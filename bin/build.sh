@@ -68,7 +68,7 @@ python3 -c "import json,sys; json.load(open(sys.argv[1]))" \
 	"$SORGENTE/media/com_alboonline/joomla.asset.json" \
 	|| { echo "ERRORE: joomla.asset.json non valido" >&2; exit 1; }
 
-# Qui c'era il confronto della guida fra ~/albo-online e ~/albo-j6, dichiarato TEMPORANEO
+# Qui c'era il confronto della guida fra ~/albo-j5 e ~/albo-j6, dichiarato TEMPORANEO
 # quando fu scritto: serviva perche' la guida viveva in due cartelle copiate a mano e poteva
 # essere aggiornata in una sola (successo davvero: la nota sul limite PHP finita solo su J5).
 # Ora la guida sta in src/media/com_alboonline/guida/ e basta: non c'e' piu' un secondo

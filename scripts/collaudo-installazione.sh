@@ -4,7 +4,7 @@
 # Dev-only. DISTRUTTIVO: la disinstallazione cancella le tabelle dell'albo.
 #
 # USO:  bash scripts/collaudo-installazione.sh <cartella-ambiente>
-#       bash scripts/collaudo-installazione.sh ~/albo-online
+#       bash scripts/collaudo-installazione.sh ~/albo-j5
 #       bash scripts/collaudo-installazione.sh ~/albo-j6
 #
 # PERCHE' ESISTE

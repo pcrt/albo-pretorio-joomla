@@ -163,15 +163,20 @@ jobs:
           coverage: none
           tools: phpcs, cs2pr
 
+      # joomla/coding-standards NON ha versioni stabili: solo alpha e rc. Composer di suo
+      # installa solo stabili, quindi senza il vincolo esplicito il comando falliva e questo
+      # job era rosso dal primo giorno — senza aver mai controllato una riga di codice.
+      # Un controllo che sembra esserci e non c'e' e' peggio di uno assente: il rosso fisso
+      # insegna a ignorare i rossi.
       - name: Installa lo standard di codice Joomla
         run: |
-          composer global require joomla/coding-standards --no-interaction --no-progress
+          composer global require "joomla/coding-standards:^3.0@alpha" --no-interaction --no-progress
           phpcs --config-set installed_paths "$(composer global config home -q)/vendor/joomla/coding-standards"
 
       - name: Analisi dei sorgenti del componente
         run: |
           phpcs -q --report=checkstyle --standard=Joomla --extensions=php \
-            administrator/components/com_alboonline/src \
-            components/com_alboonline/src \
-            plugins/task/alboonline/src \
-            plugins/content/alboonline/src | cs2pr
+            src/administrator/components/com_alboonline/src \
+            src/components/com_alboonline/src \
+            src/plugins/task/alboonline/src \
+            src/plugins/content/alboonline/src | cs2pr

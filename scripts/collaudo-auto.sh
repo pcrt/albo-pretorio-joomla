@@ -7,9 +7,9 @@
 
 # L'URL è parametrizzabile: la stessa suite deve poter girare su J5 e su J6 (un solo
 # codice, due installazioni di collaudo). Da J6:
-#   cd /home/stage/albo-j6 && ALBO_BASE=https://albo-j6.ddev.site bash /home/stage/albo-online/scripts/collaudo-auto.sh
+#   cd /home/stage/albo-j6 && ALBO_BASE=https://albo-j6.ddev.site bash /home/stage/albo-j5/scripts/collaudo-auto.sh
 # `ddev mysql` usa la directory corrente, quindi lo script va lanciato DENTRO il progetto giusto.
-SITE="${ALBO_BASE:-https://albo-online.ddev.site}"
+SITE="${ALBO_BASE:-https://albo-j5.ddev.site}"
 BASE="$SITE/index.php?option=com_alboonline"
 PASS=0
 FAIL=0

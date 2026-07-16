@@ -16,7 +16,7 @@ ddev exec bash -c "mkdir -p /var/www/html/tmp/a11y && cd /var/www/html/tmp/a11y 
   && npm init -y && npm install axe-core jsdom"
 
 # poi, ogni volta (id atto pubblicato e archiviato come argomenti):
-ddev exec node /var/www/html/scripts/a11y/scan.mjs https://albo-online.ddev.site <id_pubbl> <id_arch>
+ddev exec node /var/www/html/scripts/a11y/scan.mjs https://albo-j5.ddev.site <id_pubbl> <id_arch>
 ```
 
 Esce con codice 1 se trova violazioni **critical** o **serious**.

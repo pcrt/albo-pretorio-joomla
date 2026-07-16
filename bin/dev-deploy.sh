@@ -2,7 +2,7 @@
 #
 # Costruisce il pacchetto e lo INSTALLA su un ambiente di sviluppo, come farebbe un ente.
 #
-# USO:  bash bin/dev-deploy.sh j5      -> installa su ~/albo-online  (Joomla 5)
+# USO:  bash bin/dev-deploy.sh j5      -> installa su ~/albo-j5  (Joomla 5)
 #       bash bin/dev-deploy.sh j6      -> installa su ~/albo-j6      (Joomla 6)
 #       bash bin/dev-deploy.sh entrambi
 #
@@ -32,9 +32,9 @@ RADICE="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 QUALE="${1:-}"
 
 case "$QUALE" in
-	j5)       BERSAGLI=("$HOME/albo-online") ;;
+	j5)       BERSAGLI=("$HOME/albo-j5") ;;
 	j6)       BERSAGLI=("$HOME/albo-j6") ;;
-	entrambi) BERSAGLI=("$HOME/albo-online" "$HOME/albo-j6") ;;
+	entrambi) BERSAGLI=("$HOME/albo-j5" "$HOME/albo-j6") ;;
 	*)
 		echo "Uso: bash bin/dev-deploy.sh j5|j6|entrambi" >&2
 		exit 2
@@ -98,5 +98,5 @@ done
 
 echo ""
 echo "▸ Fatto. Il collaudo va lanciato DENTRO l'ambiente, o ddev prende il progetto sbagliato:"
-echo "    cd ~/albo-online && bash scripts/collaudo-auto.sh"
+echo "    cd ~/albo-j5 && bash scripts/collaudo-auto.sh"
 echo "    cd ~/albo-j6     && ALBO_BASE=https://albo-j6.ddev.site bash scripts/collaudo-auto.sh"

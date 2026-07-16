@@ -2,7 +2,7 @@
  * Scansione axe-core delle pagine pubbliche del componente. Dev-only.
  *
  * Uso (dentro il container):
- *   node /var/www/html/tmp/a11y/scan.mjs https://albo-online.ddev.site
+ *   node /var/www/html/tmp/a11y/scan.mjs https://albo-j5.ddev.site
  *
  * LIMITE DA DICHIARARE: gira su jsdom, non su un browser vero. Quindi:
  *   - il CONTRASTO COLORI non è verificabile (serve il rendering) — e dipende comunque dal
@@ -15,7 +15,7 @@
 import { JSDOM } from 'jsdom';
 import axe from 'axe-core';
 
-const base = process.argv[2] || 'https://albo-online.ddev.site';
+const base = process.argv[2] || 'https://albo-j5.ddev.site';
 
 const pagine = [
   ['lista atti', `${base}/index.php?option=com_alboonline&view=atti`],

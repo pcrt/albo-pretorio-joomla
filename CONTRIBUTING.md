@@ -82,7 +82,7 @@ diventano la stessa cosa, e il guardiano smette di servire.
 
 ```bash
 bash bin/dev-deploy.sh entrambi          # costruisce e INSTALLA su J5 e J6
-bash scripts/collaudo-installazione.sh ~/albo-online   # aggiornamento, disinstallazione, install pulita
+bash scripts/collaudo-installazione.sh ~/albo-j5   # aggiornamento, disinstallazione, install pulita
 ```
 
 **Il collaudo si fa sul pacchetto installato, non sull'albero di file.** È la regola che manca da
