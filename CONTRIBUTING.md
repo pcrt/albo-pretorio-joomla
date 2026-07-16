@@ -126,11 +126,25 @@ Una modifica si considera pronta quando **entrambe le suite sono verdi su Joomla
 
 ## Due Joomla, un codice
 
-Il componente deve funzionare **con lo stesso identico codice** su Joomla 5 e Joomla 6. Durante lo
-sviluppo si tengono due installazioni di prova, ma **non sono due sorgenti**: il codice sta solo qui,
-e ci arriva con `bin/dev-deploy.sh entrambi`. Non copiare file a mano tra gli ambienti — è così che in
-passato la guida è finita aggiornata su uno solo dei due, e che un ambiente è rimasto indietro di una
-versione mentre l'altro era già stato collaudato.
+Il componente deve funzionare **con lo stesso identico codice** su Joomla 5 e Joomla 6:
+
+```
+~/albo-pretorio-joomla   questo repo — la fonte, il codice vive solo qui
+~/albo-j5                Joomla 5, usa-e-getta    https://albo-j5.ddev.site
+~/albo-j6                Joomla 6, usa-e-getta    https://albo-j6.ddev.site
+```
+
+I due ambienti **non sono due sorgenti**: sono destinazioni. Ci arriva tutto con
+`bin/dev-deploy.sh entrambi`, che installa il pacchetto vero e rispecchia gli strumenti di
+collaudo. **Non copiare file a mano fra le cartelle**: è così che in passato la guida è finita
+aggiornata su uno solo dei due, e che un ambiente è rimasto indietro di una versione mentre
+l'altro era già stato collaudato. Se un ambiente si sporca, si butta e si rifà.
+
+Una copia di `scripts/` **deve** stare dentro l'ambiente — `ddev exec php scripts/seed-demo.php`
+gira nel container, che vede solo la cartella del progetto — ma è **derivata**: la rispecchia
+`dev-deploy.sh` a ogni giro, in una direzione sola. Restano fuori dal rispecchiamento
+`scripts/firma-test/` (certificati di prova, contengono una **chiave privata**: non si committa) e
+`scripts/a11y/node_modules/`: vivono solo in locale, apposta.
 
 ## Le lingue
 

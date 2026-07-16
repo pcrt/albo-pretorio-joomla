@@ -94,6 +94,35 @@ for BERSAGLIO in "${BERSAGLI[@]}"; do
 	fi
 
 	echo "  ✓ $NOME: versione $INSTALLATA"
+
+	# ── Gli strumenti di collaudo ────────────────────────────────────────────
+	# Perche' una copia di scripts/ deve stare NELL'AMBIENTE: i seed e le prove del modello
+	# girano con `ddev exec php scripts/...`, cioe' DENTRO il container, che vede solo la
+	# cartella del progetto. Non e' una scelta: e' un vincolo di ddev.
+	#
+	# Quella copia pero' non deve vivere di vita propria, o diventa una seconda verita'. Dopo
+	# il rename degli ambienti la copia vecchia puntava a un sito che non esisteva piu' e ha
+	# dato 20 FAIL falsi su un prodotto sano: mezz'ora persa a cercare una regressione
+	# inventata. Quindi si rispecchia dal repo, in UNA direzione sola, a ogni deploy.
+	#
+	# --delete perche' un file tolto dal repo deve sparire anche qui: senza, gli avanzi
+	# restano e prima o poi qualcuno li esegue.
+	#
+	# Le due esclusioni NON sono dimenticanze, sono roba che sta fuori dal repo APPOSTA e
+	# vive solo qui:
+	#   node_modules/  le dipendenze dello scanner di accessibilita', installate in locale
+	#   firma-test/    i certificati self-signed di prova — dentro c'e' una CHIAVE PRIVATA,
+	#                  che non si committa. Cancellarli vorrebbe dire non poter piu'
+	#                  rigenerare i documenti di prova firmati.
+	if command -v rsync > /dev/null; then
+		rsync -a --delete \
+			--exclude 'a11y/node_modules/' \
+			--exclude 'firma-test/' \
+			"$RADICE/scripts/" "$BERSAGLIO/scripts/"
+		echo "    strumenti di collaudo rispecchiati dal repo"
+	else
+		echo "    ⚠️  rsync assente: scripts/ in $NOME NON e' stato aggiornato" >&2
+	fi
 done
 
 echo ""
