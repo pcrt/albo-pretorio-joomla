@@ -1,16 +1,28 @@
 # CI — Albo Pretorio Online
 #
-# Quattro controlli, eseguiti a ogni push e pull request:
-#   1. php-lint     — `php -l` su tutti i sorgenti, su PHP 8.3 e 8.4 (bloccante)
-#   2. xml-validate — tutti i file XML devono essere ben formati (bloccante)
-#   3. pacchetto    — costruisce lo zip e passa il guardiano (bloccante)
-#   4. phpcs        — standard di codice Joomla (INFORMATIVO: non blocca il merge)
+# Tre controlli, eseguiti a ogni push e pull request. Tutti e tre BLOCCANTI: qui non c'e'
+# niente di informativo, perche' un controllo che non blocca lo si impara a ignorare.
+#   1. php-lint     — `php -l` su tutti i sorgenti, su PHP 8.3 e 8.4
+#   2. xml-validate — tutti i file XML devono essere ben formati
+#   3. pacchetto    — costruisce lo zip e passa il guardiano
 #
 # PERCHE' IL JOB «pacchetto»
 # Fino alla 1.0.0 la CI controllava la SINTASSI del codice e nient'altro: non costruiva mai
 # il pacchetto. Il risultato e' che due file non spediti (l'esito della verifica firma e il
 # referto di esempio della guida) sono arrivati fino a una release pubblica con tutti i
 # controlli verdi. Un codice che compila e un prodotto che funziona sono due cose diverse.
+#
+# PERCHE' NON C'E' PIU' phpcs (standard di stile Joomla)
+# Perche' era rumore, e il rumore in un cruscotto e' peggio di uno strumento in meno.
+# Segnalava 1958 rilievi e ZERO difetti: tabulazioni, graffe a capo, @return da scrivere
+# sopra funzioni che gia' dichiarano il tipo di ritorno nella firma. La correzione automatica
+# ne chiudeva 1293, gli altri 1190 erano giorni di lavoro per commenti cerimoniali.
+# Nessuno li avrebbe mai fatti, quindi quel job sarebbe rimasto rosso per sempre — e un rosso
+# fisso insegna a ignorare i rossi. E' esattamente il difetto che ci e' costato una release
+# con la verifica della firma muta: i controlli erano verdi, ma guardavano la cosa sbagliata.
+# La documentazione del codice qui e' fatta di commenti che spiegano il PERCHE' delle scelte;
+# vale piu' di un @return che ripete la firma. Se un giorno servira' (p.es. per entrare nella
+# vetrina delle estensioni Joomla) si rimette, e quel giorno ci sara' un motivo.
 #
 # I job non toccano il database né avviano Joomla: le suite di collaudo (scripts/) girano
 # in un ambiente DDEV completo e restano da eseguire in locale prima di una release —
@@ -146,37 +158,3 @@ jobs:
 
           cp /tmp/manifest.orig "$MANIFEST"
           echo "Il guardiano ha visto il difetto: la build e' diventata rossa come doveva."
-
-  phpcs:
-    name: PHP CodeSniffer (standard Joomla) · informativo
-    runs-on: ubuntu-latest
-    # Non blocca il merge: è una guida allo stile, non un cancello. Si potrà rendere
-    # bloccante quando i sorgenti passano puliti.
-    continue-on-error: true
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Prepara PHP + phpcs
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: "8.3"
-          coverage: none
-          tools: phpcs, cs2pr
-
-      # joomla/coding-standards NON ha versioni stabili: solo alpha e rc. Composer di suo
-      # installa solo stabili, quindi senza il vincolo esplicito il comando falliva e questo
-      # job era rosso dal primo giorno — senza aver mai controllato una riga di codice.
-      # Un controllo che sembra esserci e non c'e' e' peggio di uno assente: il rosso fisso
-      # insegna a ignorare i rossi.
-      - name: Installa lo standard di codice Joomla
-        run: |
-          composer global require "joomla/coding-standards:^3.0@alpha" --no-interaction --no-progress
-          phpcs --config-set installed_paths "$(composer global config home -q)/vendor/joomla/coding-standards"
-
-      - name: Analisi dei sorgenti del componente
-        run: |
-          phpcs -q --report=checkstyle --standard=Joomla --extensions=php \
-            src/administrator/components/com_alboonline/src \
-            src/components/com_alboonline/src \
-            src/plugins/task/alboonline/src \
-            src/plugins/content/alboonline/src | cs2pr
