@@ -1,0 +1,5 @@
+-- v1.0.0 — Prima release pubblica. Nessun aggiornamento di schema da applicare:
+-- lo schema completo è in `install.mysql.utf8.sql` (un'installazione pulita nasce completa).
+-- Il file esiste di proposito per allineare `#__schemas` alla versione del manifest
+-- (convenzione: una versione = un file di update, anche vuoto). Le versioni successive
+-- aggiungeranno il proprio `X.Y.Z.sql` con le eventuali modifiche di schema.

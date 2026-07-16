@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form>
+	<fieldset name="lock_params">
+		<field
+			name="info"
+			type="note"
+			label="PLG_TASK_ALBOONLINE_LOCK_NOTE_LABEL"
+			description="PLG_TASK_ALBOONLINE_LOCK_NOTE_DESC"
+		/>
+	</fieldset>
+</form>

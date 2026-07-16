@@ -1,0 +1,13 @@
+{
+    "name": "pcrt/com-alboonline-vendor",
+    "description": "Dipendenze di terze parti impacchettate con il componente Albo Online (mPDF per la generazione del referto di pubblicazione).",
+    "license": "GPL-2.0-or-later",
+    "require": {
+        "php": ">=8.1",
+        "mpdf/mpdf": "^8.2"
+    },
+    "config": {
+        "vendor-dir": "src/administrator/components/com_alboonline/vendor",
+        "optimize-autoloader": true
+    }
+}

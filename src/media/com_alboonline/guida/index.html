@@ -1,0 +1,2025 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guida — Albo Pretorio Online</title>
+<style>
+  :root{
+    --bg:#fbfcfd; --card:#ffffff; --fg:#12181f; --muted:#5b6773;
+    --line:#e2e7ed; --line-soft:#eef2f6;
+    --accent:#0b5cad; --accent-2:#0a4a8c; --accent-soft:#e9f1fa; --accent-contrast:#ffffff;
+    --sidebar:#0f1b2a; --sidebar-fg:#c9d6e4; --sidebar-muted:#7d90a6;
+    --warn-bg:#fff8e6; --warn-line:#d99e00;
+    --stop-bg:#fdecec; --stop-line:#c0392b;
+    --ok-bg:#e9f6ee; --ok-line:#1e7e34;
+    --code:#f1f4f8;
+    --shadow:0 1px 2px rgba(16,24,40,.05), 0 4px 16px rgba(16,24,40,.06);
+    --radius:12px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#0e1116; --card:#161b22; --fg:#e7ecf2; --muted:#9aa7b4;
+      --line:#252c35; --line-soft:#1c222a;
+      --accent:#6cb0f0; --accent-2:#9ccbf7; --accent-soft:#152538; --accent-contrast:#0e1116;
+      --sidebar:#0a0e14; --sidebar-fg:#c2cedb; --sidebar-muted:#6f8095;
+      --warn-bg:#2c2615; --warn-line:#c99a12;
+      --stop-bg:#331e1e; --stop-line:#e06c5f;
+      --ok-bg:#16281d; --ok-line:#4caf6d;
+      --code:#1b2028;
+      --shadow:0 1px 2px rgba(0,0,0,.3), 0 4px 16px rgba(0,0,0,.25);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0e1116; --card:#161b22; --fg:#e7ecf2; --muted:#9aa7b4;
+    --line:#252c35; --line-soft:#1c222a;
+    --accent:#6cb0f0; --accent-2:#9ccbf7; --accent-soft:#152538; --accent-contrast:#0e1116;
+    --sidebar:#0a0e14; --sidebar-fg:#c2cedb; --sidebar-muted:#6f8095;
+    --warn-bg:#2c2615; --warn-line:#c99a12;
+    --stop-bg:#331e1e; --stop-line:#e06c5f;
+    --ok-bg:#16281d; --ok-line:#4caf6d;
+    --code:#1b2028;
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 4px 16px rgba(0,0,0,.25);
+  }
+  :root[data-theme="light"]{
+    --bg:#fbfcfd; --card:#ffffff; --fg:#12181f; --muted:#5b6773;
+    --line:#e2e7ed; --line-soft:#eef2f6;
+    --accent:#0b5cad; --accent-2:#0a4a8c; --accent-soft:#e9f1fa; --accent-contrast:#ffffff;
+    --sidebar:#0f1b2a; --sidebar-fg:#c9d6e4; --sidebar-muted:#7d90a6;
+    --warn-bg:#fff8e6; --warn-line:#d99e00;
+    --stop-bg:#fdecec; --stop-line:#c0392b;
+    --ok-bg:#e9f6ee; --ok-line:#1e7e34;
+    --code:#f1f4f8;
+    --shadow:0 1px 2px rgba(16,24,40,.05), 0 4px 16px rgba(16,24,40,.06);
+  }
+
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion: reduce){
+    *{transition:none !important; animation:none !important}
+    html{scroll-behavior:auto}
+  }
+  body{
+    margin:0; background:var(--bg); color:var(--fg);
+    font:16px/1.68 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .skip{position:absolute;left:-9999px}
+  .skip:focus{
+    left:1rem; top:1rem; z-index:200; position:fixed;
+    background:var(--card); color:var(--accent); padding:.75rem 1.1rem;
+    border:3px solid var(--accent); border-radius:8px; font-weight:700;
+  }
+
+  .layout{display:flex; min-height:100vh}
+
+  /* ================= MENU LATERALE ================= */
+  .sidebar{
+    width:300px; flex:0 0 300px; background:var(--sidebar); color:var(--sidebar-fg);
+    height:100vh; position:sticky; top:0; overflow-y:auto;
+    display:flex; flex-direction:column;
+  }
+  .brand{
+    padding:1.5rem 1.4rem 1.2rem; border-bottom:1px solid rgba(255,255,255,.08);
+  }
+  .brand .logo{
+    display:inline-flex; align-items:center; gap:.55rem;
+    font-weight:700; font-size:1.02rem; color:#fff; letter-spacing:-.01em;
+  }
+  .brand .logo .mark{
+    width:30px; height:30px; border-radius:8px; flex:0 0 30px;
+    background:linear-gradient(135deg,#2b7fd4,#0b5cad);
+    display:grid; place-items:center; color:#fff; font-size:.95rem;
+  }
+  .brand .sub{display:block; color:var(--sidebar-muted); font-size:.82rem; margin-top:.45rem}
+
+  .cerca{padding:1rem 1.4rem .5rem}
+  .cerca input{
+    width:100%; padding:.55rem .7rem; border-radius:8px;
+    border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.06);
+    color:#fff; font:inherit; font-size:.9rem;
+  }
+  .cerca input::placeholder{color:var(--sidebar-muted)}
+  .cerca input:focus-visible{outline:3px solid var(--accent-2); outline-offset:1px}
+
+  .sidebar nav{flex:1; padding:.5rem 0 2rem}
+  .navgroup{
+    margin:1.1rem 0 .35rem; padding:0 1.4rem;
+    font-size:.68rem; letter-spacing:.11em; text-transform:uppercase;
+    color:var(--sidebar-muted); font-weight:700;
+  }
+  .sidebar nav ul{list-style:none; margin:0; padding:0}
+  .sidebar nav a{
+    display:flex; align-items:center; gap:.55rem;
+    padding:.5rem 1.4rem; color:var(--sidebar-fg); text-decoration:none;
+    font-size:.925rem; border-left:3px solid transparent; min-height:2.2rem;
+  }
+  .sidebar nav a .num{
+    flex:0 0 1.35rem; height:1.35rem; border-radius:5px;
+    background:rgba(255,255,255,.08); color:var(--sidebar-muted);
+    font-size:.7rem; font-weight:700; display:grid; place-items:center;
+  }
+  .sidebar nav a:hover{background:rgba(255,255,255,.05); color:#fff}
+  .sidebar nav a:focus-visible{outline:3px solid var(--accent-2); outline-offset:-3px}
+  .sidebar nav a[aria-current="page"]{
+    background:rgba(43,127,212,.16); border-left-color:#2b7fd4; color:#fff; font-weight:600;
+  }
+  .sidebar nav a[aria-current="page"] .num{background:#2b7fd4; color:#fff}
+  .sidebar nav li.nascosta{display:none}
+  .nessun-risultato{
+    display:none; padding:.6rem 1.4rem; color:var(--sidebar-muted); font-size:.88rem;
+  }
+
+  /* ================= CONTENUTO ================= */
+  main{flex:1; min-width:0; display:flex; flex-direction:column}
+
+  .topbar{
+    position:sticky; top:0; z-index:20;
+    display:flex; align-items:center; gap:1rem; justify-content:space-between;
+    padding:.75rem 2.5rem; background:color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter:blur(8px); border-bottom:1px solid var(--line);
+  }
+  .briciole{color:var(--muted); font-size:.85rem}
+  .briciole b{color:var(--fg); font-weight:600}
+  .azioni{display:flex; gap:.5rem}
+  .btn{
+    background:var(--card); color:var(--fg); border:1px solid var(--line);
+    border-radius:8px; padding:.45rem .8rem; cursor:pointer; font:inherit; font-size:.85rem;
+    min-height:2.2rem; display:inline-flex; align-items:center; gap:.35rem; text-decoration:none;
+    transition:border-color .15s ease, color .15s ease;
+  }
+  .btn:hover{border-color:var(--accent); color:var(--accent)}
+  .btn:focus-visible{outline:3px solid var(--accent); outline-offset:2px}
+  .btn-primario{background:var(--accent); color:#fff; border-color:var(--accent)}
+  .btn-primario:hover{background:var(--accent-2); color:#fff}
+
+  .pagina{padding:2.5rem 3rem 3rem; max-width:960px; width:100%; margin:0 auto; scroll-margin-top:4.5rem}
+  .pagina:focus{outline:none}
+
+  .occhiello{
+    display:inline-block; font-size:.72rem; font-weight:700; letter-spacing:.09em;
+    text-transform:uppercase; color:var(--accent); background:var(--accent-soft);
+    padding:.25rem .6rem; border-radius:999px; margin-bottom:.9rem;
+  }
+  h1{font-size:2.05rem; line-height:1.2; margin:0 0 .7rem; letter-spacing:-.02em}
+  h2{font-size:1.28rem; margin:2.3rem 0 .7rem; letter-spacing:-.01em}
+  h3{font-size:1.02rem; margin:1.6rem 0 .5rem; color:var(--muted); text-transform:none}
+  p,li{max-width:72ch}
+  a{color:var(--accent); text-underline-offset:2px}
+  .lead{font-size:1.12rem; color:var(--muted); margin-bottom:1.8rem}
+  code{background:var(--code); padding:.14em .42em; border-radius:5px; font-size:.88em}
+  pre{background:var(--code); padding:1rem 1.1rem; border-radius:var(--radius); overflow-x:auto; font-size:.84rem; border:1px solid var(--line)}
+  pre code{background:none; padding:0}
+
+  .tablewrap{overflow-x:auto; margin:1.3rem 0; border:1px solid var(--line); border-radius:var(--radius); background:var(--card); box-shadow:var(--shadow)}
+  table{border-collapse:collapse; width:100%; font-size:.93rem}
+  th,td{padding:.72rem .9rem; text-align:left; vertical-align:top; border-bottom:1px solid var(--line-soft)}
+  th{background:var(--line-soft); font-weight:650; font-size:.82rem; text-transform:uppercase; letter-spacing:.04em; color:var(--muted)}
+  tr:last-child td{border-bottom:0}
+
+  figure{margin:1.7rem 0}
+  figure img{width:100%; height:auto; border:1px solid var(--line); border-radius:var(--radius); display:block; box-shadow:var(--shadow)}
+  figcaption{color:var(--muted); font-size:.85rem; margin-top:.6rem}
+
+  .box{border-left:5px solid; padding:1rem 1.2rem; border-radius:0 var(--radius) var(--radius) 0; margin:1.5rem 0}
+  .box > :first-child{margin-top:0}
+  .box > :last-child{margin-bottom:0}
+  .box .tit{display:block; font-weight:700; margin-bottom:.35rem}
+  .stop{background:var(--stop-bg); border-color:var(--stop-line)}
+  .warn{background:var(--warn-bg); border-color:var(--warn-line)}
+  .ok{background:var(--ok-bg); border-color:var(--ok-line)}
+  .note{background:var(--accent-soft); border-color:var(--accent)}
+
+  .quote{border-left:4px solid var(--line); padding:.2rem 0 .2rem 1rem; color:var(--muted); font-style:italic; margin:1rem 0}
+
+  /* Riquadri "scheda" della home */
+  .griglia{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:1rem; margin:1.6rem 0}
+  .scheda{
+    background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+    padding:1.1rem 1.2rem; text-decoration:none; color:var(--fg); box-shadow:var(--shadow);
+    display:block;
+    transition:border-color .15s ease, transform .15s ease, box-shadow .15s ease;
+  }
+  .scheda:hover{border-color:var(--accent); transform:translateY(-2px); box-shadow:0 2px 4px rgba(16,24,40,.06), 0 8px 24px rgba(16,24,40,.1)}
+  .scheda:focus-visible{outline:3px solid var(--accent); outline-offset:2px}
+  .scheda b{display:block; margin-bottom:.25rem}
+  .scheda span{color:var(--muted); font-size:.9rem}
+
+  /* Navigazione fra pagine — ancorata in fondo alla finestra */
+  .pagnav{
+    display:flex; justify-content:space-between; gap:1rem;
+    max-width:960px; width:100%;
+    margin:auto auto 0; padding:1.75rem 3rem 2.5rem;
+  }
+  .pn{
+    display:flex; align-items:center; gap:1rem; text-decoration:none;
+    flex:1 1 0; max-width:48%; padding:1rem 1.25rem; border-radius:14px;
+    transition:border-color .15s ease, background .15s ease, transform .15s ease, box-shadow .15s ease;
+  }
+  .pn:focus-visible{outline:3px solid var(--accent); outline-offset:3px}
+  .pn .freccia{
+    flex:0 0 2.5rem; height:2.5rem; border-radius:50%;
+    display:grid; place-items:center; font-size:1.2rem; font-weight:700;
+  }
+  .pn .txt{display:flex; flex-direction:column; gap:.2rem; min-width:0}
+  .pn .dir{font-size:.7rem; font-weight:800; letter-spacing:.11em; text-transform:uppercase}
+  .pn .tit2{font-weight:650; font-size:1.04rem; line-height:1.3}
+
+  .pn-prev{background:var(--card); border:2px solid var(--line); color:var(--fg); box-shadow:var(--shadow)}
+  .pn-prev .freccia{background:var(--accent-soft); color:var(--accent)}
+  .pn-prev .dir{color:var(--muted)}
+  .pn-prev:hover{border-color:var(--accent); transform:translateY(-2px)}
+
+  .pn-next{
+    background:var(--accent); border:2px solid var(--accent);
+    color:var(--accent-contrast); margin-left:auto;
+    justify-content:flex-end; text-align:right;
+    box-shadow:0 4px 14px color-mix(in srgb, var(--accent) 35%, transparent);
+  }
+  .pn-next .freccia{background:color-mix(in srgb, var(--accent-contrast) 20%, transparent); color:var(--accent-contrast)}
+  .pn-next .dir{color:var(--accent-contrast); opacity:.8}
+  .pn-next .tit2{color:var(--accent-contrast)}
+  .pn-next:hover{background:var(--accent-2); border-color:var(--accent-2); transform:translateY(-2px)}
+
+  .apri-menu{display:none}
+
+  /* ---- MODALITÀ A PAGINE (attiva solo se il JS funziona) ---- */
+  .js .pagina{display:none}
+  .js .pagina.attiva{display:block}
+  /* Senza JS: tutte le pagine restano visibili una dopo l'altra, con un filo di stacco.
+     La guida resta interamente leggibile — non si spegne insieme al JavaScript. */
+  .pagina + .pagina{border-top:1px solid var(--line)}
+  .js .pagina + .pagina{border-top:0}
+  .js .pagnav{display:flex}
+  .pagnav{display:none}
+
+  @media (max-width:960px){
+    .layout{display:block}
+    .sidebar{width:auto; height:auto; position:static; flex-direction:column}
+    .apri-menu{
+      display:flex; align-items:center; gap:.5rem; width:100%; text-align:left;
+      background:none; border:0; color:#fff; font:inherit; font-weight:600;
+      padding:.9rem 1.4rem; cursor:pointer; border-top:1px solid rgba(255,255,255,.08);
+    }
+    .sidebar nav[hidden]{display:none}
+    .topbar{padding:.7rem 1.2rem}
+    .pagina{padding:1.6rem 1.2rem 3rem}
+    .pagnav{flex-direction:column; padding:1.25rem 1.2rem 2rem}
+    .pn{max-width:100%}
+    .pn-next{margin-left:0}
+  }
+</style>
+</head>
+<body>
+
+<a class="skip" href="#contenuto">Vai al contenuto</a>
+
+<div class="layout">
+
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="logo"><span class="mark" aria-hidden="true">⚖</span> Albo Pretorio Online</span>
+      <span class="sub">Guida per chi pubblica e per chi installa</span>
+    </div>
+
+    <div class="cerca">
+      <label class="skip" for="filtro">Cerca nel menu</label>
+      <input id="filtro" type="search" placeholder="Cerca nel menu…" autocomplete="off">
+    </div>
+
+    <button class="apri-menu" id="apri" type="button" aria-expanded="false" aria-controls="menu">☰ Indice</button>
+
+    <nav id="menu" aria-label="Indice della guida">
+      <p class="nessun-risultato" id="vuoto">Nessuna voce corrisponde.</p>
+
+      <p class="navgroup">Per cominciare</p>
+      <ul>
+        <li><a href="#home"><span class="num" aria-hidden="true">◆</span> Da dove parto</a></li>
+        <li><a href="#capire"><span class="num" aria-hidden="true">!</span> La cosa più importante</a></li>
+        <li><a href="#stati"><span class="num" aria-hidden="true">5</span> I cinque stati di un atto</a></li>
+      </ul>
+
+      <p class="navgroup">Pubblicare un atto</p>
+      <ul>
+        <li><a href="#bozza"><span class="num" aria-hidden="true">1</span> Preparare la bozza</a></li>
+        <li><a href="#allegati"><span class="num" aria-hidden="true">2</span> Allegati e firme</a></li>
+        <li><a href="#avvisi"><span class="num" aria-hidden="true">3</span> Avvisi e checklist</a></li>
+        <li><a href="#pubblicare"><span class="num" aria-hidden="true">4</span> Pubblicare</a></li>
+        <li><a href="#buffer"><span class="num" aria-hidden="true">5</span> L'ora per ripensarci</a></li>
+        <li><a href="#blindato"><span class="num" aria-hidden="true">6</span> L'atto è blindato</a></li>
+      </ul>
+
+      <p class="navgroup">Dopo la pubblicazione</p>
+      <ul>
+        <li><a href="#proroga"><span class="num" aria-hidden="true">→</span> Prorogare</a></li>
+        <li><a href="#rettifica"><span class="num" aria-hidden="true">✎</span> Correggere: la rettifica</a></li>
+        <li><a href="#defissione"><span class="num" aria-hidden="true">✓</span> Scadenza e referto</a></li>
+        <li><a href="#registro"><span class="num" aria-hidden="true">≡</span> Il registro delle pubblicazioni</a></li>
+        <li><a href="#riattivare"><span class="num" aria-hidden="true">↺</span> Riattivare un archiviato</a></li>
+        <li><a href="#oblio"><span class="num" aria-hidden="true">⊘</span> Diritto all'oblio</a></li>
+      </ul>
+
+      <p class="navgroup">Organizzare</p>
+      <ul>
+        <li><a href="#categorie"><span class="num" aria-hidden="true">▤</span> Le categorie</a></li>
+        <li><a href="#permessi"><span class="num" aria-hidden="true">◑</span> Chi può fare cosa</a></li>
+        <li><a href="#cittadino"><span class="num" aria-hidden="true">◉</span> Cosa vede il cittadino</a></li>
+      </ul>
+
+      <p class="navgroup">Installare e configurare</p>
+      <ul>
+        <li><a href="#requisiti"><span class="num" aria-hidden="true">▸</span> Requisiti</a></li>
+        <li><a href="#installazione"><span class="num" aria-hidden="true">▸</span> Installare</a></li>
+        <li><a href="#configurazione"><span class="num" aria-hidden="true">▸</span> Configurazione minima</a></li>
+        <li><a href="#lavori"><span class="num" aria-hidden="true">⚠</span> I lavori automatici</a></li>
+        <li><a href="#opzioni"><span class="num" aria-hidden="true">▸</span> Tutte le opzioni</a></li>
+        <li><a href="#aggiornare"><span class="num" aria-hidden="true">▸</span> Aggiornare</a></li>
+      </ul>
+
+      <p class="navgroup">Le ragioni</p>
+      <ul>
+        <li><a href="#norme"><span class="num" aria-hidden="true">§</span> Le norme dietro le regole</a></li>
+      </ul>
+
+      <p class="navgroup">Quando qualcosa non va</p>
+      <ul>
+        <li><a href="#problemi"><span class="num" aria-hidden="true">?</span> Problemi e soluzioni</a></li>
+        <li><a href="#nonfa"><span class="num" aria-hidden="true">✕</span> Cosa il sistema NON fa</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <main id="contenuto">
+
+    <div class="topbar">
+      <p class="briciole" id="briciole">Guida · <b>Da dove parto</b></p>
+      <div class="azioni">
+        <button class="btn" id="tema" type="button">◐ Tema</button>
+        <button class="btn" id="stampa" type="button">⎙ Stampa tutto</button>
+      </div>
+    </div>
+
+    <!-- ===================== HOME ===================== -->
+    <article class="pagina" id="home" tabindex="-1" aria-labelledby="t-home">
+      <span class="occhiello">Guida completa</span>
+      <h1 id="t-home">Albo Pretorio Online</h1>
+      <p class="lead">Il componente che trasforma Joomla nell'<strong>albo pretorio</strong> di un ente
+      pubblico: gestisce la vita di un atto — dalla bozza al ritiro — con le garanzie che la legge
+      richiede. Questa guida spiega, passo per passo, come si usa e perché funziona così.</p>
+
+      <h2>Cos'è l'albo pretorio</h2>
+      <p>L'albo pretorio è la <strong>bacheca ufficiale</strong> di un ente pubblico: il luogo dove gli
+      atti — determine, delibere, bandi, avvisi… — vengono <strong>affissi</strong> perché chiunque possa
+      prenderne visione. Non è una formalità. Dalla pubblicazione all'albo <strong>decorrono i termini di
+      legge</strong>: per esempio quelli entro cui un cittadino può impugnare un provvedimento, o quelli
+      oltre i quali un atto diventa efficace.</p>
+      <p>Proprio perché ha effetti giuridici, l'albo segue <strong>regole rigide</strong>. Un atto vi resta
+      affisso per un <strong>periodo stabilito dalla legge</strong> — diverso secondo il tipo di atto — e
+      poi <strong>deve</strong> essere ritirato. Finché è pubblicato deve avere una <strong>data certa</strong>,
+      non deve poter essere <strong>modificato</strong>, e deve portare con sé il proprio
+      <strong>documento</strong>. Se una di queste condizioni salta, la pubblicazione non prova più nulla —
+      o, peggio, diventa una violazione.</p>
+
+      <h2>Cosa fa questo componente</h2>
+      <p>Pubblicare all'albo <strong>non è «mettere un PDF su una pagina web»</strong>. Sembra semplice, ma
+      è pieno di trappole che si pagano care:</p>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>Se…</th><th>…cosa succede</th></tr></thead>
+          <tbody>
+            <tr><td>un atto <strong>non viene ritirato</strong> alla scadenza</td><td>l'ente viola la normativa sulla privacy: il Garante ha già sanzionato amministrazioni per la permanenza indebita di atti online.</td></tr>
+            <tr><td>le <strong>date non sono certe</strong></td><td>i termini di impugnazione del cittadino diventano contestabili.</td></tr>
+            <tr><td>un atto pubblicato <strong>viene modificato</strong></td><td>l'attestazione di pubblicazione non vale più nulla.</td></tr>
+            <tr><td>il <strong>documento non c'è</strong></td><td>la pubblicazione è vuota, giuridicamente inesistente.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Questo componente <strong>non si limita a mostrare gli atti: impedisce che queste cose
+      accadano</strong>. Assegna da sé il numero di protocollo e la data certa, <strong>sigilla</strong>
+      l'atto una volta pubblicato, lo <strong>ritira</strong> da solo alla scadenza, ed emette la
+      <strong>prova</strong> di quando e per quanto è stato all'albo. Molte delle «cose che non ti lascia
+      fare» che incontrerai in questa guida sono <strong>protezioni volute</strong>, non limiti: servono a
+      non farti sbagliare su un atto che ha valore legale.</p>
+
+      <h2>Chi mette in moto il ciclo</h2>
+      <p>Tre ruoli, e uno solo agisce a mano — il tuo:</p>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>Ruolo</th><th>Cosa fa</th></tr></thead>
+          <tbody>
+            <tr><td>🧑‍💼 <strong>Il responsabile</strong></td><td>Il funzionario dell'ente. Redige, pubblica, proroga, rettifica, gestisce l'oblio, carica il referto firmato: sono le azioni <strong>manuali</strong>, quelle che imparerai in questa guida.</td></tr>
+            <tr><td>⚙️ <strong>Lo scheduler</strong></td><td>Un'automazione periodica. Alla fine della finestra di sicurezza <strong>sigilla</strong> l'atto; alla scadenza lo <strong>ritira</strong>, lo archivia ed emette il referto. Azioni <strong>automatiche</strong> (vanno però attivate: vedi <a href="#lavori">I lavori automatici</a>).</td></tr>
+            <tr><td>👤 <strong>Il cittadino</strong></td><td>Consulta l'albo, scarica gli atti, ne verifica l'integrità con l'impronta. <strong>Non modifica nulla.</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>Il ciclo di vita di un atto</h2>
+      <p>Cinque passaggi. Tu ne fai <strong>due</strong> — preparare e pubblicare; gli altri tre li fa il
+      sistema, da solo. Ogni passaggio ha la sua pagina in questa guida.</p>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>#</th><th>Cosa succede</th><th>Chi lo fa</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>L'atto viene preparato in <strong>bozza</strong>, con i suoi allegati</td><td>Tu</td></tr>
+            <tr><td>2</td><td>Si preme <strong>Pubblica</strong>: protocollo, data certa, termini avviati → <strong>In Attesa</strong></td><td>Tu</td></tr>
+            <tr><td>3</td><td>Passata l'ora di ripensamento, l'atto diventa <strong>pubblico e sigillato</strong></td><td><strong>Il sistema</strong></td></tr>
+            <tr><td>4</td><td>Alla scadenza l'atto viene <strong>ritirato</strong> dall'albo</td><td><strong>Il sistema</strong></td></tr>
+            <tr><td>5</td><td>Viene emesso il <strong>referto</strong>: la prova di quando e per quanto si è pubblicato</td><td><strong>Il sistema</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>Per andare al punto</h2>
+      <div class="griglia">
+        <a class="scheda" href="#capire">
+          <b>Devo pubblicare un atto</b>
+          <span>Comincia da qui: due regole spiegano quasi tutto il resto.</span>
+        </a>
+        <a class="scheda" href="#requisiti">
+          <b>Devo installare il componente</b>
+          <span>Requisiti, configurazione, e il passo che non si può sbagliare.</span>
+        </a>
+        <a class="scheda" href="#problemi">
+          <b>Qualcosa non funziona</b>
+          <span>«Ho pubblicato ma l'atto non compare», e gli altri casi.</span>
+        </a>
+        <a class="scheda" href="#nonfa">
+          <b>Cosa il sistema NON fa</b>
+          <span>Meglio saperlo prima che dopo.</span>
+        </a>
+      </div>
+    </article>
+
+    <!-- ===================== CAPIRE ===================== -->
+    <article class="pagina" id="capire" tabindex="-1" aria-labelledby="t-capire">
+      <span class="occhiello">Per cominciare</span>
+      <h1 id="t-capire">La cosa più importante da capire</h1>
+      <p class="lead">Un albo pretorio non è un elenco di pagine web: è un procedimento con delle
+      scadenze, e quelle scadenze hanno effetti giuridici.</p>
+
+      <p>Da quando un atto è pubblicato <strong>decorrono i termini per impugnarlo</strong>; se resta
+      online oltre il dovuto, l'ente <strong>tratta dati personali senza più averne titolo</strong>.
+      Per questo il componente non si comporta come un normale gestore di contenuti.</p>
+
+      <p>Due regole spiegano quasi tutto il resto.</p>
+
+      <div class="box stop">
+        <span class="tit">1. Un atto pubblicato non si modifica e non si cancella. Mai.</span>
+        <p>Non è un limite del software: è il motivo per cui l'albo ha valore legale. Se un atto
+        pubblicato si potesse ritoccare, <strong>non proverebbe più niente</strong>.</p>
+        <p><strong>Un esempio.</strong> Un cittadino contesta una gara: sostiene che il bando all'albo
+        dicesse un'altra cosa. Se l'ente avesse potuto ritoccare il PDF <em>dopo</em> la pubblicazione, la
+        sua parola varrebbe quanto quella del cittadino — e l'albo non proverebbe nulla. Invece, al momento
+        della blindatura ogni allegato riceve un'<strong>impronta digitale (SHA-256)</strong>, che il
+        sistema conserva e mostra: chiunque può verificare che il documento è <strong>identico byte per
+        byte</strong> a quello pubblicato quel giorno. È questa impossibilità di ritocco a dare valore alla
+        pubblicazione.</p>
+        <p><strong>E in pratica.</strong> Se provi a modificare o salvare un atto blindato, il sistema
+        rifiuta: <span class="quote">«Impossibile salvare: l'atto è blindato e immodificabile.»</span>
+        Oggetto, date e allegati sono <strong>protetti da sovrascrittura</strong>. Restano possibili solo le
+        <strong>azioni dedicate</strong> — proroga, rettifica, diritto all'oblio — ciascuna con le sue
+        regole.</p>
+        <p>Per correggere si usa la <a href="#rettifica">rettifica</a>: un atto nuovo, collegato al
+        vecchio, che spiega cosa si corregge.</p>
+      </div>
+
+      <div class="box warn">
+        <span class="tit">2. Pubblicare non è istantaneo: c'è una finestra di sicurezza, poi ci pensa il sistema.</span>
+        <p>Premere «Pubblica» <strong>non</strong> mette subito l'atto all'albo. Il sistema assegna il
+        <strong>protocollo</strong> e fissa la <strong>data certa</strong>, poi mette l'atto
+        <strong>«In Attesa»</strong> — non ancora visibile al cittadino — e ti lascia una finestra
+        (di norma <strong>un'ora</strong>) per <strong>annullare</strong>, se ti accorgi di un errore.</p>
+        <p>Solo dopo, <strong>in automatico</strong>, l'atto viene reso pubblico e <strong>sigillato</strong>;
+        alla scadenza viene ritirato e ne viene emesso il <strong>referto</strong>, senza che nessuno debba
+        ricordarsene.</p>
+        <p><strong>Attenzione:</strong> questo passaggio automatico avviene solo se i <a href="#lavori">due
+        lavori pianificati</a> girano. Se non sono attivi, l'atto <strong>resta «In Attesa» per
+        sempre</strong>: crederesti di aver pubblicato senza averlo fatto.</p>
+      </div>
+    </article>
+
+    <!-- ===================== STATI ===================== -->
+    <article class="pagina" id="stati" tabindex="-1" aria-labelledby="t-stati">
+      <span class="occhiello">Per cominciare</span>
+      <h1 id="t-stati">I cinque stati di un atto</h1>
+      <p class="lead">Nell'elenco degli atti, la colonna «Stato Workflow» dice sempre a che punto è
+      l'atto.</p>
+
+      <figure>
+        <img src="immagini/01-admin-elenco-atti.png?v=20260715" alt="L'elenco degli atti nel pannello di amministrazione: la colonna «Stato Workflow» mostra i colori dei diversi stati — Archiviato, Pubblicato, In Attesa e Bozza.">
+        <figcaption>L'elenco degli atti. Nella colonna «Stato Workflow» si leggono, ognuno col suo colore, quattro dei cinque stati: <strong>Archiviato</strong>, <strong>Pubblicato</strong>, <strong>In Attesa</strong> e <strong>Bozza</strong>.</figcaption>
+      </figure>
+
+      <div class="box note">
+        <span class="tit">E il «Cestinato»? Va cercato con il filtro</span>
+        <p>Nella schermata qui sopra il Cestinato non compare: di default l'elenco mostra
+        <strong>tutti gli atti tranne quelli nel cestino</strong>. Per vederli premi
+        <strong>«Opzioni Filtro»</strong> e scegli <strong>«Cestinato»</strong> nel menu
+        <strong>«Stato Workflow»</strong>. Ricorda: nel cestino può finire <strong>solo una bozza</strong>
+        — un atto pubblicato non si cestina.</p>
+      </div>
+
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>Stato</th><th>Cosa significa</th><th>Il cittadino lo vede?</th><th>Si può modificare?</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Bozza</strong></td><td>Lo stai preparando</td><td>No</td><td>Sì, tutto</td></tr>
+            <tr><td><strong>In Attesa</strong></td><td>Hai premuto «Pubblica»: protocollo assegnato, termini avviati — ma sei ancora in tempo per annullare</td><td><strong>Non ancora</strong></td><td>Sì (o annulla)</td></tr>
+            <tr><td><strong>Pubblicato</strong></td><td>È <strong>blindato</strong>: online, sigillato, immodificabile</td><td>Sì</td><td><strong>No</strong></td></tr>
+            <tr><td><strong>Archiviato</strong></td><td>Il periodo è finito: ritirato dall'albo, resta nello storico</td><td>Sì, nell'archivio</td><td>No</td></tr>
+            <tr><td><strong>Cestinato</strong></td><td>Buttato via — <strong>solo</strong> se era ancora una bozza</td><td>No</td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </article>
+
+    <!-- ===================== BOZZA ===================== -->
+    <article class="pagina" id="bozza" tabindex="-1" aria-labelledby="t-bozza">
+      <span class="occhiello">Pubblicare · passo 1</span>
+      <h1 id="t-bozza">Preparare la bozza</h1>
+      <p class="lead"><em>Componenti → Albo Pretorio Online → Atti → Nuovo</em></p>
+
+      <figure>
+        <img src="immagini/02-admin-atto-bozza.png?v=20260715" alt="La scheda di un atto in bozza con l'aiuto in linea acceso: sotto i campi Oggetto, Categoria e Tipo Atto compaiono le spiegazioni.">
+        <figcaption>La scheda di un atto in bozza con l'<strong>aiuto in linea acceso</strong>: sotto ogni campo compare la spiegazione (qui Oggetto, Categoria, Tipo Atto).</figcaption>
+      </figure>
+
+      <div class="box note">
+        <p>💡 Il pulsante <strong>«Scegli aiuto in linea»</strong>, in alto a destra nella barra,
+        accende le spiegazioni sotto ogni campo — come nella foto qui sopra. Sono nascoste di
+        default per non fare rumore: <strong>accendile la prima volta</strong>.</p>
+      </div>
+
+      <h2>I campi dove sbagliare ha una conseguenza</h2>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>Campo</th><th>Perché conta</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Oggetto</strong></td><td>È <strong>pubblico</strong>: è quello che il cittadino legge nell'elenco. Ed è il testo su cui il sistema cerca eventuali dati sensibili per avvisarti.</td></tr>
+            <tr><td><strong>Tipo Atto</strong></td><td><strong>Decide la durata della pubblicazione.</strong> Non è un'etichetta: una determina resta 15 giorni, un bando 30. La durata è un <strong>minimo di legge</strong>.</td></tr>
+            <tr><td><strong>Categoria</strong></td><td>Serve solo a <strong>classificare</strong>. <strong>Non limita chi vede l'atto</strong> — vedi <a href="#categorie">Le categorie</a>.</td></tr>
+            <tr><td><strong>Ente Emanante</strong></td><td><strong>Obbligatorio.</strong> Viene stampato sul referto: è il nome che l'ente esibisce se qualcuno contesta. Arriva già compilato dalle Opzioni.</td></tr>
+            <tr><td><strong>Responsabile del Procedimento</strong></td><td>Anche questo finisce sul referto e nel registro.</td></tr>
+            <tr><td><strong>Data Atto</strong></td><td>È la data <strong>del provvedimento</strong> (quella scritta sull'atto), <strong>non</strong> quella di pubblicazione. Sono due cose diverse.</td></tr>
+            <tr><td><strong>Segnatura di protocollo</strong></td><td>Il numero del <strong>protocollo informatico dell'ente</strong>: è <strong>un'altra cosa</strong> rispetto al numero di repertorio dell'albo, che assegna il sistema. Facoltativo.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </article>
+
+    <!-- ===================== ALLEGATI ===================== -->
+    <article class="pagina" id="allegati" tabindex="-1" aria-labelledby="t-allegati">
+      <span class="occhiello">Pubblicare · passo 2</span>
+      <h1 id="t-allegati">Allegati e firme</h1>
+      <p class="lead">Scheda <strong>Allegati</strong> → <strong>Aggiungi allegati</strong>. Formati
+      accettati: PDF e P7M, massimo 20 MB per file.</p>
+
+      <p>Sotto ogni file caricato il sistema dice cosa ha visto. Sono <strong>avvisi, non
+      blocchi</strong>.</p>
+
+      <figure>
+        <img src="immagini/13-admin-allegati-firme.png?v=20260715" alt="La tabella degli allegati con l'esito sotto ogni file: due firme integre col nome del firmatario, una firma non valida perché il documento è alterato, un avviso «non PDF/A» e un file riconosciuto come PDF/A.">
+        <figcaption>Cosa scrive il sistema sotto ogni allegato: <strong>firma integra</strong> col firmatario,
+        <strong>firma non valida</strong> quando il file è alterato, l'avviso <strong>«non PDF/A»</strong> e il
+        riconoscimento del <strong>PDF/A</strong>. Sono esempi di prova, senza valore giuridico.</figcaption>
+      </figure>
+
+      <h2>Le firme: due modi, e cosa il sistema controlla</h2>
+      <p>Un documento firmato digitalmente può arrivare in <strong>due forme</strong>. Non devi
+      sceglierle né dichiararle: <strong>carichi il file com'è</strong> e il sistema riconosce da solo il
+      tipo.</p>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>Tipo di firma</th><th>Com'è fatto il file</th></tr></thead>
+          <tbody>
+            <tr><td><strong>PAdES</strong></td><td>La firma è <strong>dentro il PDF</strong>: il file resta un <code>.pdf</code> (che si apre e si legge normalmente, ma porta la firma dentro).</td></tr>
+            <tr><td><strong>CAdES</strong></td><td>La firma è una <strong>«busta»</strong> che avvolge il documento: il file è un <code>.p7m</code> (dentro c'è il documento + la firma).</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Cosa verifica il sistema</h3>
+      <p>Sotto ogni file firmato compare l'esito. Il sistema controlla tre cose:</p>
+      <ul>
+        <li>che il documento <strong>non sia stato alterato</strong> dopo la firma → scrive
+        <span class="quote">«Firma tecnicamente integra»</span> (in verde), oppure
+        <span class="quote">«Firma non valida: il documento risulta alterato»</span> (in rosso) se anche
+        un solo byte è cambiato;</li>
+        <li><strong>chi ha firmato</strong> — nome e codice fiscale, alla voce «Firmatario»;</li>
+        <li>la <strong>presenza</strong> di una marca temporale (solo la presenza, non la sua validità).</li>
+      </ul>
+      <p>Se un file <strong>non è firmato</strong>, semplicemente non compare nessun esito di firma.</p>
+
+      <div class="box warn">
+        <span class="tit">«Integra» non vuol dire «qualificata a norma»</span>
+        <p>Il sistema verifica l'<strong>integrità tecnica</strong>, <strong>non</strong> che la firma sia
+        <strong>qualificata e valida a norma</strong> — cioè la catena di certificazione, la revoca del
+        certificato, la lista di fiducia europea. E lo <strong>dichiara apertamente</strong> sotto ogni
+        firma: <span class="quote">«Validazione avanzata … non disponibile: esito non equivalente a
+        "firma qualificata valida a norma"»</span>. Per quella verifica serve un <strong>validatore
+        esterno</strong> (il servizio della Commissione europea, o strumenti come Dike / ArubaSign).
+        <strong>Preferiamo dirlo che fingere.</strong></p>
+      </div>
+
+      <h2>Il formato del PDF</h2>
+      <p>Oltre alla firma, il sistema guarda com'è fatto il PDF:</p>
+      <ul>
+        <li>se <strong>non è in PDF/A</strong> lo segnala — è il formato consigliato per la
+        conservazione a lungo termine, ma <strong>non è obbligatorio</strong>;</li>
+        <li>se sembra <strong>una scansione senza testo</strong>, avvisa: un documento così è
+        <strong>illeggibile per un non vedente</strong> (serve un PDF con testo, o un'alternativa).</li>
+      </ul>
+
+      <div class="box stop">
+        <span class="tit">Senza allegato non si pubblica</span>
+        <p>Pubblicare all'albo <em>è</em> pubblicare un documento. Senza, i termini di legge
+        decorrerebbero su un atto vuoto.</p>
+        <p>(Se l'ente pubblica avvisi di solo testo, l'obbligo si può disattivare nelle Opzioni — ma
+        è una scelta da fare consapevolmente.)</p>
+      </div>
+    </article>
+
+    <!-- ===================== AVVISI ===================== -->
+    <article class="pagina" id="avvisi" tabindex="-1" aria-labelledby="t-avvisi">
+      <span class="occhiello">Pubblicare · passo 3</span>
+      <h1 id="t-avvisi">Avvisi e checklist</h1>
+      <p class="lead">Due aiuti prima di premere «Pubblica». Nessuno dei due blocca: servono a
+      farti fermare un attimo.</p>
+
+      <figure>
+        <img src="immagini/14-admin-avvisi-checklist.png?v=20260715" alt="In cima alla scheda di un atto in bozza: il riquadro giallo «Possibili dati particolari da verificare» e, sotto, la checklist «Prima di pubblicare, verifica:» aperta con i cinque controlli.">
+        <figcaption>I due aiuti in cima alla scheda dell'atto in bozza: l'<strong>avviso sui dati particolari</strong>
+        (giallo) e la <strong>checklist «Prima di pubblicare, verifica:»</strong>, qui aperta sui suoi cinque controlli.</figcaption>
+      </figure>
+
+      <h2>Dati particolari</h2>
+      <p>Se nel testo compaiono termini che fanno pensare a dati di <strong>salute, giudiziari,
+      minori o disagio economico</strong>, appare un riquadro giallo: <em>«Possibili dati particolari
+      da verificare»</em>.</p>
+
+      <div class="box warn">
+        <p>Il rilevamento è <strong>automatico e approssimato</strong>: può sbagliare in eccesso o in
+        difetto, e <strong>la valutazione resta tua</strong>. Ma quando appare, fermati.</p>
+        <p><strong>L'omissis va fatto prima di caricare il PDF.</strong> Il sistema non oscura i
+        documenti — e nessun software serio lo fa in automatico: il testo resterebbe estraibile sotto
+        il nero, dando una <em>falsa</em> sicurezza.</p>
+        <p style="margin-top:.6rem">Pubblicarli senza oscurarli è un <strong>trattamento
+        illecito</strong>, e il Garante ha già sanzionato comuni. <a href="#norme"><strong>Le norme
+        dietro questa regola ↗</strong></a></p>
+      </div>
+
+      <h2>La checklist</h2>
+      <p>Sugli atti in bozza c'è un blocco richiudibile <em>«Prima di pubblicare, verifica:»</em> con
+      cinque controlli: minimizzazione dei dati, omissis, versione corretta dell'allegato, ente e
+      segnatura, durata adeguata.</p>
+      <p>Le spunte <strong>non vengono salvate</strong>: sono un promemoria per te, non un alibi. La
+      responsabilità resta del responsabile.</p>
+    </article>
+
+    <!-- ===================== PUBBLICARE ===================== -->
+    <article class="pagina" id="pubblicare" tabindex="-1" aria-labelledby="t-pubblicare">
+      <span class="occhiello">Pubblicare · passo 4</span>
+      <h1 id="t-pubblicare">Pubblicare</h1>
+      <p class="lead">Con l'atto in Bozza, premi <strong>«Pubblica (assegna protocollo)»</strong>
+      nella barra in alto. Oppure, dall'elenco, clicca il badge <strong>Bozza</strong>.</p>
+
+      <h2>Prima di lasciarti pubblicare, il sistema controlla cinque cose</h2>
+      <p>Se una manca, <strong>rifiuta e ti dice esattamente cosa</strong>:</p>
+
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>Se…</th><th>Il messaggio</th></tr></thead>
+          <tbody>
+            <tr><td>non hai il permesso</td><td>«Non hai i permessi per pubblicare gli atti.»</td></tr>
+            <tr><td>manca l'<strong>ente emanante</strong></td><td>«Impossibile pubblicare: manca l'ente emanante…»</td></tr>
+            <tr><td><strong>non c'è nessun allegato</strong></td><td>«…senza, i termini decorrerebbero su un atto vuoto.»</td></tr>
+            <tr><td>un allegato è registrato ma <strong>il file non c'è</strong></td><td>«Ricarica il documento prima di pubblicare.»</td></tr>
+            <tr><td>hai messo una <strong>data di fine troppo vicina</strong></td><td>«…per questa tipologia la durata minima di legge è di N giorni.»</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>Cosa succede quando pubblichi</h2>
+      <ol>
+        <li>Ti viene assegnato il <strong>numero di repertorio</strong> (es. <code>2026/0001</code>, progressivo per anno). Nell'elenco atti e sul sito compare nella colonna <strong>«Protocollo»</strong> — è lo stesso numero: non confonderlo con la <em>segnatura</em> del protocollo informatico dell'ente, che è un campo a parte.</li>
+        <li>L'atto passa a <strong>In Attesa</strong>.</li>
+        <li>Parte la <strong>data certa</strong> di inizio pubblicazione: <strong>da qui decorrono i termini</strong>.</li>
+        <li>Viene calcolata la data di fine, in base al <strong>tipo di atto</strong>.</li>
+      </ol>
+
+      <div class="box note">
+        <span class="tit">Sulla durata</span>
+        <p>Puoi pubblicare <strong>più a lungo</strong> del minimo (per una graduatoria anche un
+        anno), <strong>mai per meno</strong>. Se lasci il campo vuoto, il sistema calcola da solo.</p>
+      </div>
+    </article>
+
+    <!-- ===================== BUFFER ===================== -->
+    <article class="pagina" id="buffer" tabindex="-1" aria-labelledby="t-buffer">
+      <span class="occhiello">Pubblicare · passo 5</span>
+      <h1 id="t-buffer">L'ora per ripensarci</h1>
+      <p class="lead">Appena pubblichi, l'atto non è ancora visibile al cittadino. C'è una finestra —
+      di norma un'ora — in cui puoi tornare indietro.</p>
+
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>In questa finestra…</th></tr></thead>
+          <tbody>
+            <tr><td>✅ puoi ancora <strong>modificare</strong> l'atto</td></tr>
+            <tr><td>✅ puoi <strong>annullare la pubblicazione</strong></td></tr>
+            <tr><td>❌ il cittadino <strong>non vede niente</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p><strong>Se annulli:</strong> l'atto torna in Bozza e le date si azzerano — ma <strong>il
+      numero di protocollo resta suo</strong>. Non viene bruciato e non si crea un buco nel
+      repertorio: quando ripubblicherai, riavrà lo stesso numero.</p>
+
+      <p><strong>Se non fai niente:</strong> allo scadere dell'ora il sistema, da solo, rende l'atto
+      <strong>pubblico</strong> e lo <strong>sigilla</strong> (calcola l'impronta digitale di ogni
+      allegato).</p>
+
+      <div class="box stop">
+        <span class="tit">Se un atto resta «In Attesa» per ore, non è un ritardo: è un guasto</span>
+        <p>Significa che i lavori automatici non stanno girando, e <strong>nessun atto sta diventando
+        pubblico</strong>. Vai a <a href="#problemi">Problemi e soluzioni</a>.</p>
+      </div>
+    </article>
+
+    <!-- ===================== BLINDATO ===================== -->
+    <article class="pagina" id="blindato" tabindex="-1" aria-labelledby="t-blindato">
+      <span class="occhiello">Pubblicare · passo 6</span>
+      <h1 id="t-blindato">L'atto è blindato</h1>
+      <p class="lead">I campi diventano grigi, il pulsante Salva sparisce, gli allegati non si
+      toccano più. Non è un malfunzionamento: è il punto di tutto il sistema.</p>
+
+      <figure>
+        <img src="immagini/03-admin-atto-blindato.png" alt="Scheda di un atto blindato: campi grigi, avviso «Atto blindato - Immodificabile», riquadro di proroga.">
+        <figcaption>Un atto blindato. In cima compare «Atto blindato - Immodificabile».</figcaption>
+      </figure>
+
+      <p>Da adesso quell'atto <strong>prova qualcosa</strong>, e una prova che si può ritoccare
+      <strong>non prova niente</strong>.</p>
+
+      <h2>Le uniche quattro cose ancora possibili</h2>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>Cosa</th><th>Come</th></tr></thead>
+          <tbody>
+            <tr><td><a href="#proroga"><strong>Prorogare</strong></a> la fine pubblicazione (solo allungare)</td><td>riquadro «Proroga Fine Pubblicazione»</td></tr>
+            <tr><td><a href="#rettifica"><strong>Rettificare</strong></a> l'atto</td><td>pulsante «Crea rettifica»</td></tr>
+            <tr><td><a href="#oblio"><strong>Attivare o revocare</strong></a> il diritto all'oblio</td><td>riquadri dedicati</td></tr>
+            <tr><td><a href="#categorie"><strong>Riassegnare la categoria</strong></a> — solo se è sparita</td><td>riquadro «Categoria mancante»</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Tutte e quattro finiscono nel <strong>registro delle operazioni</strong>, con il tuo nome e
+      la data.</p>
+    </article>
+
+    <!-- ===================== PROROGA ===================== -->
+    <article class="pagina" id="proroga" tabindex="-1" aria-labelledby="t-proroga">
+      <span class="occhiello">Dopo la pubblicazione</span>
+      <h1 id="t-proroga">Prorogare la pubblicazione</h1>
+      <p class="lead">Sull'atto blindato, riquadro «Proroga Fine Pubblicazione». Indica data e ora,
+      e premi «Proroga».</p>
+
+      <figure>
+        <img src="immagini/15-admin-proroga.png?v=20260715" alt="Il riquadro «Proroga Fine Pubblicazione» su un atto blindato: mostra la data attuale di fine pubblicazione, un campo per la nuova data e ora, e il pulsante «Proroga».">
+        <figcaption>Il riquadro «Proroga Fine Pubblicazione»: la <strong>data attuale</strong>, il campo per la
+        <strong>nuova scadenza</strong> e il pulsante «Proroga». È l'unico modo per allungare la pubblicazione.</figcaption>
+      </figure>
+
+      <div class="box stop">
+        <span class="tit">Si può solo allungare, mai accorciare</span>
+        <p>Non è una svista: accorciare la pubblicazione <strong>taglierebbe i termini di
+        impugnazione</strong> del cittadino, cioè gli toglierebbe tempo per difendersi. Il sistema non
+        lo consente a nessuno.</p>
+      </div>
+
+      <p>Il campo «Fine Pubblicazione» nella scheda è <strong>di sola lettura</strong>: scriverci
+      dentro non proroga niente. <strong>L'unica via è il riquadro.</strong></p>
+    </article>
+
+    <!-- ===================== RETTIFICA ===================== -->
+    <article class="pagina" id="rettifica" tabindex="-1" aria-labelledby="t-rettifica">
+      <span class="occhiello">Dopo la pubblicazione</span>
+      <h1 id="t-rettifica">Correggere un atto pubblicato: la rettifica</h1>
+      <p class="lead">Hai pubblicato e c'è un errore. Non si corregge: si rettifica.</p>
+
+      <p>Premi <strong>«Crea rettifica»</strong>. Il sistema crea <strong>un atto nuovo, in
+      bozza</strong>, che:</p>
+      <ul>
+        <li>si intitola <code>[Rettifica] &lt;titolo originale&gt;</code></li>
+        <li>ricopia oggetto, categoria, tipo, ente, responsabile</li>
+        <li><strong>ricopia anche gli allegati</strong> (li sostituirai con quelli corretti)</li>
+        <li>resta <strong>collegato</strong> all'atto originale</li>
+      </ul>
+      <p>Poi lo pubblichi come un atto qualunque. Avrà <strong>un suo numero di protocollo</strong>.</p>
+
+      <h2>La motivazione è obbligatoria</h2>
+      <p>Nella scheda <strong>Rettifica</strong>, il campo <strong>Note Rettifica</strong> va
+      compilato. Senza, il salvataggio viene rifiutato:</p>
+      <p class="quote">«Indica la motivazione della rettifica: un atto che ne rettifica un altro deve
+      essere motivato (art. 3 L. 241/1990).»</p>
+      <p>Quella motivazione viene <strong>congelata nel referto</strong> e mostrata nel registro. È il
+      senso della rettifica: non nascondere l'errore, ma <strong>spiegarlo</strong>.</p>
+
+      <div class="box note">
+        <span class="tit">Una cosa sui tempi</span>
+        <p>L'atto originale viene marcato come «rettificato» <strong>solo quando la rettifica viene
+        pubblicata</strong>, non quando la crei. Se abbandoni la bozza della rettifica, l'originale
+        <strong>resta intatto</strong>.</p>
+      </div>
+    </article>
+
+    <!-- ===================== DEFISSIONE ===================== -->
+    <article class="pagina" id="defissione" tabindex="-1" aria-labelledby="t-defissione">
+      <span class="occhiello">Dopo la pubblicazione</span>
+      <h1 id="t-defissione">La scadenza: defissione e referto</h1>
+      <p class="lead">Alla data di fine il sistema fa tutto da solo: archivia l'atto, lo toglie
+      dall'albo, ed emette il referto.</p>
+
+      <h2>Il referto</h2>
+      <p>È <strong>il documento che l'ente esibisce se qualcuno contesta quando e per quanto un atto
+      è stato pubblicato</strong>. Un PDF <strong>congelato</strong>, con:</p>
+      <ul>
+        <li>il periodo <strong>effettivo</strong> di pubblicazione (quello vero, non quello previsto)</li>
+        <li>ente, responsabile, repertorio, segnatura, e — se c'è — la <strong>motivazione della rettifica</strong></li>
+        <li>un'<strong>impronta digitale (SHA-256)</strong>: se qualcuno alterasse il file, l'impronta non tornerebbe</li>
+      </ul>
+
+      <figure>
+        <img src="immagini/16-referto-esempio.png?v=20260715b" alt="Esempio di referto di pubblicazione: intestazione «COMUNE DI ESEMPIO — REFERTO DI PUBBLICAZIONE», tabella con numero di repertorio, oggetto, tipologia, data dell'atto, periodo di pubblicazione e responsabile della pubblicazione, la formula di attestazione e, in fondo, lo spazio per la firma.">
+        <figcaption>Un referto di esempio (dati fittizi). Nella tabella il repertorio, l'oggetto, il
+        <strong>periodo effettivo</strong> di pubblicazione e il <strong>responsabile</strong>; in fondo lo
+        <strong>spazio per la firma</strong> (il referto nasce senza firma).
+        <a href="esempi/referto-di-esempio.pdf" target="_blank" rel="noopener"><strong>Scarica il PDF di esempio ↓</strong></a></figcaption>
+      </figure>
+
+      <h2>Come si firma il referto</h2>
+      <p>Il referto <strong>nasce senza firma</strong>: in fondo trovi lo spazio per firmarlo. Chi firma è
+      il <strong>responsabile della pubblicazione</strong> — cioè chi ha premuto «Pubblica» (messo, segretario,
+      addetto all'albo, secondo il <strong>regolamento del vostro ente</strong>), <strong>non</strong> chi
+      richiede o redige l'atto. Hai due strade:</p>
+
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>Come</th><th>Cosa fai, e cosa fa il sistema</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><strong>Firma digitale</strong></td>
+              <td>Scarichi il PDF, lo firmi in <strong>PAdES</strong> (<code>.pdf</code>) o <strong>CAdES</strong>
+              (<code>.p7m</code>) e lo <strong>ricarichi</strong> (max 20 MB). Il sistema <strong>verifica la
+              firma</strong> e controlla che sia stata apposta <strong>proprio su quel referto</strong>, non su
+              un altro documento (confronto dell'impronta).</td>
+            </tr>
+            <tr>
+              <td><strong>Firma a penna</strong></td>
+              <td>Stampi il referto, <strong>firmi lo spazio in fondo</strong>, lo <strong>scansioni</strong> e
+              ricarichi il PDF. Resta agli atti come copia firmata.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="box warn">
+        <span class="tit">La scansione non ha una firma verificabile</span>
+        <p>Se ricarichi una <strong>scansione</strong>, il referto risulta «Firmato» e la copia è
+        conservata, ma <strong>non c'è una firma digitale da controllare</strong>: vale come copia della firma
+        autografa, non come prova crittografica. Per la <strong>verifica automatica</strong> serve una firma
+        <strong>digitale</strong> (PAdES o CAdES).</p>
+      </div>
+
+      <p>In entrambi i casi il referto <strong>emesso resta identico</strong>, byte per byte: la versione
+      firmata si <strong>aggiunge</strong>, non lo sostituisce.</p>
+
+      <div class="box note">
+        <p>Il referto <strong>non è imposto da una legge nazionale</strong>: la sua disciplina dipende
+        dal <strong>regolamento del vostro ente</strong>. Per questo si può disattivare e la
+        denominazione si può cambiare. <strong>Il cittadino non lo vede</strong>: è un documento
+        interno, agli atti.</p>
+      </div>
+    </article>
+
+    <!-- ===================== REGISTRO ===================== -->
+    <article class="pagina" id="registro" tabindex="-1" aria-labelledby="t-registro">
+      <span class="occhiello">Dopo la pubblicazione</span>
+      <h1 id="t-registro">Il registro delle pubblicazioni</h1>
+      <p class="lead">Dall'elenco degli atti, pulsante <strong>«Registro pubblicazioni»</strong> nella
+      barra in alto. È il riepilogo di tutto ciò che l'ente ha pubblicato, per annualità.</p>
+
+      <figure>
+        <img src="immagini/07-admin-registro-pubblicazioni.png" alt="Il registro delle pubblicazioni: tabella con numero di repertorio, oggetto, tipologia, periodo di pubblicazione e stato di ogni atto, con filtro per anno e pulsante di stampa.">
+        <figcaption>Il registro delle pubblicazioni, filtrabile per anno e stampabile.</figcaption>
+      </figure>
+
+      <p>Per ogni atto pubblicato riporta: <strong>numero di repertorio</strong>, oggetto, tipologia,
+      periodo di pubblicazione (<em>dal — al</em>) e stato. Se un atto è una
+      <a href="#rettifica">rettifica</a>, sotto l'oggetto compare il riferimento all'atto rettificato
+      <strong>con la motivazione</strong>.</p>
+
+      <p>Si può <strong>filtrare per anno</strong> (o vedere tutte le annualità insieme) e
+      <strong>stampare</strong> con il pulsante «Stampa registro» — utile per la vidimazione periodica,
+      se il regolamento dell'ente la prevede.</p>
+
+      <div class="box note">
+        <span class="tit">Registro e referto non sono la stessa cosa</span>
+        <p>Il <strong>registro</strong> è l'elenco riepilogativo di <em>tutte</em> le pubblicazioni.
+        Il <a href="#defissione"><strong>referto</strong></a> è l'attestazione del <em>singolo</em>
+        atto, emessa alla defissione. Il primo si consulta, il secondo si esibisce.</p>
+      </div>
+    </article>
+
+    <!-- ===================== RIATTIVARE ===================== -->
+    <article class="pagina" id="riattivare" tabindex="-1" aria-labelledby="t-riattivare">
+      <span class="occhiello">Dopo la pubblicazione</span>
+      <h1 id="t-riattivare">Riattivare un atto archiviato</h1>
+      <p class="lead">Un atto archiviato torna online <strong>prorogandolo</strong>: apri l'atto e, nel
+      riquadro «Proroga Fine Pubblicazione», indica una <strong>data futura</strong>. Il pulsante
+      diventa «Riattiva e Proroga».</p>
+
+      <figure>
+        <img src="immagini/09-admin-atto-archiviato.png?v=20260715" alt="Il riquadro proroga su un atto archiviato: un avviso spiega che impostando una data futura l'atto verrà riattivato e riportato allo stato Pubblicato; il pulsante dice «Riattiva e Proroga».">
+        <figcaption>Su un atto archiviato il riquadro cambia: avvisa che l'atto tornerà online e il pulsante diventa «Riattiva e Proroga».</figcaption>
+      </figure>
+
+      <p>La data che indichi è la <strong>nuova fine</strong> della pubblicazione. L'atto <strong>torna
+      online subito</strong>, direttamente come «Pubblicato»: la riattivazione <strong>non ripassa</strong>
+      dallo stato «In Attesa», non c'è una nuova finestra per ripensarci.</p>
+
+      <p>Il sistema apre un <strong>nuovo periodo</strong> di pubblicazione — che parte adesso — e
+      <strong>non allunga quello vecchio</strong>. È importante: se allungasse il vecchio, il referto
+      attesterebbe una pubblicazione <em>continua</em> che comprende i giorni in cui l'atto era invisibile
+      — cioè <strong>attesterebbe il falso</strong>. Così invece avrai <strong>due referti</strong>, uno per
+      periodo, entrambi veri.</p>
+
+      <h2>Due casi in cui viene rifiutata</h2>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>Caso</th><th>Perché</th></tr></thead>
+          <tbody>
+            <tr><td><strong>C'è il diritto all'oblio attivo</strong></td><td>«Ripubblicarlo sarebbe un trattamento illecito.» Prima va revocato l'oblio, motivando.</td></tr>
+            <tr><td><strong>I documenti sono stati cancellati</strong></td><td>«Un atto ripubblicato senza il proprio documento non ha valore.» Vale <strong>anche dopo aver revocato l'oblio</strong>: se i PDF non ci sono più, non tornano.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </article>
+
+    <!-- ===================== OBLIO ===================== -->
+    <article class="pagina" id="oblio" tabindex="-1" aria-labelledby="t-oblio">
+      <span class="occhiello">Dopo la pubblicazione</span>
+      <h1 id="t-oblio">Il diritto all'oblio</h1>
+      <p class="lead">Quando un cittadino chiede la cancellazione dei propri dati (art. 17 GDPR),
+      l'ente lo esegue sull'atto. La motivazione è sempre obbligatoria e resta tracciata.</p>
+
+      <h2>Come si attiva</h2>
+      <p>Si fa dall'atto stesso, e <strong>solo su un atto pubblicato o archiviato</strong> (su una
+      bozza non avrebbe senso: non è ancora pubblico). Apri l'atto: se hai il permesso, in alto compare
+      il riquadro <strong>«Attiva il diritto all'oblio»</strong>. Scrivi la <strong>motivazione</strong>
+      — il riferimento all'istanza dell'interessato, <strong>almeno 15 caratteri</strong> — e premi
+      <strong>«Attiva oblio»</strong>.</p>
+
+      <figure>
+        <img src="immagini/17-admin-oblio.png?v=20260715" alt="Il riquadro «Attiva il diritto all'oblio» in cima a un atto: la spiegazione (art. 17 GDPR, effetto immediato se archiviato o differito se nei termini, azione tracciata), il campo «Motivazione dell'attivazione» con esempio di riferimento all'istanza, e il pulsante «Attiva oblio».">
+        <figcaption>Il riquadro «Attiva il diritto all'oblio»: la motivazione è obbligatoria (il riferimento
+        all'istanza) e viene registrata nel log insieme al tuo nome e alla data.</figcaption>
+      </figure>
+
+      <div class="box note">
+        <span class="tit">Chi può farlo, e cosa resta scritto</span>
+        <p>Serve un <strong>permesso dedicato</strong>: non tutti i redattori possono attivare o revocare
+        l'oblio. E ogni attivazione — come ogni revoca — finisce nell'<strong>audit log</strong> con il tuo
+        nome utente, la data e la motivazione: è l'<strong>accountability</strong> che la norma richiede
+        (art. 5.2 GDPR).</p>
+      </div>
+
+      <h2>Cosa succede dipende da dove si trova l'atto</h2>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>Situazione</th><th>Effetto</th></tr></thead>
+          <tbody>
+            <tr><td>L'atto è <strong>archiviato</strong> (termini finiti)</td><td><strong>Sparisce subito</strong> dal sito: le sue pagine rispondono «non trovato».</td></tr>
+            <tr><td>L'atto è <strong>ancora nei termini</strong></td><td><strong>Resta online.</strong> L'oblio viene registrato e scatterà <strong>alla scadenza</strong>.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="box note">
+        <span class="tit">Perché un atto nei termini resta online?</span>
+        <p>Perché durante la pubblicità legale <strong>l'obbligo di legge prevale</strong> sul diritto
+        alla cancellazione (art. 17.3.b GDPR). Non è il software che decide: è la norma. Il sistema
+        registra la richiesta e la esegue <strong>appena può</strong>.
+        <a href="#norme"><strong>Le norme dietro questa regola ↗</strong></a></p>
+      </div>
+
+      <h2>Nessuna «lapide»</h2>
+      <p>Quando un atto sparisce per oblio, <strong>non resta un cartello</strong> che dica «contenuto
+      rimosso». Non è una dimenticanza: un avviso del genere <strong>rivelerebbe proprio ciò che l'oblio
+      deve nascondere</strong> — cioè che su quell'atto qualcuno ha chiesto la cancellazione. Perciò la
+      pagina risponde «non trovato», <strong>come se l'atto non fosse mai esistito</strong>. L'atto
+      resta comunque <strong>nel pannello di amministrazione</strong>, a disposizione dell'ente — salvo
+      che l'ente non abbia scelto di cancellarne anche i documenti (vedi sotto).</p>
+
+      <h2>Nascondere, o cancellare davvero?</h2>
+      <p>Di norma l'oblio <strong>nasconde</strong> l'atto ma <strong>conserva i documenti</strong>: i
+      PDF restano sul server. Così, se l'oblio è stato un errore, si può tornare indietro.</p>
+      <p>L'ente può però scegliere la <strong>cancellazione vera</strong>: nelle Opzioni c'è
+      <strong>«Elimina file PDF con diritto all'oblio»</strong>, di serie <strong>spenta</strong>. Se
+      attiva, quando un atto con oblio viene <strong>archiviato</strong> i suoi <strong>file PDF vengono
+      eliminati fisicamente</strong> dal server (i record degli allegati restano, con il nome del file
+      svuotato, per tracciabilità).</p>
+      <div class="box stop">
+        <span class="tit">Con i PDF cancellati, l'oblio non si torna indietro</span>
+        <p>La cancellazione dei documenti è <strong>irreversibile</strong>. Puoi ancora revocare il
+        <em>flag</em> dell'oblio, ma <strong>l'atto non potrà più tornare online</strong>: senza i suoi
+        documenti non è riattivabile. Attiva questa opzione <strong>solo dopo una valutazione
+        normativa</strong>.</p>
+      </div>
+
+      <h2>Revocare l'oblio</h2>
+      <p>La revoca serve a <strong>correggere un errore</strong>: l'oblio è stato attivato per sbaglio,
+      o sull'atto sbagliato. Non è un ripensamento del cittadino. Sull'atto compare il riquadro rosso
+      <strong>«Diritto all'Oblio attivo»</strong>: scrivi la <strong>motivazione</strong> (almeno 15
+      caratteri) e premi <strong>«Revoca oblio»</strong>. Serve lo <strong>stesso permesso</strong>
+      dell'attivazione, e anche la revoca finisce <strong>nel log</strong> — nome, data, motivazione.</p>
+
+      <figure>
+        <img src="immagini/18-admin-oblio-revoca.png?v=20260715" alt="Il riquadro rosso «Diritto all'Oblio attivo»: spiega che l'atto è stato rimosso in esecuzione dell'oblio e non può essere ripubblicato, e offre il campo «Motivazione della revoca» con il pulsante «Revoca oblio».">
+        <figcaption>Il riquadro «Diritto all'Oblio attivo»: spiega perché l'atto non è online e, a chi ne ha
+        il permesso, offre la revoca con motivazione obbligatoria.</figcaption>
+      </figure>
+
+      <div class="box warn">
+        <span class="tit">La revoca da sola non rimette online l'atto</span>
+        <p>Revocare <strong>azzera solo il flag</strong> dell'oblio: non tocca la visibilità. Cosa succede
+        dipende da <strong>dov'era l'atto</strong> quando l'oblio è scattato.</p>
+      </div>
+
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>Se l'oblio era scattato…</th><th>Dopo la revoca</th></tr></thead>
+          <tbody>
+            <tr><td>su un atto <strong>archiviato</strong> (già reso invisibile)</td><td>L'atto <strong>resta invisibile</strong>. Per riportarlo online devi <a href="#riattivare">riattivarlo</a> — e solo se i suoi <strong>PDF esistono ancora</strong>.</td></tr>
+            <tr><td>su un atto <strong>ancora nei termini</strong> (rimozione solo programmata)</td><td>La revoca <strong>annulla la rimozione programmata</strong>: l'atto prosegue normale e si archivia alla scadenza come sempre.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="box note">
+        <p>La revoca è <strong>permessa ma tracciata</strong>, non vietata: un divieto assoluto verrebbe
+        aggirato modificando il database a mano. Meglio un'operazione <strong>possibile e registrata</strong>,
+        di cui resta traccia — di nuovo l'<strong>accountability</strong> dell'art. 5.2 GDPR.</p>
+      </div>
+    </article>
+
+    <!-- ===================== CATEGORIE ===================== -->
+    <article class="pagina" id="categorie" tabindex="-1" aria-labelledby="t-categorie">
+      <span class="occhiello">Organizzare</span>
+      <h1 id="t-categorie">Le categorie</h1>
+      <p class="lead">Le categorie sono le <strong>cartelle</strong> in cui classificare gli atti:
+      servono a tenerli in ordine e a farli trovare al cittadino. Ogni atto deve stare in una categoria.</p>
+
+      <h2>A cosa servono</h2>
+      <p>Le categorie hanno <strong>tre usi</strong>, e un solo scopo: mettere ordine. Non cambiano nulla
+      del valore legale dell'atto.</p>
+      <ul>
+        <li><strong>Classificano ogni atto.</strong> Quando prepari un atto, la categoria è un campo
+        <strong>obbligatorio</strong>: dice «di che tipo è» (Determine, Bandi e gare, Delibere…).</li>
+        <li><strong>Guidano il cittadino.</strong> Nel sito pubblico le categorie compaiono come un
+        <strong>albero di navigazione</strong> a lato dell'elenco: il cittadino ci clicca sopra per
+        vedere <strong>solo</strong> gli atti di quella categoria. Accanto a ciascuna c'è il
+        <strong>numero di atti</strong> che vi troverà.</li>
+        <li><strong>Si possono annidare.</strong> Una categoria può avere <strong>sotto-categorie</strong>
+        (per esempio «Delibere → Delibere di Giunta»). Cliccando la categoria madre il cittadino vede
+        anche gli atti delle sotto-categorie.</li>
+      </ul>
+      <p>Quello che le categorie <strong>non</strong> fanno: non toccano il protocollo, le date, i termini
+      o il documento dell'atto. Sono una <strong>classificazione</strong>, non una parte dell'atto — per
+      questo, come vedremo, cambiare categoria è l'unica modifica ammessa su un atto già blindato.</p>
+
+      <h2>Dove si gestiscono</h2>
+      <p><em>Componenti → Albo Pretorio Online → Categorie.</em> Da qui le crei, le rinomini, le riordini
+      e le annidi. Sono le <strong>categorie standard di Joomla</strong>, ma dedicate all'albo: non si
+      mescolano con quelle degli articoli del sito.</p>
+
+      <figure>
+        <img src="immagini/05-admin-categorie.png?v=20260715" alt="La gestione delle categorie dell'albo nel pannello di amministrazione: l'elenco con Determine, Bandi e gare, Delibere e le rispettive sotto-categorie.">
+        <figcaption>La gestione delle categorie dell'albo: qui le crei e le organizzi. Ogni atto ne
+        richiederà una.</figcaption>
+      </figure>
+
+      <h2>Come si crea (o si modifica) una categoria</h2>
+      <p>Dall'elenco delle categorie premi <strong>«Nuovo»</strong> — oppure apri una categoria
+      esistente per modificarla: la scheda è la stessa. Il pulsante <strong>«Scegli aiuto in linea»</strong>,
+      in alto a destra, accende le spiegazioni sotto ogni campo, come nella foto qui sotto.</p>
+
+      <figure>
+        <img src="immagini/19-admin-categoria-crea.png?v=20260715" alt="La scheda di una categoria dell'albo con l'aiuto in linea acceso: Titolo, Alias, l'editor Descrizione e, nel riquadro laterale, i campi Principale (categoria madre), Stato e Accesso ciascuno con la propria spiegazione.">
+        <figcaption>La scheda di una categoria — qui «Delibere di Giunta», sotto-categoria di «Delibere» —
+        con l'aiuto in linea acceso: sotto ogni campo compare la spiegazione.</figcaption>
+      </figure>
+
+      <p>I campi che contano:</p>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>Campo</th><th>Cosa fa</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Titolo</strong> <span class="text-muted">(obbligatorio)</span></td><td>Il nome che il <strong>cittadino</strong> vedrà nell'albero delle categorie, sul sito pubblico.</td></tr>
+            <tr><td><strong>Principale</strong></td><td>La <strong>categoria madre</strong>. Lascialo in alto per una categoria principale; scegli una categoria esistente per creare una <strong>sotto-categoria</strong> — è così che «Delibere di Giunta» sta dentro «Delibere».</td></tr>
+            <tr><td><strong>Descrizione</strong></td><td>Facoltativa: un testo introduttivo per la categoria.</td></tr>
+            <tr><td><strong>Stato</strong></td><td>«Pubblicato» la rende visibile. <strong>Attenzione:</strong> sospenderla la nasconde dalla navigazione del sito, ma <strong>non ritira gli atti</strong> che contiene — restano pubblicati e i termini continuano a decorrere. Un atto si ritira solo alla scadenza o con l'oblio.</td></tr>
+            <tr><td><strong>Accesso</strong></td><td>Vedi il riquadro qui sotto: <strong>non</strong> limita chi vede gli atti.</td></tr>
+            <tr><td><strong>Alias</strong></td><td>Generato dal titolo; è la parte dell'URL. Puoi lasciarlo com'è.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Si salva con <strong>«Salva»</strong> (o «Salva e Chiudi»). Per <strong>rinominare</strong> una
+      categoria basta riaprirla e cambiare il titolo; per <strong>riordinarle</strong> si usa
+      l'ordinamento nell'elenco. Spostare un atto da una categoria all'altra si fa invece
+      <strong>dalla scheda dell'atto</strong>, cambiando il campo Categoria (finché l'atto non è
+      blindato).</p>
+
+      <div class="box stop">
+        <span class="tit">L'errore che quasi tutti fanno: il campo «Accesso»</span>
+        <p>Nella scheda della categoria c'è il campo <strong>«Accesso»</strong> (il livello di accesso).
+        Sembra che serva a <strong>limitare chi vede gli atti</strong> di quella categoria.
+        <strong>Non è così.</strong></p>
+        <p>Quel campo nasconde <strong>la categoria dall'albero di navigazione</strong> a chi non è
+        autorizzato — ma <strong>gli atti restano nell'elenco pubblico</strong>: la loro visibilità
+        dipende dal livello di accesso <em>dell'atto</em>, non da quello della categoria. Un atto
+        pubblicato all'albo <strong>è consultabile da chiunque</strong>, anche se sta in una categoria
+        «riservata». È giusto così — un albo pretorio è pubblico per definizione — ma è una
+        <strong>falsa sicurezza</strong> se qualcuno ci conta.</p>
+        <p><strong>Se un contenuto non deve essere pubblico, non va pubblicato all'albo.</strong></p>
+      </div>
+
+      <h2>Il numero accanto a ogni categoria</h2>
+      <p>Nell'albero, accanto a ogni categoria, c'è il conteggio degli atti. È <strong>coerente con ciò
+      che vedrai davvero</strong>: nella vista <strong>Albo</strong> conta i pubblicati, nella vista
+      <strong>Archivio</strong> gli archiviati. Gli atti <strong>in oblio non vengono mai contati</strong>,
+      così il numero non rivela l'esistenza di un atto rimosso.</p>
+
+      <h2>Non si cancella una categoria che contiene atti</h2>
+      <p class="quote">«Impossibile cancellare la categoria: contiene N atti dell'Albo Pretorio…
+      Sposta prima l'atto in un'altra categoria.»</p>
+      <p>Il sistema <strong>impedisce</strong> di cancellare una categoria che contiene atti: cancellarla
+      li lascerebbe <strong>orfani</strong>, senza classificazione. Prima vanno spostati in un'altra
+      categoria.</p>
+      <p>Se però un atto <strong>è già rimasto orfano</strong> (per esempio da un'installazione vecchia),
+      aprendolo trovi il riquadro <strong>«Categoria mancante»</strong>: è <strong>l'unica</strong>
+      modifica ammessa su un atto blindato, proprio perché la categoria non incide su protocollo, date,
+      termini o documento. L'operazione viene registrata.</p>
+    </article>
+
+    <!-- ===================== PERMESSI ===================== -->
+    <article class="pagina" id="permessi" tabindex="-1" aria-labelledby="t-permessi">
+      <span class="occhiello">Organizzare</span>
+      <h1 id="t-permessi">Chi può fare cosa</h1>
+      <p class="lead"><em>Opzioni → Permessi.</em> I permessi decidono <strong>cosa può fare un
+      funzionario in amministrazione</strong>. Il senso principale: chi redige e chi pubblica devono
+      poter essere persone diverse — è ciò che rende difendibile un albo davanti a un controllo.</p>
+
+      <div class="box note">
+        <span class="tit">I permessi NON decidono cosa vede il cittadino</span>
+        <p>L'albo è <strong>pubblico per definizione</strong>: un atto pubblicato è consultabile da
+        <strong>chiunque</strong>, senza login e a prescindere dai permessi. I permessi governano il
+        <strong>lavoro in amministrazione</strong>, non la vista pubblica — con <strong>una sola
+        eccezione sul sito</strong>: lo <strong>scarico degli allegati</strong> degli atti
+        <strong>archiviati</strong> (e delle bozze) è riservato a chi ne ha il permesso; il cittadino li
+        vede elencati ma <strong>col lucchetto</strong>. Vedi <a href="#cittadino">Cosa vede il cittadino</a>.</p>
+      </div>
+
+      <h2>I permessi che contano</h2>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>Permesso</th><th>Cosa consente</th><th>Dove</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Accesso Amministrativo</strong></td><td>Entrare nella gestione dell'albo in amministrazione</td><td>Admin</td></tr>
+            <tr><td><strong>Crea</strong></td><td>Creare nuove bozze</td><td>Admin</td></tr>
+            <tr><td><strong>Modifica</strong></td><td>Modificare le bozze (e scaricare gli allegati di una bozza dal sito)</td><td>Admin + sito</td></tr>
+            <tr><td><strong>Pubblicare Atti</strong></td><td>Premere «Pubblica»: assegnare protocollo e data certa. <strong>È il permesso che separa il redattore dal responsabile.</strong></td><td>Admin</td></tr>
+            <tr><td><strong>Rettificare Atti</strong></td><td>Creare la rettifica di un atto blindato</td><td>Admin</td></tr>
+            <tr><td><strong>Revocare il Diritto all'Oblio</strong></td><td>Attivare <strong>e</strong> revocare l'oblio, con motivazione tracciata</td><td>Admin</td></tr>
+            <tr><td><strong>Scaricare Archiviati</strong></td><td>Scaricare gli allegati degli atti archiviati e i referti — <strong>anche dal sito pubblico</strong>, dove il cittadino non può</td><td>Admin + sito</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p><strong>Un redattore</strong> tipico ha: Accesso Amministrativo, Crea, Modifica.
+      <strong>Non</strong> ha «Pubblicare Atti»: il pulsante non gli compare, e anche forzando la
+      richiesta il sistema la respinge.</p>
+
+      <div class="box note">
+        <p>Avere «Pubblicare Atti» <strong>non basta</strong>: la pubblicazione fallisce comunque se
+        manca l'ente emanante o l'allegato. <strong>I controlli valgono per tutti</strong>,
+        amministratore compreso.</p>
+      </div>
+
+      <div class="box warn">
+        <span class="tit">«Modifica» ed «Elimina» non aggirano i presìdi</span>
+        <p>Anche con «Modifica», «Elimina» o «Modifica Stato», un atto <strong>blindato</strong> resta
+        immodificabile e non si cancella — nemmeno con la spunta verde/rossa di Joomla: il workflow
+        legale prevale sui permessi. I permessi dicono <em>chi può provarci</em>; i presìdi dicono
+        <em>cosa è comunque vietato</em>.</p>
+      </div>
+
+      <p>Ogni azione finisce nel <strong>registro delle operazioni</strong>: chi, cosa, quando, da
+      quale indirizzo IP.</p>
+    </article>
+
+    <!-- ===================== CITTADINO ===================== -->
+    <article class="pagina" id="cittadino" tabindex="-1" aria-labelledby="t-cittadino">
+      <span class="occhiello">Organizzare</span>
+      <h1 id="t-cittadino">Cosa vede il cittadino</h1>
+      <p class="lead">L'albo dal lato pubblico: elenco, ricerca, filtri, e la scheda del singolo
+      atto.</p>
+
+      <figure>
+        <img src="immagini/10-cittadino-elenco.png" alt="L'albo visto dal cittadino: elenco degli atti con ricerca, filtri e albero delle categorie.">
+        <figcaption>L'albo dal lato pubblico.</figcaption>
+      </figure>
+
+      <p><strong>Nell'elenco:</strong> numero di protocollo, titolo, data di pubblicazione, tipo,
+      categoria, numero di allegati. Può cercare per parola chiave, protocollo o oggetto, e filtrare
+      per tipo, anno e categoria.</p>
+
+      <p><strong>Nella scheda dell'atto:</strong> oggetto, descrizione, ente, responsabile, date,
+      segnatura, gli allegati da scaricare, e — per chi vuole controllare — l'<strong>impronta
+      SHA-256</strong> di ogni documento, con la spiegazione di come verificarla da sé. Se l'atto è
+      stato rettificato (o è una rettifica), lo vede scritto, col collegamento all'altro atto.</p>
+
+      <figure>
+        <img src="immagini/11-cittadino-atto.png" alt="La scheda pubblica di un atto: numero di protocollo, oggetto, allegato scaricabile con impronta di integrità, e il riquadro Informazioni Atto con date e segnatura.">
+        <figcaption>La scheda pubblica di un atto in pubblicazione: l'allegato si scarica, l'impronta si può verificare.</figcaption>
+      </figure>
+
+      <h2>E l'atto archiviato?</h2>
+      <p>Resta consultabile nello storico, ma con un avviso in testa: <em>«Questo atto è stato
+      archiviato. Le informazioni sono conservate a solo scopo storico.»</em> L'allegato compare
+      nell'elenco ma <strong>non è più scaricabile</strong> (icona con il lucchetto): il documento
+      resta disponibile solo a chi, in amministrazione, ha il permesso di scaricare gli archiviati.</p>
+
+      <figure>
+        <img src="immagini/12-cittadino-atto-archiviato.png" alt="La scheda pubblica di un atto archiviato: avviso di archiviazione in testa e allegato con il lucchetto, non scaricabile.">
+        <figcaption>Un atto archiviato lato pubblico: si legge, ma l'allegato è bloccato.</figcaption>
+      </figure>
+
+      <h2>Cosa NON vede, mai</h2>
+      <ul>
+        <li>le <strong>bozze</strong> e gli atti <strong>In Attesa</strong> — rispondono «non trovato» anche indovinando l'indirizzo</li>
+        <li>gli atti in <strong>oblio</strong></li>
+        <li>il <strong>referto</strong></li>
+        <li>gli <strong>allegati degli atti archiviati</strong> (li scarica solo chi ne ha il permesso)</li>
+      </ul>
+    </article>
+
+    <!-- ===================== REQUISITI ===================== -->
+    <article class="pagina" id="requisiti" tabindex="-1" aria-labelledby="t-requisiti">
+      <span class="occhiello">Installare</span>
+      <h1 id="t-requisiti">Requisiti</h1>
+
+      <div class="box stop">
+        <span class="tit">Se leggi una cosa sola, leggi questa</span>
+        <p>L'installazione ha <strong>un passo che si può sbagliare in silenzio</strong>: far girare i
+        <a href="#lavori">lavori automatici</a>. Se lo salti, il componente si installa, l'interfaccia
+        funziona, il funzionario preme «Pubblica» e riceve il numero di protocollo — <strong>ma l'atto
+        non diventa mai pubblico</strong>, e nessuno se ne accorge.</p>
+      </div>
+
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>Requisito</th><th>Se manca</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Joomla 5.1+</strong> oppure <strong>6.x</strong></td><td>non si installa</td></tr>
+            <tr><td><strong>PHP 8.3+</strong></td><td>non si installa</td></tr>
+            <tr><td>MySQL / MariaDB</td><td>non si installa</td></tr>
+            <tr><td>Cartella <code>media/</code> <strong>scrivibile</strong> dal server web</td><td>non salva allegati né referti (di norma su Joomla è già così)</td></tr>
+            <tr><td>Un modo per eseguire i <strong>lavori automatici</strong></td><td>⚠️ <strong>l'albo sembra funzionare ma non pubblica</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>Due strumenti consigliati sul server</h2>
+      <p>Nessuno dei due è bloccante: se mancano, il componente <strong>degrada in modo onesto</strong>
+      — non verifica, e <strong>lo dichiara</strong> invece di fingere.</p>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>Strumento</th><th>A cosa serve</th><th>Se manca</th></tr></thead>
+          <tbody>
+            <tr><td><code>openssl</code> da riga di comando</td><td>verificare le firme <strong>PAdES</strong> (PDF firmati)</td><td>scrive «integrità non verificabile su questo server»</td></tr>
+            <tr><td><code>pdftotext</code><br>(<code>poppler-utils</code>)</td><td>riconoscere i PDF che sono <strong>solo una scansione</strong></td><td>l'avviso «sembra una scansione» <strong>non compare mai</strong>: si pubblicherebbero documenti illeggibili per un non vedente senza saperlo</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="box warn">
+        <p><strong>Verificateli davvero.</strong> <code>pdftotext</code> manca su molti hosting. È il
+        classico controllo che tutti danno per scontato e nessuno fa.</p>
+      </div>
+
+      <h2>Se l'installazione dice che il file è troppo grande</h2>
+      <p>Il pacchetto pesa qualche MB (contiene la libreria che genera i PDF del referto). Se al
+      caricamento Joomla risponde che <strong>il file supera la dimensione massima</strong>, il
+      limite <strong>non è di Joomla</strong>: è del <strong>PHP del vostro server</strong>. Si
+      alza, ed è una modifica di configurazione, non un problema del componente.</p>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>Parametro PHP</th><th>Cosa controlla</th><th>Valore consigliato</th></tr></thead>
+          <tbody>
+            <tr><td><code>upload_max_filesize</code></td><td>dimensione massima di un file caricato</td><td>almeno <strong>16M</strong></td></tr>
+            <tr><td><code>post_max_size</code></td><td>dimensione massima dell'intero invio (deve essere ≥ del precedente)</td><td>almeno <strong>16M</strong></td></tr>
+            <tr><td><code>memory_limit</code></td><td>memoria a disposizione (l'installazione ne usa un po')</td><td>almeno <strong>128M</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Dove metterli dipende dall'hosting: nel <code>php.ini</code>, in un file
+      <code>.user.ini</code> nella cartella del sito, o dal pannello del provider. In caso di dubbio,
+      <strong>chiedete al vostro hosting di alzare <code>upload_max_filesize</code> e
+      <code>post_max_size</code></strong>: sanno cosa fare. Il limite <em>effettivo</em> che Joomla
+      applica è il <strong>più basso</strong> dei due.</p>
+      <div class="box note">
+        <p>La pagina <em>Sistema → Informazioni di sistema → Informazioni PHP</em> vi dice i valori
+        attualmente attivi, così verificate se la modifica ha avuto effetto.</p>
+      </div>
+    </article>
+
+    <!-- ===================== INSTALLAZIONE ===================== -->
+    <article class="pagina" id="installazione" tabindex="-1" aria-labelledby="t-installazione">
+      <span class="occhiello">Installare</span>
+      <h1 id="t-installazione">Installare il componente</h1>
+      <p class="lead">Caricare il pacchetto è la parte facile. Qui sotto: come si installa e i due
+      controlli da fare subito. Poi si passa alla <a href="#configurazione">configurazione</a> e — il
+      passo che conta — ai <a href="#lavori">lavori automatici</a>.</p>
+
+      <h2>Caricare il pacchetto</h2>
+      <p><em>Sistema → Installa estensioni</em> → caricate lo zip. Vengono installati il componente e
+      <strong>due plugin</strong>.</p>
+      <div class="box note">
+        <p>Se il caricamento viene rifiutato perché <strong>il file è troppo grande</strong>, non è un
+        limite di Joomla: è il PHP del server. <a href="#requisiti"><strong>Come alzarlo ↗</strong></a></p>
+      </div>
+
+      <h2>Controllare che i due plugin siano attivi</h2>
+      <p><em>Sistema → Plugin</em> → cercate «alboonline». L'installazione li abilita da sola, ma
+      controllare costa dieci secondi.</p>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>Plugin</th><th>Cosa fa</th><th>Se è disattivato</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Task — Albo Pretorio Online</strong></td><td>esegue i due lavori automatici</td><td>⚠️ <strong>l'albo non pubblica e non archivia nulla</strong></td></tr>
+            <tr><td><strong>Contenuti — Albo Pretorio Online</strong></td><td>impedisce di cancellare una categoria che contiene atti; aggiunge gli aiuti in linea</td><td>una categoria cancellata lascia gli <strong>atti orfani</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>Fatto questo, i prossimi passi</h2>
+      <p>Il pacchetto è installato, ma l'albo <strong>non è ancora pronto</strong>. In ordine:</p>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>Cosa manca</th><th>Dove, in questa guida</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Configurare</strong> l'ente emanante, le tipologie e durate, i permessi e la <strong>voce di menu</strong> che mostra l'albo al cittadino</td><td>→ <a href="#configurazione">Configurazione minima</a></td></tr>
+            <tr><td><strong>Far girare i lavori automatici</strong> (il passo che decide se l'albo funziona davvero) e <strong>verificare</strong> il ciclo con un atto di prova</td><td>→ <a href="#lavori">I lavori automatici</a></td></tr>
+            <tr><td>Tutte le altre <strong>opzioni</strong>, una per una</td><td>→ <a href="#opzioni">Tutte le opzioni</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="box stop">
+        <span class="tit">Non fermarti all'installazione</span>
+        <p>Il componente installato e l'interfaccia che funziona <strong>non bastano</strong>. Senza i
+        <a href="#lavori">lavori automatici</a> attivi <em>e innescati</em>, il funzionario preme
+        «Pubblica», riceve il protocollo — ma <strong>l'atto non diventa mai pubblico</strong>, e nessuno
+        se ne accorge.</p>
+      </div>
+    </article>
+
+    <!-- ===================== CONFIGURAZIONE ===================== -->
+    <article class="pagina" id="configurazione" tabindex="-1" aria-labelledby="t-configurazione">
+      <span class="occhiello">Installare</span>
+      <h1 id="t-configurazione">Configurazione minima</h1>
+      <p class="lead">Il minimo per partire dopo l'installazione: tre impostazioni nelle <em>Opzioni</em>
+      (<em>Componenti → Albo Pretorio Online → Opzioni</em>) e una <strong>voce di menu</strong> che mostri
+      l'albo al cittadino.</p>
+
+      <figure>
+        <img src="immagini/04-admin-opzioni.png" alt="Le Opzioni del componente: ente emanante, tipi di atto, durate, buffer.">
+        <figcaption>Le Opzioni del componente.</figcaption>
+      </figure>
+
+      <h2>1. Ente Emanante Predefinito — obbligatorio</h2>
+      <p>Non ha un valore preimpostato, ed è voluto: <strong>senza, la pubblicazione viene
+      rifiutata</strong>. Un atto all'albo deve dire <strong>di chi è</strong>.</p>
+      <div class="box note">
+        <span class="tit">Viene congelato</span>
+        <p>Il nome dell'ente viene copiato su ogni atto alla creazione, e nel referto all'emissione. Se
+        un domani cambia la denominazione, <strong>i referti già emessi non cambiano</strong> — ed è
+        corretto: attestano cosa era vero allora.</p>
+      </div>
+
+      <h2>2. Tipi di Atto e durate</h2>
+      <p>Ogni tipologia ha i <strong>suoi giorni</strong> (preimpostati: determina, delibera, decreto,
+      avviso <strong>15 giorni</strong>; bando <strong>30</strong>).</p>
+      <div class="box warn">
+        <p>⚠️ <strong>La durata è un minimo di legge, non un valore predefinito.</strong> Chi pubblica
+        <strong>non può accorciarla</strong>. Impostatela sulla base del <strong>vostro
+        regolamento</strong>.</p>
+      </div>
+
+      <h2>3. Permessi</h2>
+      <p><em>Opzioni → Permessi.</em> Il minimo: <strong>chi redige e chi pubblica devono poter essere
+      persone diverse</strong> — è ciò che rende difendibile un albo davanti a un controllo. Dettaglio in
+      <a href="#permessi">Chi può fare cosa</a>.</p>
+
+      <h2>4. Mostrare l'albo sul sito (voce di menu)</h2>
+      <p>Le tre impostazioni sopra dicono <em>come</em> funziona l'albo; questa dice <em>dove</em> lo vede
+      il cittadino. In <em>Menu → (il tuo menu) → Nuovo</em>, alla voce <strong>«Tipo di voce di menu»</strong>
+      scegli <strong>«Albo Pretorio – Elenco Atti»</strong>. Puoi crearne due:</p>
+      <ul>
+        <li>una <strong>«Albo»</strong> con <strong>«Solo atti archiviati» = No</strong>: mostra gli atti <strong>in corso di pubblicazione</strong>;</li>
+        <li>una <strong>«Archivio»</strong> con <strong>«Solo atti archiviati» = Sì</strong>: mostra lo <strong>storico</strong> degli atti già ritirati ma consultabili.</li>
+      </ul>
+      <p>Nella stessa voce scegli se mostrare l'<strong>albero delle categorie</strong>, i
+      <strong>filtri di ricerca</strong> e <strong>quanti atti per pagina</strong>.</p>
+    </article>
+
+    <!-- ===================== LAVORI ===================== -->
+    <article class="pagina" id="lavori" tabindex="-1" aria-labelledby="t-lavori">
+      <span class="occhiello">Installare · il passo che conta</span>
+      <h1 id="t-lavori">I lavori automatici</h1>
+      <p class="lead">È il capitolo che decide se il vostro albo funziona davvero.</p>
+
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>Lavoro</th><th>Cosa fa</th><th>Se non gira</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Albo Pretorio -<br>Blocca Atti Pubblicati</strong></td><td>a fine buffer rende l'atto <strong>pubblico</strong> e lo <strong>sigilla</strong></td><td>gli atti <strong>non diventano mai visibili</strong>: l'ente crede di aver pubblicato e non l'ha fatto</td></tr>
+            <tr><td><strong>Albo Pretorio -<br>Archivia Atti Scaduti</strong></td><td>a fine periodo <strong>ritira</strong> l'atto ed emette il <strong>referto</strong></td><td>gli atti <strong>restano online oltre i termini</strong> (permanenza indebita, sanzionata dal Garante) e <strong>non resta prova</strong> di quando si è pubblicato</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>I due lavori esistono già</h2>
+      <p><strong>L'installazione li crea da sola</strong>, attivi: <em>Blocca</em> ogni <strong>5
+      minuti</strong>, <em>Archivia</em> ogni <strong>15</strong>.</p>
+
+      <figure>
+        <img src="immagini/06-admin-lavori-pianificati.png" alt="Le attività pianificate di Joomla, con i due lavori dell'albo attivi.">
+        <figcaption>Sistema → Attività pianificate. Devono esserci entrambi, e devono essere attivi.</figcaption>
+      </figure>
+
+      <p>Se <strong>mancano</strong>, il componente lo dice con un avviso in cima all'elenco atti.</p>
+
+      <h2>Ma creare i lavori NON basta: vanno innescati</h2>
+      <p>Joomla <strong>non ha un orologio proprio</strong>. Le attività partono solo se
+      <strong>qualcosa le sveglia</strong>. I modi sono tre, e per un albo <strong>la scelta non è
+      indifferente</strong>:</p>
+
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>Modo</th><th>Come funziona</th><th>Va bene per un albo?</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Scheduler «pigro»</strong><br><em>(predefinito di Joomla)</em></td><td>i lavori partono <strong>quando qualcuno visita il sito</strong></td><td>❌ <strong>No.</strong> Un albo comunale ha poche visite: un atto può restare «In Attesa» <strong>per ore o giorni</strong>. Nessun visitatore = nessuna pubblicazione</td></tr>
+            <tr><td><strong>Web cron</strong></td><td>un servizio esterno chiama un indirizzo segreto</td><td>⚠️ Accettabile. Dipende da un terzo e da un indirizzo che non deve trapelare</td></tr>
+            <tr><td><strong>Cron di sistema</strong></td><td>il server chiama Joomla da solo</td><td>✅ <strong>È questo.</strong> L'unico che non dipende né dalle visite né da terzi</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>Impostare il cron di sistema</h2>
+      <pre><code>*/5 * * * * /usr/bin/php /percorso/del/sito/cli/joomla.php scheduler:run --all >> /percorso/del/sito/administrator/logs/albo-cron.log 2>&amp;1 || true</code></pre>
+      <p>Il percorso del log dev'essere <strong>scrivibile dall'utente del cron</strong>: la cartella
+      dei log di Joomla va bene; <code>/var/log</code> di solito no, perché richiede permessi di
+      amministratore — e il log <strong>fallirebbe in silenzio</strong>.</p>
+      <p>Poi, in <em>Sistema → Attività pianificate → Opzioni</em>, <strong>disattivate lo scheduler
+      pigro</strong>, così i lavori non partono due volte.</p>
+
+      <div class="box warn">
+        <span class="tit">Perché quel <code>|| true</code> in fondo — non toglietelo</span>
+        <p>Quando non c'è nulla da fare — cioè <strong>quasi sempre</strong> — il comando di Joomla
+        esce con un <strong>codice di errore</strong>. È normale, ma il cron lo interpreta come un
+        guasto e <strong>manda un'email all'amministratore a ogni giro</strong>: cinque all'ora, notte
+        compresa. Dopo due giorni qualcuno spegne il cron — e <strong>l'albo smette silenziosamente di
+        pubblicare</strong>.</p>
+        <p><strong>Il prezzo, detto chiaro:</strong> così il cron non vi avviserà più nemmeno di un
+        guasto vero. Perciò il log serve, e ogni tanto va guardato — insieme alla colonna
+        <strong>«Ultima esecuzione»</strong>, che è il modo più rapido per accorgersi che i lavori si
+        sono fermati.</p>
+      </div>
+
+      <h2>Verificare che funzioni (dieci minuti, una volta sola)</h2>
+      <ol>
+        <li>Create un atto di prova, allegate un PDF, <strong>pubblicatelo</strong>.</li>
+        <li>Deve passare in <strong>«In Attesa»</strong> con protocollo e data.</li>
+        <li>Aspettate il primo giro dei lavori (o forzatelo da <em>Attività pianificate → Esegui</em>).</li>
+        <li>L'atto deve diventare <strong>«Pubblicato»</strong> e comparire sul sito.</li>
+      </ol>
+      <p>Se resta <strong>«In Attesa»</strong>, i lavori non stanno girando.</p>
+    </article>
+
+    <!-- ===================== OPZIONI ===================== -->
+    <article class="pagina" id="opzioni" tabindex="-1" aria-labelledby="t-opzioni">
+      <span class="occhiello">Installare</span>
+      <h1 id="t-opzioni">Tutte le opzioni</h1>
+      <p class="lead">Una per una, con il valore predefinito e cosa cambia se la tocchi.</p>
+
+      <h2>Impostazioni generali</h2>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>Opzione</th><th>Cosa fa</th><th>Predefinito</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Ente Emanante Predefinito</strong></td><td>Denominazione dell'amministrazione. Finisce sul referto e nel registro</td><td><em>vuoto</em> — <strong>obbligatorio</strong></td></tr>
+            <tr><td><strong>Tipi di Atto</strong></td><td>Le tipologie e <strong>i giorni di ciascuna</strong> (durata = minimo di legge)</td><td>Determina, delibera, decreto, avviso: 15 gg · Bando: 30 gg</td></tr>
+            <tr><td><strong>Giorni Pubblicazione Predefiniti</strong></td><td>Durata per le tipologie senza durata propria</td><td>15</td></tr>
+            <tr><td><strong>Durata Buffer (minuti)</strong></td><td>La finestra di ripensamento fra «Pubblica» e la messa online</td><td>60</td></tr>
+            <tr><td><strong>Allegato obbligatorio</strong></td><td>Se Sì, <strong>un atto senza documento non si pubblica</strong></td><td>Sì</td></tr>
+            <tr><td><strong>Indicizzazione motori di ricerca</strong></td><td>Se gli atti finiscono su Google. Per l'albo è <strong>sconsigliata</strong> (il contrario dell'Amministrazione Trasparente). Sugli archiviati il <em>noindex</em> è <strong>forzato comunque</strong></td><td>Non indicizzare</td></tr>
+            <tr><td><strong>Avviso categorie particolari</strong></td><td>Segnala possibili dati sensibili in redazione. <strong>Avvisa, non blocca</strong></td><td>Sì</td></tr>
+            <tr><td><strong>Checklist prima della pubblicazione</strong></td><td>Il promemoria di cinque punti sulle bozze</td><td>Sì</td></tr>
+            <tr><td><strong>Elimina file PDF con diritto all'oblio</strong></td><td>Cancella <strong>fisicamente</strong> i PDF. ⚠️ <strong>Irreversibile</strong>, e impedisce per sempre di riattivare l'atto</td><td>No</td></tr>
+            <tr><td><strong>Indirizzo della guida</strong></td><td>Dirotta il pulsante «Aiuto» di Joomla su <strong>questa guida</strong> invece che sulla documentazione di Joomla (inutile a un funzionario)</td><td><em>vuoto</em></td></tr>
+            <tr><td><strong>Carica Bootstrap</strong></td><td>Solo se il vostro template non include Bootstrap — vedi <a href="#problemi">Problemi</a></td><td>No</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>Referto di pubblicazione</h2>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>Opzione</th><th>Cosa fa</th><th>Predefinito</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Emetti il referto alla defissione</strong></td><td>Genera il PDF congelato che attesta periodo effettivo e integrità</td><td>Sì</td></tr>
+            <tr><td><strong>Denominazione del documento</strong></td><td>Il titolo stampato in testa</td><td><em>«REFERTO DI PUBBLICAZIONE»</em></td></tr>
+            <tr><td><strong>Sottotitolo / riferimento regolamentare</strong></td><td>Es. l'articolo del <strong>vostro</strong> regolamento</td><td><em>vuoto</em></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </article>
+
+    <!-- ===================== AGGIORNARE ===================== -->
+    <article class="pagina" id="aggiornare" tabindex="-1" aria-labelledby="t-aggiornare">
+      <span class="occhiello">Installare</span>
+      <h1 id="t-aggiornare">Aggiornare il componente</h1>
+      <p class="lead">Si installa il pacchetto nuovo sopra quello vecchio, dalla stessa schermata.</p>
+
+      <p>Joomla riconosce l'aggiornamento e applica da solo le modifiche al database.</p>
+      <p><strong>I lavori automatici non vengono toccati:</strong> se esistono già, l'aggiornamento
+      <strong>non li duplica</strong> e <strong>non li riaccende</strong> se li avevate disattivati di
+      proposito.</p>
+
+      <div class="box warn">
+        <span class="tit">Una nota onesta</span>
+        <p>Il percorso di aggiornamento <strong>da versioni molto vecchie</strong> del componente
+        <strong>non è ancora stato collaudato a fondo</strong>. Se aggiornate un'installazione con dati
+        reali: <strong>fate prima una copia di sicurezza del database e della cartella dei
+        documenti</strong>.</p>
+        <p>Ve lo diciamo esplicitamente perché preferiamo dirvi cosa non abbiamo ancora provato,
+        piuttosto che lasciarvelo scoprire.</p>
+      </div>
+    </article>
+
+    <!-- ===================== NORME ===================== -->
+    <article class="pagina" id="norme" tabindex="-1" aria-labelledby="t-norme">
+      <span class="occhiello">Le ragioni</span>
+      <h1 id="t-norme">Le norme dietro le regole</h1>
+      <p class="lead">Ogni volta che il sistema ti impedisce qualcosa, non è un capriccio: c'è una
+      norma dietro. Qui trovi quale, con il riferimento preciso.</p>
+
+      <div class="box note">
+        <p>A cosa serve questa pagina: quando devi <strong>scriverlo in una determina</strong>,
+        <strong>rispondere al responsabile della protezione dei dati</strong> o
+        <strong>convincere un collega</strong> che «il programma non me lo fa fare» ha un fondamento,
+        qui c'è la fonte da citare. Gli avvisi nel resto della guida rimandano a questa pagina con
+        una freccia <a href="#avvisi">↗</a>.</p>
+      </div>
+
+      <h2>Pubblicità legale: durata e data certa</h2>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>La regola</th><th>La norma</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>L'atto si pubblica all'albo <strong>online</strong> ed è la pubblicazione che ne
+              produce gli effetti legali</td>
+              <td><strong>Art. 32 L. 69/2009</strong> (dal 2011 la pubblicità legale è
+              sull'albo <em>informatico</em>); <strong>art. 124 TUEL</strong> (D.Lgs. 267/2000) per le
+              delibere degli enti locali</td>
+            </tr>
+            <tr>
+              <td>La <strong>durata</strong> è un <strong>minimo</strong>: si può pubblicare più a
+              lungo, mai per meno</td>
+              <td>I termini di pubblicazione sono fissati dalla norma di settore e dal regolamento
+              dell'ente. Accorciarli <strong>taglierebbe i termini di impugnazione</strong> del
+              cittadino</td>
+            </tr>
+            <tr>
+              <td>La <strong>data di inizio</strong> non è modificabile a mano: la fissa il sistema
+              alla pubblicazione</td>
+              <td>È la <strong>data certa</strong> da cui decorrono i termini. Se fosse scrivibile,
+              non varrebbe come prova</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>Immodificabilità e rettifica</h2>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>La regola</th><th>La norma</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>Un atto pubblicato <strong>non si modifica né si cancella</strong></td>
+              <td>La pubblicità legale ha valore probatorio: un atto ritoccabile non proverebbe più
+              nulla. Per questo si corregge con una <strong>rettifica</strong>, non modificando
+              l'originale</td>
+            </tr>
+            <tr>
+              <td>La rettifica <strong>deve essere motivata</strong></td>
+              <td><strong>Art. 3 L. 241/1990</strong>: ogni provvedimento amministrativo va motivato.
+              La motivazione viene congelata nel referto e mostrata nel registro</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>Dati particolari e minimizzazione</h2>
+      <p>È la ragione dietro l'avviso giallo che compare quando il testo contiene termini sensibili
+      (<a href="#avvisi">Avvisi e checklist ↗</a>).</p>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>La regola</th><th>La norma</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>I dati su <strong>salute</strong>, <strong>vita sessuale</strong>, convinzioni,
+              appartenenze sono «categorie particolari»: <strong>non vanno pubblicati</strong> senza
+              base adeguata</td>
+              <td><strong>Art. 9 GDPR</strong> (Reg. UE 2016/679)</td>
+            </tr>
+            <tr>
+              <td>I dati <strong>giudiziari</strong> hanno una protezione a sé</td>
+              <td><strong>Art. 2-octies Codice Privacy</strong> (D.Lgs. 196/2003, come modificato dal
+              D.Lgs. 101/2018)</td>
+            </tr>
+            <tr>
+              <td>Nella <strong>trasparenza</strong> e nella pubblicità, i dati eccedenti vanno
+              omessi; cautela particolare per il <strong>disagio economico-sociale</strong></td>
+              <td><strong>Art. 26 c. 4 D.Lgs. 33/2013</strong>; <strong>Linee guida del Garante</strong>
+              del 15 maggio 2014 sulla pubblicazione di atti e documenti</td>
+            </tr>
+            <tr>
+              <td>Si pubblicano <strong>solo i dati necessari</strong> alla finalità
+              (minimizzazione)</td>
+              <td><strong>Art. 5.1.c GDPR</strong></td>
+            </tr>
+            <tr>
+              <td>L'<strong>omissis</strong> va fatto sul documento <strong>prima</strong> di
+              caricarlo — il sistema non oscura i PDF</td>
+              <td>Un oscuramento automatico darebbe una <strong>falsa sicurezza</strong>: il testo
+              resterebbe estraibile sotto il nero</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="box stop">
+        <span class="tit">Perché è serio</span>
+        <p>Pubblicare all'albo dati particolari senza averli oscurati è un <strong>trattamento
+        illecito</strong>, e <strong>il Garante ha già sanzionato comuni</strong> per questo. La
+        responsabilità è <strong>dell'ente</strong>, non del software: l'avviso è un aiuto, la
+        decisione è tua.</p>
+      </div>
+
+      <h2>Diritto all'oblio e deindicizzazione</h2>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>La regola</th><th>La norma</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>Il cittadino può chiedere la <strong>cancellazione</strong> dei propri dati</td>
+              <td><strong>Art. 17 GDPR</strong> (diritto all'oblio)</td>
+            </tr>
+            <tr>
+              <td>Ma se l'atto è <strong>ancora nei termini</strong>, la pubblicazione
+              <strong>prevale</strong> e l'oblio scatta alla scadenza</td>
+              <td><strong>Art. 17.3.b GDPR</strong>: il diritto alla cancellazione non si applica
+              finché il trattamento è necessario per <strong>adempiere un obbligo di legge</strong></td>
+            </tr>
+            <tr>
+              <td>Gli atti dell'albo <strong>non vanno indicizzati</strong> dai motori di ricerca</td>
+              <td><strong>Linee guida Garante 2014</strong>: l'albo è pubblicità legale
+              <em>temporanea</em>, l'opposto dell'indicizzazione permanente (vedi
+              <a href="#nonfa">la differenza con l'Amministrazione Trasparente</a>)</td>
+            </tr>
+            <tr>
+              <td>Ogni attivazione o revoca dell'oblio è <strong>tracciata</strong></td>
+              <td><strong>Art. 5.2 GDPR</strong> (responsabilizzazione — <em>accountability</em>):
+              l'ente deve poter dimostrare cosa ha fatto e perché</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>Documento informatico e protocollo</h2>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>La regola</th><th>La norma</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>Pubblicare all'albo è <strong>pubblicare un documento</strong>: un atto
+              <strong>senza allegato non si pubblica</strong></td>
+              <td>La pubblicità legale è la pubblicazione <em>di un documento</em>, non di un semplice
+              testo: un atto pubblicato senza il suo documento sarebbe <strong>giuridicamente vuoto</strong>,
+              e i termini decorrerebbero su nulla. <span style="color:var(--muted)">(L'obbligo è
+              configurabile: si può disattivare per gli avvisi il cui contenuto sta tutto nei campi di
+              testo — vedi <a href="#opzioni">Tutte le opzioni</a>.)</span></td>
+            </tr>
+            <tr>
+              <td>La <strong>segnatura di protocollo</strong> è un dato a sé, distinto dal numero di
+              repertorio dell'albo</td>
+              <td><strong>Art. 55 DPR 445/2000</strong> (Testo unico documentazione amministrativa)</td>
+            </tr>
+            <tr>
+              <td>Il documento espone i <strong>metadati minimi</strong> ed è verificabile con
+              l'<strong>impronta</strong></td>
+              <td><strong>Linee guida AgID sul documento informatico</strong>, Allegato 5 (metadati
+              minimi); l'impronta SHA-256 è integrità <em>tecnica</em>, non firma</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="box note">
+        <p>Per ciascuno di questi temi esiste una <strong>scheda di approfondimento</strong> nella
+        cartella <code>docs/compliance/</code> del progetto (una per adempimento), pensata per chi
+        nell'ente deve rispondere formalmente. Questa pagina ne è il riassunto operativo.</p>
+      </div>
+
+      <p style="color:var(--muted);font-size:.9rem;margin-top:2rem"><strong>Nota.</strong> I
+      riferimenti servono a spiegare <em>perché</em> il sistema si comporta così e a darti la fonte
+      da citare. <strong>Non sono una consulenza legale</strong>: per un caso concreto e dubbio,
+      senti chi nell'ente ha titolo per decidere.</p>
+    </article>
+
+    <!-- ===================== PROBLEMI ===================== -->
+    <article class="pagina" id="problemi" tabindex="-1" aria-labelledby="t-problemi">
+      <span class="occhiello">Quando qualcosa non va</span>
+      <h1 id="t-problemi">Problemi e soluzioni</h1>
+
+      <p class="lead">Domanda a sinistra, risposta netta subito sotto. In grassetto la risposta in una
+      riga; poi cosa fare.</p>
+
+      <h2>«Ho pubblicato ma l'atto non compare sul sito»</h2>
+      <p><strong>Nella prima ora è normale (è il buffer). Se è passata più di un'ora ed è ancora «In
+      Attesa», i lavori automatici non stanno girando</strong> — ed è il guasto più serio che possa
+      capitare.</p>
+      <p><strong>Cosa fare:</strong> <em>Sistema → Attività pianificate</em>. Ci sono i due lavori? Sono
+      <strong>attivi</strong>? La colonna <strong>«Ultima esecuzione»</strong> è aggiornata?</p>
+      <ul>
+        <li>Se <strong>mancano o sono spenti</strong> → ricreateli o riattivateli (<a href="#lavori">vedi qui</a>).</li>
+        <li>Se <strong>ci sono e sono attivi</strong> ma «Ultima esecuzione» è ferma → il server non li sta chiamando: serve il <strong>cron di sistema</strong>, e va girato a <strong>chi amministra il sito</strong>.</li>
+      </ul>
+
+      <h2>«Non riesco a pubblicare: dice che manca un documento»</h2>
+      <p><strong>Un atto all'albo deve avere un allegato: senza, la pubblicazione è vuota.</strong>
+      Carica il PDF nella scheda <strong>Allegati</strong> e ripubblica. Se il vostro ente pubblica
+      <em>avvisi di solo testo</em>, puoi disattivare <strong>«Allegato obbligatorio»</strong> nelle
+      <a href="#opzioni">Opzioni</a> — è una scelta consapevole, non una scorciatoia.</p>
+
+      <h2>«Mi dice che manca l'ente emanante»</h2>
+      <p><strong>Va compilato in Opzioni: è obbligatorio e senza nessuno può pubblicare.</strong>
+      <em>Componenti → Albo Pretorio Online → Opzioni</em> → <strong>Ente Emanante Predefinito</strong>,
+      poi <strong>salva</strong>.</p>
+
+      <h2>«Il pulsante Pubblica non c'è»</h2>
+      <p><strong>Non hai il permesso «Pubblicare Atti».</strong> È una scelta organizzativa — chi redige
+      e chi pubblica possono essere persone diverse — non un errore. Parlane con chi amministra il sito
+      (<a href="#permessi">Chi può fare cosa</a>).</p>
+
+      <h2>«Non riesco a modificare o cancellare un atto pubblicato»</h2>
+      <p><strong>È blindato, ed è corretto: un atto pubblicato è immutabile e non si cancella.</strong>
+      Non è un permesso che manca, è un divieto: cancellarlo distruggerebbe l'atto e i suoi documenti.
+      Per correggere si usa la <a href="#rettifica">rettifica</a> — un atto nuovo, collegato al vecchio.</p>
+
+      <h2>«Ho attivato il diritto all'oblio ma l'atto è ancora online»</h2>
+      <p><strong>Se è ancora nei termini, è giusto: l'oblio scatterà alla scadenza.</strong> Durante la
+      pubblicità legale l'obbligo di legge prevale sul diritto alla cancellazione (art. 17.3.b GDPR), e
+      la rimozione è <strong>programmata alla defissione</strong>. Su un atto <strong>già
+      archiviato</strong>, invece, l'oblio è <strong>immediato</strong>. Vedi
+      <a href="#oblio">Il diritto all'oblio</a>.</p>
+
+      <h2>«Ho revocato l'oblio ma l'atto non torna online»</h2>
+      <p><strong>La revoca azzera solo il flag, non rimette online l'atto.</strong> Se l'atto era
+      archiviato e reso invisibile, per riportarlo serve la <a href="#riattivare">riattivazione</a> — e
+      solo se i suoi <strong>PDF esistono ancora</strong> (se l'ente li ha fatti cancellare, non tornano).</p>
+
+      <h2>«Ho caricato il referto firmato ma dice “non corrisponde”»</h2>
+      <p><strong>Hai firmato un documento diverso dal referto emesso.</strong> Il messaggio è
+      <span class="quote">«Attenzione: non corrisponde al referto emesso»</span>: il sistema controlla che
+      la firma sia proprio su <em>quel</em> referto (confronto dell'impronta). <strong>Cosa fare:</strong>
+      scarica di nuovo il referto <em>da quell'atto</em>, firmalo <strong>senza modificarlo</strong> e
+      ricarica quel file.</p>
+
+      <h2>«L'albo si vede senza stile: testo nudo, tabelle senza bordi»</h2>
+      <p><strong>Il vostro tema non include Bootstrap</strong> (Cassiopeia e i temi Bootstrap Italia sì).
+      <strong>Rimedio:</strong> <em>Opzioni → Carica Bootstrap → Sì</em>. Anche senza stile l'albo resta
+      <strong>leggibile, scaricabile e accessibile</strong>: cambia l'aspetto, non la sostanza.</p>
+
+      <h2>«L'installazione dice che il file è troppo grande»</h2>
+      <p><strong>Non è un limite di Joomla: è il PHP del server.</strong> Alza
+      <code>upload_max_filesize</code> e <code>post_max_size</code> ad almeno <strong>16M</strong>
+      (<a href="#requisiti">Requisiti</a> spiega dove). In caso di dubbio, chiedi all'hosting: sanno cosa
+      fare.</p>
+
+      <h2>«Ricevo email di errore dal cron ogni cinque minuti»</h2>
+      <p><strong>Manca il <code>|| true</code> in fondo alla riga di crontab.</strong> È il codice di
+      uscita 125 («nessun task da eseguire») letto come guasto. <strong>Non spegnete il cron</strong>:
+      correggete la riga (<a href="#lavori">I lavori automatici</a>).</p>
+    </article>
+
+    <!-- ===================== NON FA ===================== -->
+    <article class="pagina" id="nonfa" tabindex="-1" aria-labelledby="t-nonfa">
+      <span class="occhiello">Quando qualcosa non va</span>
+      <h1 id="t-nonfa">Cosa il sistema NON fa (e non finge di fare)</h1>
+      <p class="lead">Vale la pena saperlo prima, non dopo.</p>
+
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>Cosa</th><th>Perché no</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Non verifica la marca temporale</strong></td><td>Ne rileva la <strong>presenza</strong> e lo scrive («presente, non verificata»). Validarla richiede il certificato della TSA e il controllo delle revoche: spetta all'ente o a un validatore esterno.</td></tr>
+            <tr><td><strong>Non certifica una firma come «qualificata»</strong></td><td>Verifica che la firma sia <strong>tecnicamente integra</strong> e chi l'ha apposta. La qualificazione richiede le liste di fiducia europee.</td></tr>
+            <tr><td><strong>Non fa conservazione a norma</strong></td><td>Non è un sistema di conservazione: quella è un'altra cosa, e un altro fornitore.</td></tr>
+            <tr><td><strong>Non oscura i PDF</strong></td><td>L'omissis va fatto <strong>prima</strong> del caricamento. Un oscuramento automatico darebbe una <strong>falsa</strong> sicurezza: il testo resterebbe estraibile sotto il nero.</td></tr>
+            <tr><td><strong>Non si collega al protocollo informatico</strong></td><td>C'è il <strong>campo</strong> per la segnatura, non un connettore.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="box ok">
+        <span class="tit">Il principio</span>
+        <p>Ogni volta che il sistema <strong>non può</strong> verificare qualcosa, <strong>lo
+        dice</strong> invece di lasciar credere che l'abbia fatto. Una rassicurazione falsa è peggio di
+        un controllo mancante.</p>
+      </div>
+
+      <p style="color:var(--muted);font-size:.88rem;margin-top:2.5rem">
+        Questa guida descrive il comportamento reale del componente, verificato sul codice e sulle
+        schermate. Non è una consulenza legale: i riferimenti normativi servono a spiegare
+        <strong>perché</strong> il sistema si comporta così, non a sostituire il parere di chi ha titolo
+        per darlo.
+      </p>
+    </article>
+
+    <nav class="pagnav" id="pagnav" aria-label="Navigazione fra le pagine"></nav>
+
+  </main>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  // La modalità "a pagine" si accende SOLO se il JS gira. Senza JavaScript la guida
+  // resta interamente leggibile: tutte le pagine una dopo l'altra. Una documentazione
+  // che si spegne insieme al JS non è una documentazione.
+  document.body.classList.add('js');
+
+  var pagine = Array.prototype.slice.call(document.querySelectorAll('.pagina'));
+  var voci   = Array.prototype.slice.call(document.querySelectorAll('#menu a'));
+  var pagnav = document.getElementById('pagnav');
+  var briciole = document.getElementById('briciole');
+  var titoloBase = 'Guida — Albo Pretorio Online';
+
+  function titoloDi(id) {
+    var v = voci.filter(function (a) { return a.getAttribute('href') === '#' + id; })[0];
+    if (!v) return '';
+    var clone = v.cloneNode(true);
+    var num = clone.querySelector('.num');
+    if (num) num.parentNode.removeChild(num);
+    return clone.textContent.trim();
+  }
+
+  function mostra(id, spostaFocus) {
+    var pagina = document.getElementById(id);
+    if (!pagina || !pagina.classList.contains('pagina')) { id = 'home'; pagina = document.getElementById('home'); }
+
+    pagine.forEach(function (p) { p.classList.toggle('attiva', p === pagina); });
+    voci.forEach(function (a) {
+      if (a.getAttribute('href') === '#' + id) { a.setAttribute('aria-current', 'page'); }
+      else { a.removeAttribute('aria-current'); }
+    });
+
+    var t = titoloDi(id);
+    document.title = (id === 'home' ? '' : t + ' — ') + titoloBase;
+    briciole.innerHTML = 'Guida · <b></b>';
+    briciole.querySelector('b').textContent = t || 'Da dove parto';
+
+    costruisciNav(id);
+    window.scrollTo(0, 0);
+
+    // Chi naviga da tastiera deve ritrovarsi DENTRO la pagina nuova, non in cima al menu.
+    // preventScroll: il focus NON deve far scorrere l'articolo sotto la topbar sticky
+    // (nasconderebbe l'occhiello). Lo scrollTo(0,0) qui sopra ha gia' messo la pagina in cima.
+    if (spostaFocus) { pagina.focus({ preventScroll: true }); }
+  }
+
+  function bottone(id, verso) {
+    var a = document.createElement('a');
+    a.className = 'pn ' + (verso === 'prev' ? 'pn-prev' : 'pn-next');
+    a.href = '#' + id;
+
+    var freccia = document.createElement('span');
+    freccia.className = 'freccia';
+    freccia.setAttribute('aria-hidden', 'true');
+    freccia.textContent = verso === 'prev' ? '←' : '→';
+
+    var txt = document.createElement('span');
+    txt.className = 'txt';
+    var dir = document.createElement('span');
+    dir.className = 'dir';
+    dir.textContent = verso === 'prev' ? 'Precedente' : 'Successiva';
+    var tit = document.createElement('span');
+    tit.className = 'tit2';
+    tit.textContent = titoloDi(id);
+    txt.appendChild(dir); txt.appendChild(tit);
+
+    if (verso === 'prev') { a.appendChild(freccia); a.appendChild(txt); }
+    else { a.appendChild(txt); a.appendChild(freccia); }
+    return a;
+  }
+
+  function costruisciNav(id) {
+    var ordine = voci.map(function (a) { return a.getAttribute('href').slice(1); });
+    var i = ordine.indexOf(id);
+    pagnav.innerHTML = '';
+    if (i < 0) return;
+    if (i > 0) { pagnav.appendChild(bottone(ordine[i - 1], 'prev')); }
+    if (i < ordine.length - 1) { pagnav.appendChild(bottone(ordine[i + 1], 'next')); }
+  }
+
+  window.addEventListener('hashchange', function () {
+    mostra(location.hash.slice(1) || 'home', true);
+    if (window.innerWidth <= 960) { chiudiMenu(); }
+  });
+
+  mostra(location.hash.slice(1) || 'home', false);
+
+  // ---- Ricerca nel menu ----
+  var filtro = document.getElementById('filtro');
+  var vuoto  = document.getElementById('vuoto');
+  filtro.addEventListener('input', function () {
+    var q = filtro.value.trim().toLowerCase();
+    var trovati = 0;
+    voci.forEach(function (a) {
+      var ok = !q || a.textContent.toLowerCase().indexOf(q) !== -1;
+      a.parentNode.classList.toggle('nascosta', !ok);
+      if (ok) trovati++;
+    });
+    document.querySelectorAll('.navgroup').forEach(function (g) {
+      var lista = g.nextElementSibling;
+      var visibili = lista ? lista.querySelectorAll('li:not(.nascosta)').length : 0;
+      g.style.display = visibili ? '' : 'none';
+      if (lista) lista.style.display = visibili ? '' : 'none';
+    });
+    vuoto.style.display = trovati ? 'none' : 'block';
+  });
+
+  // ---- Tema ----
+  document.getElementById('tema').addEventListener('click', function () {
+    var attuale = document.documentElement.getAttribute('data-theme');
+    if (!attuale) {
+      attuale = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    document.documentElement.setAttribute('data-theme', attuale === 'dark' ? 'light' : 'dark');
+  });
+
+  // ---- Stampa: serve TUTTA la guida, non solo la pagina aperta ----
+  document.getElementById('stampa').addEventListener('click', function () {
+    document.body.classList.remove('js');
+    window.print();
+    setTimeout(function () { document.body.classList.add('js'); }, 500);
+  });
+
+  // ---- Menu a scomparsa (schermi stretti) ----
+  var apri = document.getElementById('apri');
+  var menu = document.getElementById('menu');
+  function adatta() {
+    if (window.innerWidth <= 960) {
+      menu.hidden = apri.getAttribute('aria-expanded') !== 'true';
+    } else {
+      menu.hidden = false;
+    }
+  }
+  function chiudiMenu() { apri.setAttribute('aria-expanded', 'false'); adatta(); }
+  apri.addEventListener('click', function () {
+    apri.setAttribute('aria-expanded', String(apri.getAttribute('aria-expanded') !== 'true'));
+    adatta();
+  });
+  window.addEventListener('resize', adatta);
+  adatta();
+})();
+</script>
+</body>
+</html>

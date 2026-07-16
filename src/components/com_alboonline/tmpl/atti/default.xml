@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+	<layout title="COM_ALBOONLINE_VIEW_ATTI_TITLE" option="COM_ALBOONLINE_VIEW_ATTI_DESC">
+		<message>
+			<![CDATA[COM_ALBOONLINE_VIEW_ATTI_DESC]]>
+		</message>
+	</layout>
+	<fields name="params">
+		<fieldset name="basic" label="JGLOBAL_FIELDSET_DISPLAY_OPTIONS">
+			<field
+				name="solo_archiviati"
+				type="list"
+				label="COM_ALBOONLINE_PARAM_SOLO_ARCHIVIATI"
+				description="COM_ALBOONLINE_PARAM_SOLO_ARCHIVIATI_DESC"
+				default="0"
+			>
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+			<field
+				name="show_sidebar"
+				type="list"
+				label="COM_ALBOONLINE_PARAM_SHOW_SIDEBAR"
+				default="1"
+			>
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+			<field
+				name="show_filter"
+				type="list"
+				label="COM_ALBOONLINE_PARAM_SHOW_FILTER"
+				default="1"
+			>
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+			<field
+				name="items_per_page"
+				type="number"
+				label="COM_ALBOONLINE_PARAM_ITEMS_PER_PAGE"
+				default="20"
+				min="5"
+				max="100"
+				step="5"
+			/>
+		</fieldset>
+	</fields>
+</metadata>

@@ -1,0 +1,59 @@
+# .gitignore — Albo Pretorio Online
+#
+# NOTA SUL PERIMETRO: il repository deve contenere SOLO il prodotto (componente, plugin,
+# docs/, scripts/, bin/), non un'installazione Joomla completa. Il modo pulito è tenere il
+# repo in una cartella dedicata con i soli file del prodotto. Questo file esclude comunque,
+# in via difensiva, ciò che non va MAI committato — utile qualunque sia la struttura finale.
+#
+# NON escludere `vendor/` del componente: mPDF e i font vengono spediti col pacchetto.
+
+# --- Segreti e configurazione locale (MAI committare) ---
+configuration.php
+/.env
+*.local.php
+
+# --- Dati a runtime dell'albo (documenti caricati e referti generati) ---
+media/com_alboonline/allegati/*
+!media/com_alboonline/allegati/index.html
+!media/com_alboonline/allegati/.htaccess
+media/com_alboonline/referti/*
+!media/com_alboonline/referti/index.html
+!media/com_alboonline/referti/.htaccess
+
+# --- Output di build (i pacchetti vanno nelle Release, non nel repo) ---
+dist/*.zip
+/build/
+/tmp/
+/cache/
+
+# --- Ambiente di sviluppo locale ---
+.ddev/
+.idea/
+.vscode/
+*.code-workspace
+
+# --- Log ---
+*.log
+administrator/logs/
+logs/
+
+# --- File di sistema / editor ---
+.DS_Store
+Thumbs.db
+*~
+*.swp
+*.swo
+*.bak
+
+# --- Dipendenze di tooling (non del prodotto) ---
+node_modules/
+
+# Fixtures di test firma con chiavi self-signed (contengono una chiave privata; si rigenerano in locale)
+scripts/firma-test/
+
+# --- Dipendenze di terze parti (mPDF): NON si committano ---
+# Le scarica bin/build.sh da composer.lock. Erano 631 file committati a mano, il 77% del
+# repository, e non corrispondevano al lock: mancavano 62 font tolti per il peso e mai
+# dichiarati. Il lock e' la verita', ed e' verificabile; una cartella copiata non lo e'.
+# Chi INSTALLA l'albo riceve mPDF dentro lo zip: questo riguarda solo chi costruisce.
+/src/administrator/components/com_alboonline/vendor/

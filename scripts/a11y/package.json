@@ -1,0 +1,17 @@
+{
+  "name": "a11y",
+  "version": "1.0.0",
+  "description": "Copre la parte **nostra**: struttura, ruoli ARIA, nomi accessibili, etichette, intestazioni — cioè ciò che nessun tema dell'ente può riparare.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "axe-core": "^4.12.1",
+    "jsdom": "^24.1.3"
+  }
+}

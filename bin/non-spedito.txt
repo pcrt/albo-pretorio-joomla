@@ -1,0 +1,22 @@
+# Cosa NON finisce nel pacchetto, e PERCHE'.
+#
+# Lo leggono DUE strumenti, e devono restare d'accordo:
+#   - bin/build.sh              pota dal pacchetto tutto cio' che combacia
+#   - bin/verifica-pacchetto.php non lo segnala come "dimenticato"
+#
+# Sta scritto qui una volta sola di proposito. La stessa regola in due posti e' la
+# definizione di due regole: prima o poi una cambia e l'altra no. E' gia' successo in
+# questo progetto (la guida allineata a mano fra due ambienti, le lingue dei plugin).
+#
+# FORMATO: un glob per riga, applicato al NOME del file o della cartella, a qualsiasi
+# profondita'. Il testo dopo # e' un commento.
+#
+# REGOLA: se aggiungi una riga, scrivi il motivo. Senza motivo, "non spedito" e
+# "dimenticato" diventano indistinguibili — ed e' esattamente la confusione da cui il
+# guardiano esiste per proteggerci.
+
+.DS_Store        # spazzatura del Finder di macOS
+*.log            # log: non sono prodotto
+node_modules     # dipendenze del tooling (lo scanner di accessibilita'), non del prodotto
+.git*            # .github/ e .gitignore DELLE DIPENDENZE (mPDF): sono il loro sviluppo,
+                 # non il nostro prodotto. Un comune non ci fa niente con i workflow di mPDF.

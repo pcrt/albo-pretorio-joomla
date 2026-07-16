@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extension type="plugin" group="task" method="upgrade">
+	<name>plg_task_alboonline</name>
+	<author>Eddy Prosperi</author>
+	<authorEmail>eddy.prosperi@protocollicreativi.it</authorEmail>
+	<creationDate>2025-01</creationDate>
+	<copyright>2025 Eddy Prosperi</copyright>
+	<license>GNU General Public License versione 2 o successiva; vedi LICENSE.txt</license>
+	<version>1.4.0</version>
+	<php_minimum>8.3</php_minimum>
+	<description>PLG_TASK_ALBOONLINE_XML_DESCRIPTION</description>
+	<namespace path="src">Pcrt\Plugin\Task\Alboonline</namespace>
+	<scriptfile>script.php</scriptfile>
+
+	<files>
+		<folder plugin="alboonline">services</folder>
+		<folder>src</folder>
+		<folder>forms</folder>
+		<filename>script.php</filename>
+		<!-- Le lingue stanno QUI DENTRO, e NON si dichiarano anche in <languages>.
+		     <languages> le copierebbe nelle cartelle di lingua del core, ma solo se quella
+		     lingua e' gia' installata sul sito: altrimenti Joomla le scarta in silenzio e non
+		     le recupera piu' (Installer::parseLanguages: "We will only install language files
+		     where a core language pack already exists"). Siccome Joomla si installa in inglese
+		     per impostazione predefinita e l'italiano si aggiunge dopo, chi seguiva quell'ordine
+		     si ritrovava i nomi dei lavori pianificati in inglese per sempre.
+		     CMSPlugin::loadLanguage() ripiega qui da solo:
+		     load($ext, $basePath) || load($ext, JPATH_PLUGINS . '/' . $tipo . '/' . $nome)
+		     In piu': se un giorno l'amministratore disinstalla il language pack italiano, le
+		     NOSTRE traduzioni sopravvivono, perche' non stanno in casa sua. -->
+		<folder>language</folder>
+	</files>
+
+</extension>

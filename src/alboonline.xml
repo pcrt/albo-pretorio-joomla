@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="component" version="5.0" method="upgrade">
+    <name>com_alboonline</name>
+    <creationDate>2025-02-06</creationDate>
+    <copyright>2025 Eddy Prosperi</copyright>
+    <license>GNU General Public License versione 2 o successiva; vedi LICENSE.txt</license>
+    <author>Eddy Prosperi</author>
+    <authorEmail>eddy.prosperi@protocollicreativi.it</authorEmail>
+    <authorUrl>https://github.com/pcrt/albo-pretorio-joomla</authorUrl>
+    <version>1.2.0</version>
+    <php_minimum>8.3</php_minimum>
+    <description>COM_ALBOONLINE_XML_DESCRIPTION</description>
+    <namespace path="src">Pcrt\Component\Alboonline</namespace>
+
+    <scriptfile>script.php</scriptfile>
+
+    <install>
+        <sql>
+            <file driver="mysql" charset="utf8">sql/install.mysql.utf8.sql</file>
+        </sql>
+    </install>
+    <update>
+        <schemas>
+            <schemapath type="mysql">sql/updates/mysql</schemapath>
+        </schemas>
+    </update>
+    <uninstall>
+        <sql>
+            <file driver="mysql" charset="utf8">sql/uninstall.mysql.utf8.sql</file>
+        </sql>
+    </uninstall>
+
+    <!-- I percorsi rispecchiano src/: il pacchetto ha la stessa forma del sorgente, quindi il
+         build e' una copia e non un rimontaggio. Finche' le due forme erano diverse, qualcuno
+         doveva tenere a mente la corrispondenza — ed e' cosi' che si e' persa una cartella. -->
+    <files folder="components/com_alboonline">
+        <folder>src</folder>
+        <folder>forms</folder>
+        <folder>tmpl</folder>
+        <!-- Le lingue stanno QUI DENTRO, e NON si dichiarano anche in <languages>.
+             <languages> le copierebbe nelle cartelle di lingua del core, ma SOLO se quella
+             lingua e' gia' installata sul sito: altrimenti Joomla le scarta in silenzio e non
+             le recupera piu' (Installer::parseLanguages: "We will only install language files
+             where a core language pack already exists"). Siccome Joomla si installa in inglese
+             per impostazione predefinita e l'italiano si aggiunge dopo, chi seguiva quell'ordine
+             si ritrovava l'albo in inglese PER SEMPRE, senza un motivo visibile.
+             Tenendole qui, Joomla ci ripiega da solo — ComponentDispatcher::loadLanguage() fa
+             load($option, JPATH_BASE) || load($option, JPATH_BASE.'/components/'.$option) — e
+             l'ordine di installazione smette di contare. In piu' sopravvivono se un giorno
+             l'amministratore disinstalla il language pack italiano. -->
+        <folder>language</folder>
+    </files>
+
+    <media destination="com_alboonline" folder="media/com_alboonline">
+        <folder>css</folder>
+        <folder>js</folder>
+        <!-- La GUIDA viaggia COL componente, non su internet.
+             Cosi' e' raggiungibile anche dagli enti che hanno l'albo dietro un firewall, ed e'
+             sempre la guida GIUSTA per la versione installata (una guida online descriverebbe
+             funzioni che quell'ente non ha). Il pulsante «Guida» nell'elenco atti punta qui.
+             L'ente che preferisce una guida online la imposta in Opzioni -> Indirizzo della guida. -->
+        <folder>guida</folder>
+        <filename>joomla.asset.json</filename>
+    </media>
+
+    <administration>
+        <menu>COM_ALBOONLINE</menu>
+        <submenu>
+            <menu link="option=com_alboonline&amp;view=atti" view="atti" alt="Albo Online/Atti">COM_ALBOONLINE_TITLE_ATTI</menu>
+            <menu link="option=com_categories&amp;extension=com_alboonline" view="categories" alt="Albo Online/Categorie">COM_ALBOONLINE_TITLE_CATEGORIE</menu>
+        </submenu>
+        <files folder="administrator/components/com_alboonline">
+            <filename>access.xml</filename>
+            <filename>config.xml</filename>
+            <!-- La licenza viaggia COL software, non solo sul repository: chi riceve lo zip
+                 deve poter leggere a quali condizioni lo ha ricevuto (e' un obbligo della GPL,
+                 non una cortesia). THIRD-PARTY-NOTICES.md dice cosa c'e' dentro vendor/ e
+                 perche' il PACCHETTO e' ridistribuibile solo sotto GPL v2 (colpa di mPDF). -->
+            <filename>LICENSE.txt</filename>
+            <filename>THIRD-PARTY-NOTICES.md</filename>
+            <folder>forms</folder>
+            <folder>src</folder>
+            <folder>tmpl</folder>
+            <folder>services</folder>
+            <folder>sql</folder>
+            <!-- L'esito della verifica firma (layouts/firma/esito.php), reso da tmpl/atto/edit.php
+                 e tmpl/referto/default.php via LayoutHelper::render('firma.esito', ...). Se manca,
+                 Joomla NON protesta: FileLayout::render() restituisce stringa vuota e il riquadro
+                 sparisce in silenzio. E' successo davvero: fino alla 1.0.0 questa riga non c'era e
+                 il pacchetto non lo spediva, quindi su ogni installazione vera la verifica della
+                 firma era muta. Non toglierla. -->
+            <folder>layouts</folder>
+            <!-- Stessa ragione spiegata sopra, in <files folder="components/com_alboonline">.
+                 Qui contano anche i .sys.ini (il nome del componente nel menu e nella gestione
+                 estensioni). Ripiegano tutti su questa cartella, con lo stesso schema:
+                 mod_menu CssMenu, com_config ComponentModel (le Opzioni), com_installer
+                 InstallerModel (l'elenco estensioni). Verificati uno per uno nel core. -->
+            <folder>language</folder>
+            <!-- Dipendenze di terze parti impacchettate (mPDF per il referto, S3/M18).
+                 Va spedito con il componente: senza, la generazione del referto fallisce. -->
+            <folder>vendor</folder>
+        </files>
+    </administration>
+
+    <plugins folder="plugins">
+        <plugin plugin="alboonline" group="task">plugins/task/alboonline</plugin>
+        <plugin plugin="alboonline" group="content">plugins/content/alboonline</plugin>
+    </plugins>
+
+    <config>
+        <fields name="params">
+            <fieldset name="component">
+                <field name="save_history" default="1" />
+            </fieldset>
+        </fields>
+    </config>
+
+    <updateservers>
+        <server type="extension" priority="1" name="Albo Online Update Server">https://raw.githubusercontent.com/pcrt/albo-pretorio-joomla/main/updateserver/extension.xml</server>
+    </updateservers>
+
+</extension>

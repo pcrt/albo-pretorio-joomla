@@ -1,0 +1,83 @@
+/**
+ * Com_Alboonline - Admin styles
+ */
+
+/* Stato badges */
+.badge-stato-bozza {
+	background-color: #6c757d;
+	color: #fff;
+}
+
+.badge-stato-attesa {
+	background-color: #ffc107;
+	color: #212529;
+}
+
+.badge-stato-pubblicato {
+	background-color: #198754;
+	color: #fff;
+}
+
+.badge-stato-archiviato {
+	background-color: #0d6efd;
+	color: #fff;
+}
+
+.badge-stato-cestinato {
+	background-color: #dc3545;
+	color: #fff;
+}
+
+/* Locked act warning */
+.alert-locked {
+	border-left: 4px solid #dc3545;
+}
+
+/* Protocollo field badge */
+.field-protocollo .badge {
+	font-size: 1rem;
+	font-weight: 600;
+}
+
+/* Rectification banner */
+.alert-rettifica {
+	border-left: 4px solid #0dcaf0;
+}
+
+/* Allegati table */
+.allegati-table .sortable-handler {
+	cursor: grab;
+	color: #999;
+}
+
+.allegati-table .sortable-handler:hover {
+	color: #333;
+}
+
+.allegati-table code {
+	font-size: 0.75rem;
+	word-break: break-all;
+}
+
+.allegati-table tr.table-danger {
+	opacity: 0.6;
+}
+
+.allegati-table tr.text-decoration-line-through td {
+	text-decoration: line-through;
+}
+
+/* Allegati upload area */
+.allegati-upload {
+	border-top: 1px solid #dee2e6;
+	padding-top: 1rem;
+}
+
+.allegato-new-row {
+	align-items: center;
+}
+
+/* Allegati count badge in list */
+.badge-allegati {
+	font-size: 0.75rem;
+}

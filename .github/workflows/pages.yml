@@ -1,0 +1,92 @@
+# Pubblica la guida su GitHub Pages.
+#
+# PERCHE' NON SI PUBBLICA DIRETTAMENTE UNA CARTELLA DEL REPO
+# La guida vive in src/media/com_alboonline/guida/ perche' e' un pezzo del PRODOTTO: viaggia
+# dentro il pacchetto, e il pulsante «Guida» nell'elenco atti apre quella copia locale (cosi'
+# funziona anche negli enti dietro un firewall, ed e' sempre la guida giusta per la versione
+# installata). Pages pero' non puo' servire una sottocartella arbitraria, e soprattutto:
+#
+#   la guida online e quella spedita devono essere LA STESSA.
+#
+# Prima erano due copie — docs/guida/ e media/com_alboonline/guida/ — e sono divergute davvero:
+# il referto di esempio c'era solo in una, quindi la guida online funzionava e quella dentro il
+# pacchetto dava 404 sullo stesso link. Ora la fonte e' una, e questo workflow pubblica quella.
+#
+# Richiede una impostazione a mano, una volta sola:
+#   Settings -> Pages -> Source: GitHub Actions
+# (con «Deploy from a branch» questo workflow non ha effetto e il sito resta quello vecchio)
+
+name: Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/media/com_alboonline/guida/**'
+      - '.github/workflows/pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Un deploy alla volta; non annulla quello in corso, che lascerebbe il sito a meta'.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  pubblica:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Prepara il sito
+        run: |
+          mkdir -p sito/guida
+          cp -r src/media/com_alboonline/guida/. sito/guida/
+
+          # La radice reindirizza alla guida: l'URL pubblicato e finito nel README e'
+          # .../albo-pretorio-online/guida/, ma chi arriva alla radice non deve trovare il vuoto.
+          cat > sito/index.html <<'HTML'
+          <!doctype html>
+          <meta charset="utf-8">
+          <title>Albo Pretorio Online — Guida</title>
+          <meta http-equiv="refresh" content="0; url=guida/">
+          <link rel="canonical" href="guida/">
+          <p>Reindirizzamento alla <a href="guida/">guida di Albo Pretorio Online</a>…</p>
+          HTML
+
+          # Pages passa i file da Jekyll, che ignora le cartelle che iniziano per underscore
+          # e puo' inciampare nelle graffe dentro l'HTML. Non e' un sito Jekyll: si disattiva.
+          touch sito/.nojekyll
+
+      # La guida linka 18 immagini e il referto di esempio. Su Pages un 404 e' silenzioso: si
+      # vede solo cliccando, e infatti il PDF di esempio e' rimasto rotto nel pacchetto per
+      # una release intera. Meglio che se ne accorga il workflow.
+      #
+      # Copre sia href= sia src= (le immagini sono src=), e toglie il ?v=... che la guida usa
+      # per il cache-busting: senza, cercherebbe un file che si chiama "…png?v=20260715".
+      - name: Controlla che i file linkati dalla guida ci siano
+        run: |
+          MANCANTI=0
+          TROVATI=0
+          for f in $(grep -oE '(src|href)="(esempi|immagini)/[^"]+"' sito/guida/index.html \
+                     | sed -E 's/^(src|href)="//; s/"$//; s/\?.*$//' | sort -u); do
+            TROVATI=$((TROVATI+1))
+            [ -f "sito/guida/$f" ] || { echo "::error::la guida linka $f, che non esiste"; MANCANTI=1; }
+          done
+          echo "Controllati $TROVATI riferimenti."
+          [ "$TROVATI" -gt 0 ] || { echo "::error::nessun riferimento trovato: il controllo non sta controllando niente"; exit 1; }
+          exit $MANCANTI
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: sito
+      - id: deploy
+        uses: actions/deploy-pages@v4

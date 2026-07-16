@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- addruleprefix: Form::load() copia l'intero nodo <config> (attributi compresi) nel
+	 form e poi esegue syncPaths(), che registra i prefissi delle regole. Serve perche'
+	 il campo `tipi_atto` usa validate="tipiattounici". Vedi M14. -->
+<config addruleprefix="Pcrt\Component\Alboonline\Administrator\Rule">
+	<fieldset name="component" label="COM_ALBOONLINE_CONFIG_GENERAL">
+		<field name="save_history" type="radio" label="JGLOBAL_SAVE_HISTORY_OPTIONS_LABEL"
+			   description="JGLOBAL_SAVE_HISTORY_OPTIONS_DESC" default="1"
+			   layout="joomla.form.field.radio.switcher">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+		<field name="buffer_duration" type="number" default="60"
+			   label="COM_ALBOONLINE_CONFIG_BUFFER_DURATION"
+			   description="COM_ALBOONLINE_CONFIG_BUFFER_DURATION_DESC"
+			   min="5" max="1440" step="5" />
+		<field name="default_publish_days" type="number" default="15"
+			   label="COM_ALBOONLINE_CONFIG_DEFAULT_PUBLISH_DAYS"
+			   description="COM_ALBOONLINE_CONFIG_DEFAULT_PUBLISH_DAYS_DESC"
+			   min="1" max="365" step="1" />
+		<!-- Nessun valore predefinito: l'ente va dichiarato da chi installa.
+			 Un default preimpostato finirebbe stampato come ente emanante sui
+			 referti di pubblicazione di un'altra amministrazione. Vedi M12/M4. -->
+		<field name="ente_emanante_default" type="text"
+			   label="COM_ALBOONLINE_CONFIG_ENTE_DEFAULT"
+			   description="COM_ALBOONLINE_CONFIG_ENTE_DEFAULT_DESC"
+			   hint="COM_ALBOONLINE_CONFIG_ENTE_DEFAULT_HINT"
+			   required="true"
+			   filter="string"
+			   maxlength="255"
+			   class="form-control" />
+		<field name="delete_pdf_on_oblio" type="list"
+			   label="COM_ALBOONLINE_CONFIG_DELETE_PDF_OBLIO"
+			   description="COM_ALBOONLINE_CONFIG_DELETE_PDF_OBLIO_DESC"
+			   default="0"
+			   class="form-select">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+		<!-- S4-T2: avviso euristico sulle categorie particolari di dati (art. 9 GDPR,
+			 art. 26 c.4 D.Lgs. 33/2013). Misura di supporto in redazione, non bloccante. -->
+		<field name="categorie_particolari_alert" type="radio" default="1"
+			   label="COM_ALBOONLINE_CONFIG_CATPART_ALERT"
+			   description="COM_ALBOONLINE_CONFIG_CATPART_ALERT_DESC"
+			   layout="joomla.form.field.radio.switcher">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+		<!-- S4-T3: checklist di controllo prima della pubblicazione (minimizzazione,
+			 omissis, versione…). Promemoria, non bloccante. -->
+		<field name="checklist_pubblicazione" type="radio" default="1"
+			   label="COM_ALBOONLINE_CONFIG_CHECKLIST"
+			   description="COM_ALBOONLINE_CONFIG_CHECKLIST_DESC"
+			   layout="joomla.form.field.radio.switcher">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+		<!-- Il pulsante «Aiuto» (?) della toolbar è di Joomla ed è presente in ogni schermata,
+			 comprese le Categorie. Di fabbrica apre la guida in linea di JOOMLA: utile a uno
+			 sviluppatore, inutile a un funzionario che deve pubblicare un atto.
+			 Joomla però lo lascia dirottare: se questo parametro è valorizzato, il pulsante
+			 apre l'indirizzo indicato — la guida dell'ente, o quella del componente.
+			 Lasciato VUOTO di proposito finché la guida per i funzionari non esiste: puntare
+			 a un indirizzo inesistente darebbe un 404, e un link rotto è peggio di un aiuto
+			 generico. Vedi Joomla\CMS\Help\Help::createUrl(). -->
+		<field name="helpURL" type="url"
+			   label="COM_ALBOONLINE_CONFIG_HELPURL"
+			   description="COM_ALBOONLINE_CONFIG_HELPURL_DESC"
+			   hint="https://esempio.it/guida-albo-pretorio"
+			   filter="url"
+			   validate="url"
+			   relative="false"
+			   default="" />
+
+		<!-- Default Sì: la pubblicità legale è la pubblicazione DI UN DOCUMENTO.
+			 Disattivare solo se l'ente pubblica avvisi il cui contenuto sta
+			 interamente nei campi testuali dell'atto. Vedi M31. -->
+		<field name="allegato_obbligatorio" type="radio" default="1"
+			   label="COM_ALBOONLINE_CONFIG_ALLEGATO_OBBLIGATORIO"
+			   description="COM_ALBOONLINE_CONFIG_ALLEGATO_OBBLIGATORIO_DESC"
+			   layout="joomla.form.field.radio.switcher">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+		<!-- validate="tipiattounici": due tipi con lo stesso `valore` collasserebbero
+			 in silenzio (getTipiAttoConfig() indicizza per `valore`), applicando una
+			 durata diversa da quella mostrata. Vedi M14. -->
+		<field name="tipi_atto" type="subform"
+			   label="COM_ALBOONLINE_CONFIG_TIPI_ATTO"
+			   description="COM_ALBOONLINE_CONFIG_TIPI_ATTO_DESC"
+			   multiple="true"
+			   validate="tipiattounici"
+			   layout="joomla.form.field.subform.repeatable-table"
+			   min="1"
+			   max="50"
+			   default='[{"valore":"generico","etichetta":"Generico","giorni_pubblicazione":""},{"valore":"determina","etichetta":"Determina","giorni_pubblicazione":"15"},{"valore":"delibera","etichetta":"Delibera","giorni_pubblicazione":"15"},{"valore":"decreto","etichetta":"Decreto","giorni_pubblicazione":"15"},{"valore":"bando","etichetta":"Bando","giorni_pubblicazione":"30"},{"valore":"avviso","etichetta":"Avviso","giorni_pubblicazione":"15"}]'>
+			<form>
+				<field name="valore" type="text"
+					   label="COM_ALBOONLINE_CONFIG_TIPO_VALORE"
+					   description="COM_ALBOONLINE_CONFIG_TIPO_VALORE_DESC"
+					   required="true"
+					   maxlength="100"
+					   filter="string"
+					   class="form-control" />
+				<field name="etichetta" type="text"
+					   label="COM_ALBOONLINE_CONFIG_TIPO_ETICHETTA"
+					   description="COM_ALBOONLINE_CONFIG_TIPO_ETICHETTA_DESC"
+					   required="true"
+					   maxlength="255"
+					   filter="string"
+					   class="form-control" />
+				<field name="giorni_pubblicazione" type="number"
+					   label="COM_ALBOONLINE_CONFIG_TIPO_GIORNI"
+					   description="COM_ALBOONLINE_CONFIG_TIPO_GIORNI_DESC"
+					   min="1"
+					   max="365"
+					   filter="integer"
+					   class="form-control" />
+			</form>
+		</field>
+
+		<!-- Default noindex: per l'albo pretorio l'indicizzazione dai motori è
+			 sconsigliata (diritto all'oblio). Sugli atti archiviati il noindex è
+			 comunque FORZATO nel codice, a prescindere da questa impostazione. -->
+		<field name="default_robots" type="list"
+			   label="COM_ALBOONLINE_CONFIG_DEFAULT_ROBOTS"
+			   description="COM_ALBOONLINE_CONFIG_DEFAULT_ROBOTS_DESC"
+			   default="noindex, nofollow"
+			   class="form-select">
+			<option value="noindex, nofollow">COM_ALBOONLINE_ROBOTS_NOINDEX_NOFOLLOW</option>
+			<option value="noindex, follow">COM_ALBOONLINE_ROBOTS_NOINDEX_FOLLOW</option>
+			<option value="index, nofollow">COM_ALBOONLINE_ROBOTS_INDEX_NOFOLLOW</option>
+			<option value="">COM_ALBOONLINE_ROBOTS_INDEX_FOLLOW</option>
+		</field>
+
+		<!-- Ripiego Bootstrap. I layout del sito usano le classi Bootstrap standard
+			 (btn, card, table, badge, griglia): le disegna il TEMA dell'ente, non noi.
+			 Cassiopeia (default di Joomla) e i temi Bootstrap Italia le includono.
+			 Se invece l'ente installa un tema SENZA Bootstrap, nessuno disegna quelle
+			 classi: l'albo resta leggibile e accessibile (il markup non cambia), ma
+			 appare senza stile. Questa opzione carica il Bootstrap GIÀ PRESENTE in ogni
+			 installazione Joomla (media/vendor/bootstrap) SOLO sulle pagine dell'albo.
+			 Default = No: sui siti normali non deve caricare nulla in più, e due
+			 Bootstrap sulla stessa pagina fanno più danni di uno mancante. -->
+		<field name="carica_bootstrap" type="radio"
+			   layout="joomla.form.field.radio.switcher"
+			   label="COM_ALBOONLINE_CONFIG_CARICA_BOOTSTRAP"
+			   description="COM_ALBOONLINE_CONFIG_CARICA_BOOTSTRAP_DESC"
+			   default="0">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+	</fieldset>
+
+	<!-- Referto di pubblicazione (M18). Il referto NON è imposto da norma primaria
+		 (né art. 32 L. 69/2009 né artt. 124/134 TUEL lo nominano): vive in regolamenti
+		 e prassi. Per questo è configurabile e la sua terminologia è scelta dall'ente.
+		 Vedi docs/ricerca-normativa/07-referto-pubblicazione.md. -->
+	<fieldset name="referto" label="COM_ALBOONLINE_CONFIG_REFERTO_FIELDSET"
+			  description="COM_ALBOONLINE_CONFIG_REFERTO_FIELDSET_DESC">
+		<field name="referto_attivo" type="radio" default="1"
+			   label="COM_ALBOONLINE_CONFIG_REFERTO_ATTIVO"
+			   description="COM_ALBOONLINE_CONFIG_REFERTO_ATTIVO_DESC"
+			   layout="joomla.form.field.radio.switcher">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+		<!-- Vuoto = usa la denominazione predefinita tradotta (vedi hint). L'ente può
+			 rinominarlo: referto / relata / attestazione / notifica di pubblicazione. -->
+		<field name="referto_titolo" type="text"
+			   label="COM_ALBOONLINE_CONFIG_REFERTO_TITOLO"
+			   description="COM_ALBOONLINE_CONFIG_REFERTO_TITOLO_DESC"
+			   default=""
+			   hint="COM_ALBOONLINE_REFERTO_TITOLO"
+			   filter="string"
+			   maxlength="255"
+			   class="form-control"
+			   showon="referto_attivo:1" />
+		<!-- Sottotitolo LIBERO: nessuna base normativa preimpostata. L'ente vi indica
+			 l'eventuale riferimento del proprio regolamento, o lo lascia vuoto. -->
+		<field name="referto_sottotitolo" type="text"
+			   label="COM_ALBOONLINE_CONFIG_REFERTO_SOTTOTITOLO"
+			   description="COM_ALBOONLINE_CONFIG_REFERTO_SOTTOTITOLO_DESC"
+			   default=""
+			   filter="string"
+			   maxlength="255"
+			   class="form-control"
+			   showon="referto_attivo:1" />
+	</fieldset>
+
+	<fieldset name="permissions" label="JCONFIG_PERMISSIONS_LABEL"
+			  description="JCONFIG_PERMISSIONS_DESC">
+		<field name="rules" type="rules" label="JCONFIG_PERMISSIONS_LABEL"
+			   component="com_alboonline" filter="rules"
+			   validate="rules" section="component" />
+	</fieldset>
+</config>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form>
+	<fields name="filter">
+		<field
+			name="search"
+			type="text"
+			label="COM_ALBOONLINE_FILTER_SEARCH_LABEL"
+			description="COM_ALBOONLINE_FILTER_SEARCH_DESC"
+			hint="JSEARCH_FILTER"
+		/>
+
+		<field
+			name="catid"
+			type="category"
+			label="JCATEGORY"
+			extension="com_alboonline"
+			onchange="this.form.submit();"
+			default=""
+			published="1"
+		>
+			<option value="">JOPTION_SELECT_CATEGORY</option>
+		</field>
+
+		<field
+			name="tipo_atto"
+			type="tipoattolist"
+			addfieldprefix="Pcrt\Component\Alboonline\Administrator\Field"
+			label="COM_ALBOONLINE_FIELD_TIPO_ATTO_LABEL"
+			onchange="this.form.submit();"
+			default=""
+		>
+			<option value="">COM_ALBOONLINE_FILTER_SELECT_TIPO</option>
+		</field>
+
+		<field
+			name="anno_protocollo"
+			type="number"
+			label="COM_ALBOONLINE_FILTER_ANNO_LABEL"
+			onchange="this.form.submit();"
+			default=""
+			hint="COM_ALBOONLINE_FILTER_ANNO_HINT"
+			min="2020"
+			max="2099"
+		/>
+	</fields>
+
+	<fields name="list">
+		<field
+			name="fullordering"
+			type="list"
+			label="JGLOBAL_SORT_BY"
+			default="a.publish_up DESC"
+			onchange="this.form.submit();"
+		>
+			<option value="">JGLOBAL_SORT_BY</option>
+			<option value="a.publish_up ASC">COM_ALBOONLINE_SORT_PUBLISH_UP_ASC</option>
+			<option value="a.publish_up DESC">COM_ALBOONLINE_SORT_PUBLISH_UP_DESC</option>
+			<option value="a.titolo ASC">COM_ALBOONLINE_SORT_TITOLO_ASC</option>
+			<option value="a.titolo DESC">COM_ALBOONLINE_SORT_TITOLO_DESC</option>
+			<option value="a.numero_protocollo ASC">COM_ALBOONLINE_SORT_PROTOCOLLO_ASC</option>
+			<option value="a.numero_protocollo DESC">COM_ALBOONLINE_SORT_PROTOCOLLO_DESC</option>
+			<option value="a.data_atto ASC">COM_ALBOONLINE_SORT_DATA_ATTO_ASC</option>
+			<option value="a.data_atto DESC">COM_ALBOONLINE_SORT_DATA_ATTO_DESC</option>
+		</field>
+
+		<field
+			name="limit"
+			type="limitbox"
+			label="JGLOBAL_LIST_LIMIT"
+			default="20"
+			onchange="this.form.submit();"
+		/>
+	</fields>
+</form>

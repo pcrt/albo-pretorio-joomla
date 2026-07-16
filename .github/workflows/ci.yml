@@ -1,0 +1,173 @@
+# CI — Albo Pretorio Online
+#
+# Quattro controlli, eseguiti a ogni push e pull request:
+#   1. php-lint     — `php -l` su tutti i sorgenti, su PHP 8.3 e 8.4 (bloccante)
+#   2. xml-validate — tutti i file XML devono essere ben formati (bloccante)
+#   3. pacchetto    — costruisce lo zip e passa il guardiano (bloccante)
+#   4. phpcs        — standard di codice Joomla (INFORMATIVO: non blocca il merge)
+#
+# PERCHE' IL JOB «pacchetto»
+# Fino alla 1.0.0 la CI controllava la SINTASSI del codice e nient'altro: non costruiva mai
+# il pacchetto. Il risultato e' che due file non spediti (l'esito della verifica firma e il
+# referto di esempio della guida) sono arrivati fino a una release pubblica con tutti i
+# controlli verdi. Un codice che compila e un prodotto che funziona sono due cose diverse.
+#
+# I job non toccano il database né avviano Joomla: le suite di collaudo (scripts/) girano
+# in un ambiente DDEV completo e restano da eseguire in locale prima di una release —
+# con `bash bin/dev-deploy.sh entrambi`, che installa il pacchetto VERO su J5 e J6.
+
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  php-lint:
+    name: PHP lint · PHP ${{ matrix.php }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ["8.3", "8.4"]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Prepara PHP ${{ matrix.php }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+
+      - name: Lint di tutti i file PHP (escluso vendor)
+        run: |
+          find . -type f -name '*.php' \
+            -not -path '*/vendor/*' -not -path '*/node_modules/*' -print0 \
+            | xargs -0 -n1 -P4 php -l
+
+  xml-validate:
+    name: XML ben formato
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Prepara PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.3"
+          coverage: none
+
+      - name: Valida i file XML (escluso vendor)
+        run: |
+          php -r '
+            $err = 0;
+            $it = new RecursiveIteratorIterator(
+              new RecursiveDirectoryIterator(".", FilesystemIterator::SKIP_DOTS)
+            );
+            foreach ($it as $f) {
+              if (strtolower($f->getExtension()) !== "xml") continue;
+              $p = $f->getPathname();
+              if (strpos($p, "/vendor/") !== false || strpos($p, "/node_modules/") !== false) continue;
+              libxml_use_internal_errors(true);
+              if (simplexml_load_file($p) === false) {
+                echo "MALFORMATO: $p" . PHP_EOL;
+                foreach (libxml_get_errors() as $e) echo "  " . trim($e->message) . PHP_EOL;
+                $err = 1;
+              }
+            }
+            exit($err);
+          '
+
+  pacchetto:
+    name: Il pacchetto si costruisce ed è completo
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Prepara PHP e Composer
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.3"
+          coverage: none
+          tools: composer
+
+      # mPDF non sta nel repository: lo scarica il build. Senza cache sono ~95 MB a ogni
+      # giro (di cui 74 di font che poi il build butta, perche' un albo italiano non scrive
+      # in accadico).
+      - name: Cache di Composer
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/composer
+          key: composer-${{ hashFiles('composer.lock') }}
+          restore-keys: composer-
+
+      # LICENSE.txt e' in due copie ed e' giusto cosi': quella dentro src/ viaggia nello zip
+      # perche' la GPL vuole che chi riceve il software riceva le condizioni; quella in radice
+      # e' per chi guarda il repository. La duplicazione che fa male e' quella che puo'
+      # divergere — il testo della GPL v2 non cambia dal 1991, ma un controllo costa una riga
+      # e chiude la domanda per sempre.
+      - name: I due LICENSE.txt sono identici
+        run: cmp LICENSE.txt src/administrator/components/com_alboonline/LICENSE.txt
+
+      - name: Costruisci il pacchetto e passa il guardiano
+        run: bash bin/build.sh
+
+      # Serve a guardarlo quando qualcosa non torna, senza doverlo ricostruire in locale.
+      - name: Conserva il pacchetto
+        uses: actions/upload-artifact@v4
+        with:
+          name: com_alboonline
+          path: dist/*.zip
+          retention-days: 14
+
+      # Il guardiano deve accorgersi di un file non spedito. Se non se ne accorge non serve
+      # a niente, e non avercelo sarebbe piu' onesto che averlo e crederci. Qui si toglie
+      # dal manifest la cartella dell'esito firma — cioe' si ricrea il difetto vero della
+      # 1.0.0 — e si pretende che la build DIVENTI ROSSA.
+      - name: Prova d'esame — il guardiano riconosce il difetto che l'ha generato
+        run: |
+          MANIFEST=administrator/components/com_alboonline/alboonline.xml
+          cp "$MANIFEST" /tmp/manifest.orig
+          sed -i 's|<folder>layouts</folder>||' "$MANIFEST"
+
+          if bash bin/build.sh > /dev/null 2>&1; then
+            echo "::error::Il guardiano NON ha visto la cartella layouts tolta dal manifest."
+            echo "E' il difetto che nella 1.0.0 rendeva muta la verifica della firma."
+            cp /tmp/manifest.orig "$MANIFEST"
+            exit 1
+          fi
+
+          cp /tmp/manifest.orig "$MANIFEST"
+          echo "Il guardiano ha visto il difetto: la build e' diventata rossa come doveva."
+
+  phpcs:
+    name: PHP CodeSniffer (standard Joomla) · informativo
+    runs-on: ubuntu-latest
+    # Non blocca il merge: è una guida allo stile, non un cancello. Si potrà rendere
+    # bloccante quando i sorgenti passano puliti.
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Prepara PHP + phpcs
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.3"
+          coverage: none
+          tools: phpcs, cs2pr
+
+      - name: Installa lo standard di codice Joomla
+        run: |
+          composer global require joomla/coding-standards --no-interaction --no-progress
+          phpcs --config-set installed_paths "$(composer global config home -q)/vendor/joomla/coding-standards"
+
+      - name: Analisi dei sorgenti del componente
+        run: |
+          phpcs -q --report=checkstyle --standard=Joomla --extensions=php \
+            administrator/components/com_alboonline/src \
+            components/com_alboonline/src \
+            plugins/task/alboonline/src \
+            plugins/content/alboonline/src | cs2pr

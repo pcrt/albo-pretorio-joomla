@@ -1,0 +1,6 @@
+-- v1.2.0 — Nessun aggiornamento di schema. Le modifiche riguardano il caricamento dei file,
+-- l'interfaccia della scheda allegati e la forma del pacchetto: le tabelle non cambiano.
+--
+-- Il file esiste di proposito. Convenzione del progetto: una versione = un file di update,
+-- anche vuoto. Serve a far avanzare `#__schemas` insieme al manifest; se resta indietro,
+-- Joomla riapplica l'ultimo update che trova e si prende un falso «Duplicate column» (D78).

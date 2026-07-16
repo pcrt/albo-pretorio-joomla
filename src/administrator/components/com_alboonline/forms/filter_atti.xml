@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fields name="filter">
+		<field name="search" type="text"
+			   label="COM_ALBOONLINE_FILTER_SEARCH"
+			   hint="COM_ALBOONLINE_FILTER_SEARCH_DESC"
+			   inputmode="search" />
+
+		<!-- Il filtro sullo stato TECNICO di Joomla (`state`) è stato RIMOSSO (M23).
+			 Con i fix M1/M17 la colonna `state` non è più guidata a mano: la sua toggle e
+			 le voci Pubblica/Sospendi/Archivia sono sparite dalla lista, perché scavalcavano
+			 il workflow legale. Restava però il FILTRO su quella colonna: due tendine
+			 chiamate entrambe «Stato», con le stesse parole e significati diversi, su una
+			 colonna che non è nemmeno più mostrata in tabella.
+			 Ora l'elenco è governato dal solo stato del WORKFLOW (sotto), che è l'unico
+			 concetto che l'operatore di un albo deve maneggiare. -->
+
+		<field name="catid" type="category"
+			   label="JOPTION_SELECT_CATEGORY"
+			   extension="com_alboonline"
+			   onchange="this.form.submit();">
+			<option value="">JOPTION_SELECT_CATEGORY</option>
+		</field>
+
+		<field name="stato_atto" type="list"
+			   label="COM_ALBOONLINE_FILTER_STATO_ATTO"
+			   onchange="this.form.submit();">
+			<option value="">COM_ALBOONLINE_FILTER_SELECT_STATO</option>
+			<option value="0">COM_ALBOONLINE_STATO_BOZZA</option>
+			<option value="1">COM_ALBOONLINE_STATO_IN_ATTESA</option>
+			<option value="2">COM_ALBOONLINE_STATO_PUBBLICATO</option>
+			<option value="3">COM_ALBOONLINE_STATO_ARCHIVIATO</option>
+			<!-- Il cestino NON è uno stato del workflow: vive su `state` = -2, e infatti
+				 `stato_atto` non vale mai -2 (l'opzione, prima, non trovava mai nulla).
+				 Per l'operatore però «Cestinato» è uno stato come gli altri: il modello
+				 traduce questa voce in `state = -2`. -->
+			<option value="-2">COM_ALBOONLINE_STATO_CESTINATO</option>
+		</field>
+
+		<field name="tipo_atto" type="tipoattolist"
+			   label="COM_ALBOONLINE_FILTER_TIPO_ATTO"
+			   onchange="this.form.submit();">
+			<option value="">COM_ALBOONLINE_FILTER_SELECT_TIPO</option>
+		</field>
+
+		<field name="anno_protocollo" type="text"
+			   label="COM_ALBOONLINE_FILTER_ANNO"
+			   hint="COM_ALBOONLINE_FILTER_ANNO_HINT"
+			   inputmode="numeric"
+			   onchange="this.form.submit();" />
+
+		<field name="codice_correlazione" type="text"
+			   label="COM_ALBOONLINE_FILTER_CORRELAZIONE"
+			   hint="COM_ALBOONLINE_FILTER_CORRELAZIONE_HINT"
+			   onchange="this.form.submit();" />
+	</fields>
+
+	<fields name="list">
+		<field name="fullordering" type="list"
+			   label="JGLOBAL_SORT_BY"
+			   default="a.id DESC"
+			   onchange="this.form.submit();">
+			<option value="">JGLOBAL_SORT_BY</option>
+			<option value="a.id ASC">JGRID_HEADING_ID_ASC</option>
+			<option value="a.id DESC">JGRID_HEADING_ID_DESC</option>
+			<option value="a.titolo ASC">COM_ALBOONLINE_HEADING_TITOLO_ASC</option>
+			<option value="a.titolo DESC">COM_ALBOONLINE_HEADING_TITOLO_DESC</option>
+			<option value="a.numero_protocollo ASC">COM_ALBOONLINE_HEADING_PROTOCOLLO_ASC</option>
+			<option value="a.numero_protocollo DESC">COM_ALBOONLINE_HEADING_PROTOCOLLO_DESC</option>
+			<option value="a.stato_atto ASC">COM_ALBOONLINE_HEADING_STATO_ATTO_ASC</option>
+			<option value="a.stato_atto DESC">COM_ALBOONLINE_HEADING_STATO_ATTO_DESC</option>
+			<option value="a.ordering ASC">JGRID_HEADING_ORDERING_ASC</option>
+			<option value="a.ordering DESC">JGRID_HEADING_ORDERING_DESC</option>
+		</field>
+
+		<field name="limit" type="limitbox"
+			   label="JGLOBAL_LIST_LIMIT"
+			   default="25"
+			   onchange="this.form.submit();" />
+	</fields>
+</form>

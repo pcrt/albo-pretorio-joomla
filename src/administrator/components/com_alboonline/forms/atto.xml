@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form addfieldprefix="Pcrt\Component\Alboonline\Administrator\Field"
+	  addruleprefix="Pcrt\Component\Alboonline\Administrator\Rule">
+	<!-- Aiuto in linea: le spiegazioni dei campi nascono NASCOSTE, e il pulsante «Aiuto in
+		 linea» nella toolbar le mostra tutte. È il meccanismo nativo di Joomla (lo stesso
+		 degli articoli): chi sa già cosa fare non viene disturbato, chi ha un dubbio apre.
+		 Una spiegazione sempre a schermo sotto ogni campo diventa rumore, e finisce che
+		 nessuno legge più nemmeno quelle che contano. -->
+	<config>
+		<inlinehelp button="show"/>
+	</config>
+	<fieldset name="details" label="COM_ALBOONLINE_FIELDSET_DETAILS">
+		<field name="id" type="hidden" default="0" />
+		<field name="asset_id" type="hidden" default="0" />
+		<field name="state" type="hidden" default="0" />
+
+		<field name="stato_atto" type="statoatto"
+			   label="COM_ALBOONLINE_FIELD_STATO_ATTO"
+			   default="0" />
+
+		<field name="numero_protocollo" type="protocollo"
+			   label="COM_ALBOONLINE_FIELD_PROTOCOLLO" />
+
+		<field name="titolo" type="text"
+			   label="COM_ALBOONLINE_FIELD_TITOLO"
+			   required="true"
+			   maxlength="512"
+			   class="form-control" />
+
+		<field name="alias" type="text"
+			   label="JFIELD_ALIAS_LABEL"
+			   description="JFIELD_ALIAS_DESC"
+			   maxlength="400"
+			   class="form-control" />
+
+		<field name="oggetto" type="text"
+			   label="COM_ALBOONLINE_FIELD_OGGETTO"
+			   description="COM_ALBOONLINE_FIELD_OGGETTO_DESC"
+			   required="true"
+			   maxlength="1024"
+			   class="form-control" />
+
+		<field name="descrizione" type="editor"
+			   label="COM_ALBOONLINE_FIELD_DESCRIZIONE"
+			   filter="safehtml"
+			   buttons="true"
+			   hide="pagebreak,readmore"
+			   height="300" />
+
+		<field name="catid" type="categoryedit"
+			   addfieldprefix="Joomla\Component\Categories\Administrator\Field"
+			   label="JCATEGORY"
+			   description="COM_ALBOONLINE_FIELD_CATEGORY_DESC"
+			   extension="com_alboonline"
+			   required="true"
+			   default="" />
+
+		<field name="tipo_atto" type="tipoattolist"
+			   label="COM_ALBOONLINE_FIELD_TIPO_ATTO"
+			   description="COM_ALBOONLINE_FIELD_TIPO_ATTO_DESC"
+			   default="generico"
+			   required="true"
+			   class="form-select" />
+
+		<!-- Obbligatorio (M33): ogni atto deve portare scritto CHI lo emana, e portarlo
+			 storicizzato. Il valore viene pre-compilato con l'ente di default alla creazione
+			 (AttoModel::loadFormData), quindi il funzionario non deve digitare nulla in più.
+			 Senza `required`, svuotando il campo in modifica l'atto tornava a ereditare
+			 l'ente alla stampa: se un giorno l'ente cambia nome, il referto di un atto
+			 vecchio mostrerebbe RETROATTIVAMENTE l'ente nuovo — e un referto deve attestare
+			 i fatti com'erano. -->
+		<field name="ente_emanante" type="text"
+			   label="COM_ALBOONLINE_FIELD_ENTE_EMANANTE"
+			   description="COM_ALBOONLINE_FIELD_ENTE_EMANANTE_DESC"
+			   maxlength="255"
+			   required="true"
+			   filter="string"
+			   class="form-control" />
+
+		<field name="responsabile" type="text"
+			   label="COM_ALBOONLINE_FIELD_RESPONSABILE"
+			   description="COM_ALBOONLINE_FIELD_RESPONSABILE_DESC"
+			   maxlength="255"
+			   class="form-control" />
+
+		<field name="data_atto" type="calendar"
+			   label="COM_ALBOONLINE_FIELD_DATA_ATTO"
+			   description="COM_ALBOONLINE_FIELD_DATA_ATTO_DESC"
+			   format="%Y-%m-%d"
+			   translateformat="false"
+			   showtime="false"
+			   class="form-control" />
+
+		<!-- Segnatura di protocollo dell'ente (protocollo informatico, art. 55 DPR
+			 445/2000): numero e data del registro GENERALE della PA, DISTINTA dal
+			 repertorio d'albo (numero_protocollo). Solo campo, nessun connettore. -->
+		<field name="segnatura_protocollo" type="text"
+			   label="COM_ALBOONLINE_FIELD_SEGNATURA_PROTOCOLLO"
+			   description="COM_ALBOONLINE_FIELD_SEGNATURA_PROTOCOLLO_DESC"
+			   hint="COM_ALBOONLINE_FIELD_SEGNATURA_PROTOCOLLO_HINT"
+			   maxlength="100"
+			   filter="string"
+			   class="form-control" />
+
+		<field name="segnatura_data" type="calendar"
+			   label="COM_ALBOONLINE_FIELD_SEGNATURA_DATA"
+			   description="COM_ALBOONLINE_FIELD_SEGNATURA_DATA_DESC"
+			   format="%Y-%m-%d"
+			   translateformat="false"
+			   showtime="false"
+			   class="form-control" />
+
+		<field name="codice_correlazione" type="correlazionecode"
+			   label="COM_ALBOONLINE_FIELD_CODICE_CORRELAZIONE"
+			   description="COM_ALBOONLINE_FIELD_CODICE_CORRELAZIONE_DESC"
+			   maxlength="255" />
+	</fieldset>
+
+	<fieldset name="pubblicazione" label="COM_ALBOONLINE_FIELDSET_PUBBLICAZIONE">
+		<!-- filter="user_utc" e' indispensabile su tutti i campi data-e-ora: senza,
+			 CalendarField converte il valore da UTC al fuso dell'utente per mostrarlo
+			 (il filtro di default e' USER_UTC) ma NON riconverte in salvataggio, perche'
+			 filter() legge l'attributo direttamente dall'XML. Il risultato e' che ogni
+			 salvataggio sposta la data in avanti dell'offset del fuso. Vedi M21/M9.
+			 NB: `data_atto` e' una data di calendario (senza ora) e non va convertita. -->
+		<field name="publish_up" type="calendar"
+			   label="COM_ALBOONLINE_FIELD_PUBLISH_UP"
+			   description="COM_ALBOONLINE_FIELD_PUBLISH_UP_DESC"
+			   format="%Y-%m-%d %H:%M:%S"
+			   translateformat="false"
+			   showtime="true"
+			   readonly="true"
+			   filter="user_utc"
+			   class="form-control" />
+
+		<field name="publish_down" type="calendar"
+			   label="COM_ALBOONLINE_FIELD_PUBLISH_DOWN"
+			   description="COM_ALBOONLINE_FIELD_PUBLISH_DOWN_DESC"
+			   format="%Y-%m-%d %H:%M:%S"
+			   translateformat="false"
+			   showtime="true"
+			   filter="user_utc"
+			   class="form-control" />
+
+		<field name="diritto_oblio" type="list"
+			   label="COM_ALBOONLINE_FIELD_DIRITTO_OBLIO"
+			   description="COM_ALBOONLINE_FIELD_DIRITTO_OBLIO_DESC"
+			   default="0"
+			   class="form-select">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+		<field name="visibilita_home" type="list"
+			   label="COM_ALBOONLINE_FIELD_VISIBILITA_HOME"
+			   description="COM_ALBOONLINE_FIELD_VISIBILITA_HOME_DESC"
+			   default="nessuna"
+			   class="form-select">
+			<option value="nessuna">COM_ALBOONLINE_HOME_NESSUNA</option>
+			<option value="comunicazioni">COM_ALBOONLINE_HOME_COMUNICAZIONI</option>
+			<option value="evidenza">COM_ALBOONLINE_HOME_EVIDENZA</option>
+		</field>
+
+		<field name="robots" type="list"
+			   label="COM_ALBOONLINE_FIELD_ROBOTS"
+			   description="COM_ALBOONLINE_FIELD_ROBOTS_DESC"
+			   default=""
+			   class="form-select">
+			<option value="">COM_ALBOONLINE_ROBOTS_USE_GLOBAL</option>
+			<option value="noindex, nofollow">COM_ALBOONLINE_ROBOTS_NOINDEX_NOFOLLOW</option>
+			<option value="noindex, follow">COM_ALBOONLINE_ROBOTS_NOINDEX_FOLLOW</option>
+			<option value="index, follow">COM_ALBOONLINE_ROBOTS_INDEX_FOLLOW</option>
+			<option value="index, nofollow">COM_ALBOONLINE_ROBOTS_INDEX_NOFOLLOW</option>
+		</field>
+
+		<field name="buffer_expires_at" type="calendar"
+			   label="COM_ALBOONLINE_FIELD_BUFFER_EXPIRES"
+			   format="%Y-%m-%d %H:%M:%S"
+			   translateformat="false"
+			   showtime="true"
+			   readonly="true"
+			   filter="user_utc"
+			   class="form-control" />
+
+		<field name="locked_at" type="calendar"
+			   label="COM_ALBOONLINE_FIELD_LOCKED_AT"
+			   format="%Y-%m-%d %H:%M:%S"
+			   translateformat="false"
+			   showtime="true"
+			   readonly="true"
+			   filter="user_utc"
+			   class="form-control" />
+	</fieldset>
+
+	<fieldset name="rettifica" label="COM_ALBOONLINE_FIELDSET_RETTIFICA">
+		<field name="rettifica_di" type="hidden" />
+		<field name="rettificato_da" type="hidden" />
+		<field name="note_rettifica" type="textarea"
+			   label="COM_ALBOONLINE_FIELD_NOTE_RETTIFICA"
+			   description="COM_ALBOONLINE_FIELD_NOTE_RETTIFICA_DESC"
+			   rows="3"
+			   validate="rettificamotivata"
+			   class="form-control" />
+	</fieldset>
+
+	<fieldset name="hidden_fields">
+		<field name="anno_protocollo" type="hidden" />
+		<field name="progressivo_protocollo" type="hidden" />
+		<field name="ordering" type="hidden" default="0" />
+		<field name="checked_out" type="hidden" default="" />
+		<field name="checked_out_time" type="hidden" default="" />
+		<field name="created" type="hidden" />
+		<field name="created_by" type="createdby" label="JGLOBAL_FIELD_CREATED_BY_LABEL" hidden="true" />
+		<field name="modified" type="hidden" />
+		<field name="modified_by" type="modifiedby" label="JGLOBAL_FIELD_MODIFIED_BY_LABEL" hidden="true" />
+		<field name="version" type="hidden" default="1" />
+		<field name="hits" type="hidden" default="0" />
+		<field name="access" type="accesslevel" label="JFIELD_ACCESS_LABEL" default="1" />
+		<field name="language" type="contentlanguage" label="JFIELD_LANGUAGE_LABEL" default="it-IT">
+			<option value="*">JALL</option>
+		</field>
+		<field name="params" type="hidden" default="" />
+		<field name="metadata" type="hidden" default="" />
+	</fieldset>
+</form>

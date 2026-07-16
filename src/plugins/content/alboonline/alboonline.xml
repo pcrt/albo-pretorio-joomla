@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extension type="plugin" group="content" method="upgrade">
+	<name>plg_content_alboonline</name>
+	<author>Eddy Prosperi</author>
+	<authorEmail>eddy.prosperi@protocollicreativi.it</authorEmail>
+	<creationDate>2026-04</creationDate>
+	<copyright>2026 Eddy Prosperi</copyright>
+	<license>GNU General Public License versione 2 o successiva; vedi LICENSE.txt</license>
+	<version>1.1.0</version>
+	<php_minimum>8.3</php_minimum>
+	<description>PLG_CONTENT_ALBOONLINE_XML_DESCRIPTION</description>
+	<namespace path="src">Pcrt\Plugin\Content\Alboonline</namespace>
+	<scriptfile>script.php</scriptfile>
+
+	<files>
+		<folder plugin="alboonline">services</folder>
+		<folder>src</folder>
+		<filename>script.php</filename>
+		<!-- Copia interna delle lingue: senza, chi aggiunge l'italiano a Joomla DOPO aver
+		     installato l'albo resta con le etichette inglesi per sempre. La spiegazione lunga
+		     e' nel manifest di plg_task_alboonline. -->
+		<folder>language</folder>
+	</files>
+
+</extension>

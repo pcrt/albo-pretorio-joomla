@@ -1,0 +1,168 @@
+/**
+ * Com_Alboonline - Explorer (frontend list) styles
+ *
+ * REGOLA DEI COLORI (2026-07-14). Due categorie, trattate in modo opposto:
+ *
+ *  1. Colore ESTETICO (evidenziazioni, bordi, sfondi) -> segue il TEMA dell'ente
+ *     via var(--bs-*), col valore fisso solo come ripiego se il tema non lo dichiara.
+ *     Un albo col pulsante blu dentro un sito verde e' un corpo estraneo.
+ *
+ *  2. Colore che porta una GARANZIA DI ACCESSIBILITA' (focus visibile 2.4.7/1.4.11,
+ *     contrasto del testo attenuato 1.4.3, link di salto) -> resta FISSO.
+ *     Ereditarlo dal tema significherebbe che un tema con un primario pallido
+ *     ci fa perdere il focus visibile: la conformita' non puo' dipendere da
+ *     una variabile che non controlliamo (vedi D71).
+ */
+
+/* Layout */
+.com-alboonline-atti {
+	margin-bottom: 2rem;
+}
+
+.com-alboonline-atti h1 {
+	margin-bottom: 1.5rem;
+}
+
+/* Sidebar tree */
+.com-alboonline-sidebar {
+	position: sticky;
+	top: 1rem;
+}
+
+.com-alboonline-tree__link {
+	color: inherit;
+	text-decoration: none;
+	transition: background-color 0.15s ease-in-out;
+	border-left: 3px solid transparent;
+}
+
+.com-alboonline-tree__link:hover,
+.com-alboonline-tree__link:focus {
+	background-color: rgba(0, 0, 0, 0.04);
+	text-decoration: none;
+}
+
+/* Estetico: la categoria selezionata si evidenzia col colore del TEMA. */
+.com-alboonline-tree__item.active > .com-alboonline-tree__link {
+	background-color: rgba(0, 0, 0, 0.05); /* ripiego se color-mix non e' supportato */
+	background-color: color-mix(in srgb, var(--bs-primary, #0d6efd) 10%, transparent);
+	border-left-color: var(--bs-primary, #0d6efd);
+	font-weight: 600;
+}
+
+/* Accessibilita': focus SEMPRE visibile, colore fisso (vedi regola in testa). */
+.com-alboonline-tree__link:focus-visible {
+	outline: 2px solid #0066cc;
+	outline-offset: -2px;
+}
+
+.com-alboonline-tree .badge {
+	font-size: 0.7rem;
+	vertical-align: middle;
+}
+
+/* Barra filtri.
+   Prima imponeva la palette di Bootstrap Italia (#0066cc / #5c6f82) SOPRA quella del tema:
+   il pulsante "Cerca" restava blu anche su un sito verde o bordeaux -> corpo estraneo.
+   Ora la barra si limita a distinguersi dallo sfondo; i PULSANTI e i CAMPI li stila il tema,
+   che e' esattamente il motivo per cui usiamo le classi Bootstrap standard (btn-primary,
+   form-control): su Cassiopeia li disegna Cassiopeia, su un tema Bootstrap Italia li
+   disegna Bootstrap Italia. Nessun override. */
+.com-alboonline-filterbar {
+	background-color: rgba(0, 0, 0, 0.03);
+	border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.com-alboonline-filterbar .form-label {
+	font-size: 0.85rem;
+	margin-bottom: 0.35rem;
+}
+
+/* Table */
+.com-alboonline-table th {
+	font-size: 0.85rem;
+	text-transform: uppercase;
+	letter-spacing: 0.03em;
+	border-bottom-width: 2px;
+}
+
+.com-alboonline-table .badge {
+	font-size: 0.8rem;
+}
+
+/* Target size (WCAG 2.5.8, 2.2 AA): il link conteggio allegati e' un'area
+   toccabile di almeno 24x24 CSS px. */
+.com-alboonline-table .badge-allegati {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.25rem;
+	min-height: 1.5rem;
+	min-width: 1.5rem;
+}
+
+.com-alboonline-table a {
+	text-decoration: none;
+}
+
+.com-alboonline-table a:hover {
+	text-decoration: underline;
+}
+
+/* Righe archiviate: testo attenuato ma conforme WCAG 1.4.3 (>= 4.5:1)
+   anche sopra le righe zebrate della tabella. */
+.com-alboonline-table tr.text-muted {
+	color: #565e64;
+}
+
+.com-alboonline-table tr.text-muted a {
+	color: #0a53be;
+}
+
+/* Focus visibile (WCAG 2.4.7) garantito dal componente stesso,
+   indipendentemente dal template del sito che lo ospita. */
+.com-alboonline-atti a:focus-visible,
+.com-alboonline-atti .btn:focus-visible,
+.com-alboonline-atti .page-link:focus-visible,
+.com-alboonline-atti summary:focus-visible {
+	outline: 2px solid #0066cc;
+	outline-offset: 2px;
+	border-radius: 2px;
+}
+
+/* Pagination */
+.com-alboonline-atti__pagination {
+	margin-top: 1.5rem;
+}
+
+/* Responsive */
+@media (max-width: 991.98px) {
+	.com-alboonline-atti__sidebar {
+		margin-bottom: 1.5rem;
+	}
+
+	.com-alboonline-sidebar {
+		position: static;
+	}
+}
+
+/* Link di salto (WCAG 2.4.1). Invisibili finché non li si raggiunge con Tab: allora devono
+   diventare BEN visibili, non un rettangolo trasparente in un angolo. Chi li usa naviga da
+   tastiera e non vede il puntatore: se il link compare senza risaltare, è come non esserci. */
+.com-alboonline-skip:focus,
+.com-alboonline-skip:focus-visible {
+	position: absolute;
+	top: 0.5rem;
+	left: 0.5rem;
+	z-index: 1080;
+	display: inline-block;
+	padding: 0.6rem 1rem;
+	background: #fff;
+	color: #0b3d91;
+	font-weight: 700;
+	text-decoration: underline;
+	border: 3px solid #0b3d91;
+	border-radius: 0.25rem;
+	outline: 3px solid #ffbf47;
+	outline-offset: 2px;
+}

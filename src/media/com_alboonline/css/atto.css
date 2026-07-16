@@ -1,0 +1,86 @@
+/**
+ * Com_Alboonline - Single act detail styles
+ *
+ * REGOLA DEI COLORI: estetica -> segue il tema (var(--bs-*)); garanzie di
+ * accessibilita' (focus visibile) -> colore FISSO. Spiegata in explorer.css.
+ */
+
+.com-alboonline-atto {
+	margin-bottom: 2rem;
+}
+
+/* Header */
+.com-alboonline-atto__header h1 {
+	margin-bottom: 0.75rem;
+}
+
+.com-alboonline-atto__meta .badge {
+	font-size: 0.85rem;
+}
+
+/* Content. I grigi seguono il tema (--bs-secondary-color / --bs-emphasis-color),
+   col grigio Bootstrap come ripiego: sono testi secondari, non garanzie. */
+.com-alboonline-atto__body .lead {
+	font-size: 1.1rem;
+	color: var(--bs-emphasis-color, #495057);
+}
+
+/* Info card */
+.com-alboonline-atto__body .card dt {
+	font-size: 0.85rem;
+	color: var(--bs-secondary-color, #6c757d);
+}
+
+.com-alboonline-atto__body .card dd {
+	font-size: 0.95rem;
+	margin-bottom: 0.75rem;
+}
+
+/* Allegati: normalizzazione altezza bottoni */
+.com-alboonline-atto .list-group-item {
+	min-height: 3.5rem;
+}
+
+.com-alboonline-atto .list-group-item .text-truncate {
+	min-width: 0;
+}
+
+/* Download card */
+.com-alboonline-atto__body .btn-primary .icon-download {
+	margin-right: 0.25rem;
+}
+
+/* Focus visibile (WCAG 2.4.7) garantito dal componente stesso,
+   indipendentemente dal template del sito che lo ospita. */
+.com-alboonline-atto a:focus-visible,
+.com-alboonline-atto .btn:focus-visible,
+.com-alboonline-atto summary:focus-visible {
+	outline: 2px solid #0066cc;
+	outline-offset: 2px;
+	border-radius: 2px;
+}
+
+/* Footer */
+.com-alboonline-atto__footer {
+	padding-top: 1.5rem;
+	border-top: 1px solid var(--bs-border-color, #dee2e6);
+}
+
+/* Sidebar sticky: evita lo "spazio bianco infinito" quando le card laterali
+   (info, allegati, correlati) sono complessivamente piu' lunghe del corpo. */
+@media (min-width: 992px) {
+	.com-alboonline-atto__sidebar {
+		position: sticky;
+		top: 1.5rem;
+		max-height: calc(100vh - 3rem);
+		overflow-y: auto;
+	}
+	/* Scrollbar discreta per non sembrare un riquadro chiuso. */
+	.com-alboonline-atto__sidebar::-webkit-scrollbar {
+		width: 6px;
+	}
+	.com-alboonline-atto__sidebar::-webkit-scrollbar-thumb {
+		background: #c9c9c9;
+		border-radius: 3px;
+	}
+}

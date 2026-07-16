@@ -1,0 +1,52 @@
+{
+	"$schema": "https://developer.joomla.org/schemas/json-schema/web_assets.json",
+	"name": "com_alboonline",
+	"version": "1.1.0",
+	"description": "Albo Pretorio Online assets",
+	"license": "GPL-2.0-or-later",
+	"assets": [
+		{
+			"name": "com_alboonline.admin",
+			"type": "style",
+			"uri": "com_alboonline/admin.css",
+			"version": "1.1.0"
+		},
+		{
+			"name": "com_alboonline.admin",
+			"type": "script",
+			"uri": "com_alboonline/admin.js",
+			"version": "1.1.0",
+			"dependencies": [
+				"core"
+			]
+		},
+		{
+			"name": "com_alboonline.explorer",
+			"type": "style",
+			"uri": "com_alboonline/explorer.css",
+			"version": "1.0.0"
+		},
+		{
+			"name": "com_alboonline.explorer",
+			"type": "script",
+			"uri": "com_alboonline/explorer.js",
+			"version": "1.0.0",
+			"dependencies": [
+				"core"
+			]
+		},
+		{
+			"name": "com_alboonline.atto",
+			"type": "style",
+			"uri": "com_alboonline/atto.css",
+			"version": "1.0.0"
+		},
+		{
+			"_comment": "RIPIEGO per i template che NON includono Bootstrap (ne' Cassiopeia, ne' Bootstrap Italia, ne' altri temi Bootstrap). I nostri layout usano le classi Bootstrap standard: se il tema non le disegna, l'albo si vede nudo (leggibile e accessibile, ma senza stile). Questo asset punta al Bootstrap GIA' PRESENTE in ogni installazione Joomla (media/vendor/bootstrap): non aggiungiamo librerie. NON si carica mai da solo: solo se l'amministratore attiva l'opzione 'carica_bootstrap' nelle Opzioni del componente. Default = No, cosi' i siti normali non caricano nulla in piu' e non si rischia il doppio Bootstrap.",
+			"name": "com_alboonline.bootstrap-fallback",
+			"type": "style",
+			"uri": "vendor/bootstrap/bootstrap.min.css",
+			"version": "5"
+		}
+	]
+}
