@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Collaudo J5 — suite dei soli test AUTO del piano docs/collaudo/piano-collaudo-j5.md.
+# Suite dei controlli automatici sul frontend: naviga l'albo come un cittadino e verifica
+# che cio' che deve vedersi si veda e cio' che deve essere negato sia negato.
 # I test manuali/AT (browser, screen reader, axe) NON sono qui: non sono surrogabili.
 #
 # Uso: bash scripts/collaudo-auto.sh

@@ -129,7 +129,11 @@ jobs:
       # 1.0.0 — e si pretende che la build DIVENTI ROSSA.
       - name: Prova d'esame — il guardiano riconosce il difetto che l'ha generato
         run: |
-          MANIFEST=administrator/components/com_alboonline/alboonline.xml
+          MANIFEST=src/alboonline.xml
+          # Se il percorso e' sbagliato il cp fallisce e con `bash -e` il job muore prima
+          # ancora di provare il guardiano: sembrerebbe un guardiano rotto e sarebbe solo
+          # un percorso vecchio. E' successo al primo giro, dopo aver spostato il manifest.
+          test -f "$MANIFEST" || { echo "::error::manifest non trovato in $MANIFEST"; exit 1; }
           cp "$MANIFEST" /tmp/manifest.orig
           sed -i 's|<folder>layouts</folder>||' "$MANIFEST"
 

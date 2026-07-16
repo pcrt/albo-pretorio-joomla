@@ -56,10 +56,13 @@ $fontiGlob = [];
  * dimenticanze. Ogni voce e' una scelta e ha il suo motivo scritto accanto.
  */
 $nonSpedito = [
-    // Provenienza di vendor/ (mPDF): dicono QUALE versione ridistribuiamo. Servono a noi e a
-    // chi verifica la licenza, non all'ente che installa.
-    'src/administrator/components/com_alboonline/composer.json',
-    'src/administrator/components/com_alboonline/composer.lock',
+    // Vuoto, e va bene cosi': dentro src/ non c'e' niente che non si spedisca. Prima qui
+    // stavano composer.json/lock, poi promossi alla radice — fuori da src/, che e' il loro
+    // posto: dicono quale mPDF ridistribuiamo, servono a noi e a chi verifica la licenza,
+    // non all'ente che installa.
+    //
+    // Se un giorno una voce serve, si scrive QUI con il motivo. Una deny-list con dentro
+    // voci morte e' peggio di una vuota: fa credere che stia coprendo qualcosa.
 ];
 
 /**
