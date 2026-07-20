@@ -69,59 +69,47 @@ class DownloadController extends BaseController
 			throw new \Exception(Text::_('COM_ALBOONLINE_ERROR_NO_ATTACHMENT'), 404);
 		}
 
-		// Access control based on stato_atto
+		// Controllo di accesso in base allo stato dell'atto.
 		$statoAtto = (int) $allegato->stato_atto;
 
-		// Diritto all'oblio: blocca qualsiasi download pubblico
+		// Il diritto all'oblio si consulta solo per gli atti archiviati (unico stato che lo
+		// prevede) e richiede una lettura sull'atto: la facciamo qui, poi la DECISIONE di
+		// visibilita' e' centralizzata in AlboonlineHelper::downloadDenial(), cosi' e'
+		// collaudabile senza montare un'app HTTP (vedi scripts/test-download-visibilita.php).
+		$dirittoOblio = false;
+
 		if ($statoAtto === AlboonlineHelper::STATO_ARCHIVIATO)
 		{
-			// Carica il flag diritto_oblio dall'atto
 			$oblioQuery = $db->getQuery(true)
 				->select($db->quoteName('diritto_oblio'))
 				->from($db->quoteName('#__alboonline_atti'))
 				->where($db->quoteName('id') . ' = ' . (int) $allegato->atto_id);
 			$db->setQuery($oblioQuery);
-			$dirittoOblio = (int) $db->loadResult();
-
-			if ($dirittoOblio === 1)
-			{
-				throw new \Exception(Text::_('JGLOBAL_RESOURCE_NOT_FOUND'), 404);
-			}
+			$dirittoOblio = ((int) $db->loadResult() === 1);
 		}
 
-		// Trashed: 404
-		if ($statoAtto === AlboonlineHelper::STATO_CESTINATO)
-		{
-			throw new \Exception(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 404);
-		}
+		$denial = AlboonlineHelper::downloadDenial(
+			$statoAtto,
+			(int) $allegato->access,
+			$dirittoOblio,
+			$user->authorise('core.edit', 'com_alboonline'),
+			$user->authorise('alboonline.download.archived', 'com_alboonline'),
+			$user->getAuthorisedViewLevels()
+		);
 
-		// Draft: only with core.edit permission
-		if ($statoAtto === AlboonlineHelper::STATO_BOZZA)
+		if ($denial !== null)
 		{
-			if (!$user->authorise('core.edit', 'com_alboonline'))
-			{
-				throw new \Exception(Text::_('JERROR_ALERTNOAUTHOR'), 403);
-			}
-		}
+			// La decisione (consentito/negato + codice HTTP) sta nell'helper; qui scegliamo
+			// solo il messaggio piu' adatto allo stato, preservando quelli storici.
+			$msgKey = match ($statoAtto) {
+				AlboonlineHelper::STATO_ARCHIVIATO => $dirittoOblio
+					? 'JGLOBAL_RESOURCE_NOT_FOUND'
+					: 'COM_ALBOONLINE_ERROR_ARCHIVED_NO_DOWNLOAD',
+				AlboonlineHelper::STATO_CESTINATO => 'JERROR_AN_ERROR_HAS_OCCURRED',
+				default                           => 'JERROR_ALERTNOAUTHOR',
+			};
 
-		// Archived: deny public, allow with alboonline.download.archived
-		if ($statoAtto === AlboonlineHelper::STATO_ARCHIVIATO)
-		{
-			if (!$user->authorise('alboonline.download.archived', 'com_alboonline'))
-			{
-				throw new \Exception(Text::_('COM_ALBOONLINE_ERROR_ARCHIVED_NO_DOWNLOAD'), 403);
-			}
-		}
-
-		// Pending / Published: respect Joomla access level
-		if (in_array($statoAtto, [AlboonlineHelper::STATO_IN_ATTESA, AlboonlineHelper::STATO_PUBBLICATO]))
-		{
-			$accessLevels = $user->getAuthorisedViewLevels();
-
-			if (!in_array((int) $allegato->access, $accessLevels))
-			{
-				throw new \Exception(Text::_('JERROR_ALERTNOAUTHOR'), 403);
-			}
+			throw new \Exception(Text::_($msgKey), $denial);
 		}
 
 		// Check file exists
