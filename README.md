@@ -27,7 +27,7 @@ scarica e verifica l'integrità dei documenti; non può modificare nulla.
 
 ## 📖 Guida e demo
 
-- **[Guida completa per i funzionari »](https://pcrt.github.io/albo-pretorio-joomla/guida/)** —
+- **[Guida d'uso »](https://pcrt.github.io/albo-pretorio-joomla/guida/)** —
   dalla bozza all'oblio, con le schermate, i messaggi esatti e *«le norme dietro le regole»*.
   Viaggia anche **dentro il pacchetto** (pulsante «Guida» nell'albo), utile anche offline.
 - **Demo online** — *in arrivo.*
@@ -125,5 +125,6 @@ nostro codice, senza mPDF, resta libero di applicare anche la v3. Il pacchetto i
 **DejaVu** (Bitstream Vera): il loro avviso di copyright **non va rimosso**. Dettaglio completo in
 [THIRD-PARTY-NOTICES.md](src/administrator/components/com_alboonline/THIRD-PARTY-NOTICES.md).
 
-Sviluppato da **Eddy Prosperi** ([protocollicreativi.it](https://protocollicreativi.it)).
+Sviluppato da **Eddy Prosperi** ([protocollicreativi.it](https://protocollicreativi.it)),
+con il supporto dell'intelligenza artificiale.
 Nato per un ente reale, de-brandizzato e reso adottabile da qualsiasi PA italiana.
