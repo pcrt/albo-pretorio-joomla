@@ -26,7 +26,10 @@ class ModifiedbyField extends FormField
 
 		if (!$this->hidden)
 		{
-			$html[] = "<div>" . $user->name . " (" . $user->username . ")</div>";
+			// Escape: nome e username sono scelti dall'utente e finiscono come HTML.
+			$nome = htmlspecialchars((string) $user->name, ENT_QUOTES, 'UTF-8');
+			$userName = htmlspecialchars((string) $user->username, ENT_QUOTES, 'UTF-8');
+			$html[] = "<div>" . $nome . " (" . $userName . ")</div>";
 		}
 
 		return implode($html);

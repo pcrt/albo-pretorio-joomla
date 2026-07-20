@@ -18,6 +18,16 @@ Il formato si ispira a [Keep a Changelog](https://keepachangelog.com/it/1.1.0/) 
   anteprima dal backend (`core.edit`), mai dal pubblico. La regola vive in un unico punto
   (`AlboonlineHelper::downloadDenial`) ed è coperta da un test che la esercita su tutti gli stati.
 
+- **Il riordino degli atti (`saveOrderAjax`) girava senza gettone né permesso.** Era l'unica
+  scrittura del backend priva di verifica anti-CSRF e di controllo dei permessi: una pagina esterna
+  poteva far riordinare gli atti a un operatore loggato, e chiunque raggiungesse il backend poteva
+  farlo a prescindere dai permessi. Aggiunti gettone e `core.edit.state`, come sul metodo omologo
+  del core di Joomla.
+
+- **Nome e username non messi in sicurezza in due campi del form.** I campi «creato da» e
+  «modificato da» stampavano nome e username senza escape: un nome contenente HTML poteva eseguire
+  codice nel browser di chi apriva la scheda dell'atto. Ora passano per `htmlspecialchars`.
+
 ## [1.2.0] — 2026-07-16
 
 **Sostituisce la 1.0.0, che non andrebbe più installata**: i documenti firmati `.p7m` non si
