@@ -7,7 +7,7 @@
     <author>Eddy Prosperi</author>
     <authorEmail>eddy.prosperi@protocollicreativi.it</authorEmail>
     <authorUrl>https://github.com/pcrt/albo-pretorio-joomla</authorUrl>
-    <version>1.2.0</version>
+    <version>1.2.1</version>
     <php_minimum>8.3</php_minimum>
     <description>COM_ALBOONLINE_XML_DESCRIPTION</description>
     <namespace path="src">Pcrt\Component\Alboonline</namespace>

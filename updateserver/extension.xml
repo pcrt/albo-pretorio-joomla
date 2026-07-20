@@ -11,6 +11,23 @@
         <description>Albo Pretorio Online per la PA italiana (Joomla 5 e 6)</description>
         <element>com_alboonline</element>
         <type>component</type>
+        <version>1.2.1</version>
+        <infourl title="Albo Online">https://github.com/pcrt/albo-pretorio-joomla</infourl>
+        <downloads>
+            <downloadurl type="full" format="zip">https://github.com/pcrt/albo-pretorio-joomla/releases/download/v1.2.1/com_alboonline-1.2.1.zip</downloadurl>
+        </downloads>
+        <tags>
+            <tag>stable</tag>
+        </tags>
+        <maintainer>Protocolli Creativi (pcrt)</maintainer>
+        <targetplatform name="joomla" version="(5\.[0-9]+|6\.[0-9]+)"/>
+        <php_minimum>8.3</php_minimum>
+    </update>
+    <update>
+        <name>Albo Online</name>
+        <description>Albo Pretorio Online per la PA italiana (Joomla 5 e 6)</description>
+        <element>com_alboonline</element>
+        <type>component</type>
         <version>1.2.0</version>
         <infourl title="Albo Online">https://github.com/pcrt/albo-pretorio-joomla</infourl>
         <downloads>

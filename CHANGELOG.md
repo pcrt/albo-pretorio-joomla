@@ -5,7 +5,10 @@ Tutte le modifiche rilevanti a questo progetto sono annotate qui.
 Il formato si ispira a [Keep a Changelog](https://keepachangelog.com/it/1.1.0/) e il progetto adotta il
 [Versionamento Semantico](https://semver.org/lang/it/).
 
-## [Non rilasciato]
+## [1.2.1] — 2026-07-20
+
+Release di sicurezza. Sostituisce la 1.2.0: chi l'ha installata dovrebbe aggiornare. Nessun
+cambiamento funzionale per l'uso normale — solo la chiusura di falle e due rinforzi.
 
 ### Sicurezza
 
