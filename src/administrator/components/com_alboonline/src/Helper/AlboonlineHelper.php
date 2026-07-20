@@ -260,6 +260,69 @@ class AlboonlineHelper
 	}
 
 	/**
+	 * Decide se un allegato e' scaricabile dall'utente corrente, in base allo stato dell'atto.
+	 *
+	 * Funzione PURA (nessun accesso a DB, sessione o richiesta): tutto cio' che le serve arriva
+	 * dai parametri. Cosi' e' l'unica fonte della regola di visibilita' del download E si puo'
+	 * collaudare su tutti gli stati senza montare un'app HTTP (scripts/test-download-visibilita.php).
+	 *
+	 * Il confine e' lo stesso applicato dal resto del frontend (AttoModel::getItem / AttiModel,
+	 * che filtrano `state IN (1,2)`): un atto "In Attesa" NON e' ancora pubblico, quindi i suoi
+	 * allegati sono visibili solo in anteprima backend (core.edit), mai a un visitatore anonimo.
+	 *
+	 * @param   int    $statoAtto       stato dell'atto (una delle costanti STATO_*)
+	 * @param   int    $accessAllegato  livello di accesso Joomla dell'allegato
+	 * @param   bool   $dirittoOblio    l'atto archiviato e' in diritto all'oblio
+	 * @param   bool   $canEdit         l'utente ha core.edit (anteprima backend)
+	 * @param   bool   $canArchived     l'utente ha alboonline.download.archived
+	 * @param   int[]  $viewLevels      livelli di accesso autorizzati dell'utente
+	 *
+	 * @return  int|null  null se il download e' consentito; altrimenti il codice HTTP del
+	 *                     rifiuto (403 non autorizzato, 404 non trovato / oblio / cestinato)
+	 */
+	public static function downloadDenial(
+		int $statoAtto,
+		int $accessAllegato,
+		bool $dirittoOblio,
+		bool $canEdit,
+		bool $canArchived,
+		array $viewLevels
+	): ?int {
+		// Oblio su atto archiviato: come se non esistesse.
+		if ($statoAtto === self::STATO_ARCHIVIATO && $dirittoOblio)
+		{
+			return 404;
+		}
+
+		// Cestinato: non esiste per il pubblico.
+		if ($statoAtto === self::STATO_CESTINATO)
+		{
+			return 404;
+		}
+
+		// Bozza e In Attesa: non ancora pubblici -> solo anteprima backend (core.edit).
+		if ($statoAtto === self::STATO_BOZZA || $statoAtto === self::STATO_IN_ATTESA)
+		{
+			return $canEdit ? null : 403;
+		}
+
+		// Archiviato consultabile: serve il permesso dedicato.
+		if ($statoAtto === self::STATO_ARCHIVIATO)
+		{
+			return $canArchived ? null : 403;
+		}
+
+		// Pubblicato: rispetta il livello di accesso Joomla dell'allegato.
+		if ($statoAtto === self::STATO_PUBBLICATO)
+		{
+			return in_array($accessAllegato, $viewLevels, true) ? null : 403;
+		}
+
+		// Stato sconosciuto: nega per prudenza.
+		return 403;
+	}
+
+	/**
 	 * Restituisce gli atti con visibilita homepage.
 	 * Usato dai moduli Joomla per mostrare atti nelle sezioni "Comunicazioni" o "In Evidenza".
 	 *

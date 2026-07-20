@@ -5,6 +5,19 @@ Tutte le modifiche rilevanti a questo progetto sono annotate qui.
 Il formato si ispira a [Keep a Changelog](https://keepachangelog.com/it/1.1.0/) e il progetto adotta il
 [Versionamento Semantico](https://semver.org/lang/it/).
 
+## [Non rilasciato]
+
+### Sicurezza
+
+- **Gli allegati di un atto «In Attesa» erano scaricabili prima della pubblicazione.** Un atto
+  schedulato ma non ancora affisso è invisibile in tutto il frontend, eppure il download ne serviva
+  comunque gli allegati a chiunque ne indovinasse l'id numerico — anche a un visitatore anonimo,
+  aggirando la finestra di pubblicazione. Il gettone nell'URL è anti-CSRF, non un controllo
+  d'accesso: chiunque ne ottiene uno valido da una qualsiasi pagina dell'albo. Ora il download
+  applica lo stesso confine del resto del frontend — un atto «In Attesa» è raggiungibile solo in
+  anteprima dal backend (`core.edit`), mai dal pubblico. La regola vive in un unico punto
+  (`AlboonlineHelper::downloadDenial`) ed è coperta da un test che la esercita su tutti gli stati.
+
 ## [1.2.0] — 2026-07-16
 
 **Sostituisce la 1.0.0, che non andrebbe più installata**: i documenti firmati `.p7m` non si
