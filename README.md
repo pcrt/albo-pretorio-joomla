@@ -30,7 +30,8 @@ scarica e verifica l'integrità dei documenti; non può modificare nulla.
 - **[Guida d'uso »](https://pcrt.github.io/albo-pretorio-joomla/guida/)** —
   dalla bozza all'oblio, con le schermate, i messaggi esatti e *«le norme dietro le regole»*.
   Viaggia anche **dentro il pacchetto** (pulsante «Guida» nell'albo), utile anche offline.
-- **Demo online** — *in arrivo.*
+- **[Demo online »](https://jit.protocollicreativi.it/albo-online)** — l'albo come lo vede il
+  cittadino: elenco, filtri, scheda dell'atto e download dei documenti.
 
 ## Cosa NON fa (e non finge di fare)
 
