@@ -21,7 +21,7 @@ media/com_alboonline/referti/*
 !media/com_alboonline/referti/.htaccess
 
 # --- Output di build (i pacchetti vanno nelle Release, non nel repo) ---
-dist/*.zip
+dist/
 /build/
 /tmp/
 /cache/
