@@ -40,6 +40,16 @@ class HtmlView extends BaseHtmlView
 		$this->years         = $this->get('Years');
 		$this->params        = $app->getParams();
 
+		// Meta robots dell'elenco: dalla voce di menu, altrimenti dalla Configurazione globale.
+		// Prima non veniva impostato e l'elenco ignorava anche il noindex di tutto il sito
+		// (es. su un sito dimostrativo). La vista del singolo atto ha una regola propria.
+		$robots = $this->params->get('robots') ?: $app->get('robots');
+
+		if ($robots)
+		{
+			$app->getDocument()->setMetaData('robots', $robots);
+		}
+
 		// Get categories for sidebar tree
 		try
 		{

@@ -8,6 +8,11 @@ Il formato si ispira a [Keep a Changelog](https://keepachangelog.com/it/1.1.0/) 
 ## [Non rilasciato]
 
 ### Corretto
+- Elenco atti (vista `Atti`): il meta `robots` non veniva impostato, quindi l'elenco
+  ignorava sia l'opzione della voce di menu sia la Configurazione globale del sito
+  (es. un sito dimostrativo in `noindex` restava indicizzabile sull'albo). Ora usa
+  la voce di menu e, in mancanza, la configurazione globale. La pagina del singolo
+  atto non cambia: ha già la sua regola (`noindex` per archiviati e predefinito).
 - `script.php`: le versioni minime controllate all'installazione erano PHP 8.1.0 e
   Joomla 5.0.0, mentre i requisiti dichiarati (README, manifest, update server) sono
   PHP 8.3 e Joomla 5.1: ora coincidono. Emerso installando la 1.2.1 su Joomla 6.2 /
