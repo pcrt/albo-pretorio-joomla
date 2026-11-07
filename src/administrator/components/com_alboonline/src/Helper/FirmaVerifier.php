@@ -319,7 +319,18 @@ class FirmaVerifier
      */
     private function hasTimestampToken(string $der): bool
     {
-        // Codifica DER dell'OID 1.2.840.113549.1.9.16.2.14.
+        // Codifica DER dell'OID 1.2.840.113549.1.9.16.2.14, cioe' id-aa-signatureTimeStampToken
+        // (RFC 3161, appendice A): l'attributo CMS non firmato che contiene la marca temporale.
+        // Non e' codice offuscato: sono i byte con cui ASN.1/DER serializza quell'OID, scritti
+        // in esadecimale perche' non sono testo. Si verificano a mano:
+        //   06             tag OBJECT IDENTIFIER
+        //   0b             lunghezza: 11 byte
+        //   2a             1.2        (40 * 1 + 2)
+        //   86 48          840        (base 128, bit alto = continua)
+        //   86 f7 0d       113549
+        //   01 09 10 02 0e 1.9.16.2.14
+        // Si cerca come sequenza di byte perche' qui non si fa il parsing ASN.1 completo
+        // della busta: e' un rilevamento euristico, come dice il nome del metodo.
         $oidDer = "\x06\x0b\x2a\x86\x48\x86\xf7\x0d\x01\x09\x10\x02\x0e";
 
         return str_contains($der, $oidDer);
