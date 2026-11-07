@@ -30,14 +30,14 @@ class AlboonlineHtml
 	public function toggle($value = 0, $view = '', $field = '', $i = '')
 	{
 		$states = [
-			0 => ['icon-unpublish', Text::_('Toggle'), ''],
-			1 => ['icon-publish', Text::_('Toggle'), ''],
+			0 => ['icon-unpublish', Text::_('COM_ALBOONLINE_TOGGLE'), ''],
+			1 => ['icon-publish', Text::_('COM_ALBOONLINE_TOGGLE'), ''],
 		];
 
 		$state = ArrayHelper::getValue($states, (int) $value, $states[0]);
 		$text = '<span aria-hidden="true" class="' . $state[0] . '"></span>';
 		$html = '<a href="javascript:void(0);" class="tbody-icon ' . $state[2] . '"';
-		$html .= 'onclick="return Joomla.toggleField(\'cb' . $i . '\',\'' . $view . '.toggle\',\'' . $field . '\')" title="' . Text::_($state[1]) . '">' . $text . '</a>';
+		$html .= 'onclick="return Joomla.toggleField(\'cb' . $i . '\',\'' . $view . '.toggle\',\'' . $field . '\')" title="' . htmlspecialchars($state[1], ENT_QUOTES, 'UTF-8') . '">' . $text . '</a>';
 
 		return $html;
 	}

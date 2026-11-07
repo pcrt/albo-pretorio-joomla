@@ -690,7 +690,7 @@ class AttoModel extends AdminModel
 
 		if (!$table->load($id))
 		{
-			$this->setError(Text::_('JGLOBAL_ITEM_NOT_FOUND'));
+			$this->setError(Text::_('COM_ALBOONLINE_ERROR_ITEM_NOT_FOUND'));
 
 			return false;
 		}

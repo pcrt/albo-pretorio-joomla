@@ -49,7 +49,7 @@ class HtmlView extends BaseHtmlView
         $this->atto = $db->loadObject();
 
         if (!$this->atto) {
-            throw new \Exception(Text::_('JGLOBAL_ITEM_NOT_FOUND'), 404);
+            throw new \Exception(Text::_('COM_ALBOONLINE_ERROR_ITEM_NOT_FOUND'), 404);
         }
 
         // Referti emessi per questo atto (piu' recente in cima).
