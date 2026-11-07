@@ -1,0 +1,166 @@
+# Scheda per il catalogo del software open source di Developers Italia
+# (https://developers.italia.it/it/software) — standard publiccode.yml.
+# Validare con: https://publiccode-editor.developers.italia.it/
+# Va aggiornata a ogni release: softwareVersion e releaseDate.
+
+publiccodeYmlVersion: "0"
+
+name: Albo Pretorio Online
+url: "https://github.com/pcrt/albo-pretorio-joomla"
+landingURL: "https://www.protocollicreativi.it/albo-pretorio-online-componente-open-source-joomla"
+softwareVersion: "1.2.1"
+releaseDate: "2026-07-20"
+
+platforms:
+  - web
+
+categories:
+  - document-management
+  - compliance-management
+  - content-management
+
+developmentStatus: stable
+
+softwareType: "addon"
+
+intendedAudience:
+  scope:
+    - government
+    - local-authorities
+    - education
+  countries:
+    - IT
+
+description:
+  it:
+    localisedName: Albo Pretorio Online
+    shortDescription: >-
+      Albo online (albo pretorio) per i siti Joomla 5 e 6 degli enti pubblici:
+      date certe, atti sigillati, ritiro automatico e referto.
+    longDescription: |
+      **Albo Pretorio Online** è un componente gratuito e open source che aggiunge l'albo
+      online (albo pretorio) al sito Joomla già esistente di un ente pubblico: comuni,
+      unioni di comuni, scuole, aziende ed enti pubblici. Si installa come una normale
+      estensione, gira sul server dell'ente con i suoi dati e non richiede abbonamenti
+      a piattaforme esterne.
+
+      La pubblicità legale (L. 69/2009 art. 32, TUEL art. 124) non si esaurisce nel
+      caricare un PDF: le date devono essere certe, l'atto pubblicato non deve poter
+      cambiare, e alla scadenza deve essere ritirato, perché la sua permanenza online
+      oltre il termine espone l'ente a violazioni della normativa sulla privacy.
+      Il componente segue ogni atto dalla bozza al ritiro:
+
+      - **redazione** con controllo dei campi obbligatori, ente emanante, tipologia,
+        periodo di pubblicazione e allegati;
+      - **pubblicazione** con numero progressivo di repertorio e riferimenti temporali
+        registrati, più una finestra configurabile per annullare in caso di errore;
+      - **blindatura**: dopo la pubblicazione definitiva contenuto, date e allegati
+        diventano immodificabili, con un controllo applicato nel codice e non solo
+        nell'interfaccia;
+      - **rettifica** tramite un nuovo atto collegato all'originale e motivato, senza
+        sovrascrivere nulla;
+      - **ritiro automatico** alla scadenza tramite le attività pianificate di Joomla,
+        con archiviazione;
+      - **referto di pubblicazione** in PDF con le date effettive di inizio e fine,
+        conservato nella versione originale con impronta SHA-256, scaricabile, firmabile
+        digitalmente e ricaricabile;
+      - **registro** di tutte le operazioni e degli utenti che le hanno eseguite.
+
+      Per l'integrità dei documenti verifica tecnicamente le firme digitali **PAdES** e
+      **CAdES (.p7m)** e calcola per ogni allegato un'impronta **SHA-256** che viene
+      riverificata a ogni download. Per la privacy gestisce il **diritto all'oblio**
+      (rimozione immediata o differita, tracciata), applica istruzioni di
+      deindicizzazione anche ai PDF e avvisa il funzionario quando una bozza può
+      contenere categorie particolari di dati. L'interfaccia pubblica è progettata
+      secondo le **WCAG 2.1 AA** e segnala i PDF acquisiti come immagine, illeggibili
+      per gli screen reader.
+
+      Il componente dichiara in modo esplicito anche ciò che non fa: non è un sistema di
+      conservazione a norma, non valida la marca temporale RFC 3161, non oscura i PDF e
+      non gestisce l'accesso con SPID/CIE.
+
+      Funziona con qualsiasi template Joomla. Per i siti scolastici è stato verificato
+      insieme a Joomla Italia Theme, il template open source per il modello di sito
+      delle scuole di Designers Italia.
+    documentation: "https://pcrt.github.io/albo-pretorio-joomla/guida/"
+    features:
+      - Repertorio con numerazione progressiva e date certe
+      - Atti sigillati dopo la pubblicazione definitiva
+      - Rettifica con nuovo atto collegato, senza sovrascrivere l'originale
+      - Ritiro automatico alla scadenza con attività pianificate
+      - Referto di pubblicazione in PDF con impronta SHA-256
+      - Verifica tecnica delle firme PAdES e CAdES (.p7m)
+      - Diritto all'oblio tracciato e deindicizzazione degli atti
+      - Interfaccia pubblica progettata secondo le WCAG 2.1 AA
+    screenshots:
+      - src/media/com_alboonline/guida/immagini/10-cittadino-elenco.png
+      - src/media/com_alboonline/guida/immagini/11-cittadino-atto.png
+      - src/media/com_alboonline/guida/immagini/01-admin-elenco-atti.png
+      - src/media/com_alboonline/guida/immagini/03-admin-atto-blindato.png
+      - src/media/com_alboonline/guida/immagini/16-referto-esempio.png
+  en:
+    localisedName: Albo Pretorio Online
+    shortDescription: >-
+      Online legal notice board (albo pretorio) for Joomla 5 and 6 sites of Italian
+      public bodies: certified dates, sealed acts, automatic withdrawal.
+    longDescription: |
+      **Albo Pretorio Online** is a free, open source component that adds the online
+      legal notice board (*albo pretorio*) to the existing Joomla site of an Italian
+      public body: municipalities, schools, unions of municipalities and public agencies.
+      It installs like any Joomla extension and runs on the body's own server, with no
+      subscription to an external platform.
+
+      Italian law (Law 69/2009 art. 32, TUEL art. 124) requires administrative acts to be
+      published online for a fixed period and then withdrawn. The component manages the
+      whole life cycle of each act: drafting with mandatory-field checks, publication
+      with a progressive register number and timestamps, sealing (content, dates and
+      attachments become immutable, enforced in code), correction through a new linked
+      act, automatic withdrawal at expiry through Joomla scheduled tasks, and a
+      publication report PDF stored with a SHA-256 fingerprint. Every operation is logged.
+
+      It checks PAdES and CAdES (.p7m) digital signatures, verifies a SHA-256 hash of each
+      attachment at every download, supports a tracked right-to-be-forgotten workflow,
+      applies noindex instructions to acts and PDFs, and warns when a draft may contain
+      special categories of personal data. The public interface is designed for WCAG 2.1 AA.
+
+      It is not a certified long-term preservation system, does not validate RFC 3161
+      timestamps, does not redact PDFs and does not handle SPID/CIE login.
+    documentation: "https://pcrt.github.io/albo-pretorio-joomla/guida/"
+    features:
+      - Progressive register with certified dates
+      - Acts sealed after final publication
+      - Corrections through a new linked act, never overwriting
+      - Automatic withdrawal at expiry via scheduled tasks
+      - Publication report PDF with SHA-256 fingerprint
+      - Technical check of PAdES and CAdES (.p7m) signatures
+      - Tracked right to be forgotten and noindex for acts
+      - Public interface designed for WCAG 2.1 AA
+
+legal:
+  license: GPL-2.0-or-later
+  mainCopyrightOwner: Eddy Prosperi
+
+maintenance:
+  type: "internal"
+  contacts:
+    - name: Eddy Prosperi
+      email: "eddy.prosperi@protocollicreativi.it"
+      affiliation: Protocolli Creativi
+
+localisation:
+  localisationReady: true
+  availableLanguages:
+    - it
+    - en
+
+dependsOn:
+  open:
+    - name: Joomla
+      versionMin: "5.1"
+    - name: PHP
+      versionMin: "8.3"
+    - name: MySQL or MariaDB
+
+organisation:
+  uri: "https://www.protocollicreativi.it"
+  name: Protocolli Creativi S.r.l.
