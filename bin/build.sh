@@ -96,21 +96,55 @@ echo "▸ Scarico le dipendenze (mPDF)…"
 (cd "$RADICE" && "$COMPOSER" install --no-dev --optimize-autoloader --no-interaction --quiet) \
 	|| { echo "ERRORE: composer install fallito." >&2; exit 1; }
 
-# I FONT: mPDF ne porta 82, per alfabeti di mezzo mondo — 95 MB. Ne servono 20, i DejaVu,
-# che sono quelli con cui il referto e' impaginato. Gli altri (etiopico, birmano, accadico,
-# meitei…) pesano 74 MB e un albo pretorio italiano non li usera' mai: spedirli farebbe un
-# pacchetto da 80 MB che meta' degli enti non riesce a caricare.
+# I FONT: mPDF ne porta 82, per alfabeti di mezzo mondo — 95 MB. Il referto ne usa UNA
+# famiglia: DejaVu Serif Condensed (4 file: normale, grassetto, corsivo, grassetto corsivo).
+# E' quella che mPDF sceglie per `font-family: serif` — la regola del <body> del referto in
+# RefertoGenerator — perche' e' la prima della sua lista `serif_fonts`, ed e' anche il font
+# predefinito che carica all'avvio (il default di mPDF e' proprio `serif`). Il referto non
+# usa ne' sans-serif ne' monospace: niente <code>, <pre>, campi di form.
 #
-# ATTENZIONE, la distinzione conta: qui si tolgono font MAI USATI. NON si toccano i DejaVu,
-# nemmeno se il pacchetto sembra pesante — il referto e' un documento probatorio e un font
-# mancante lo mutila. Se un ente non riesce a caricare 8,7 MB il problema e' il limite di
-# PHP sul suo server (upload_max_filesize/post_max_size), e si alza da li': c'e' scritto
-# nella guida. Non si mutila il prodotto per compensare un server mal configurato.
+# Fino alla 1.2.1 si tenevano tutti e 20 i DejaVu (8,8 MB) e il pacchetto pesava 9,1 MB:
+# la vetrina delle estensioni Joomla (JED) accetta zip fino a 7 MB, quindi non si poteva
+# nemmeno caricare. Gli altri 62 font (etiopico, birmano, accadico, meitei…) un albo
+# pretorio italiano non li usera' mai.
+#
+# ATTENZIONE, la distinzione conta: qui si tolgono font MAI USATI. NON si tocca la famiglia
+# del referto, nemmeno se il pacchetto sembra pesante: il referto e' un documento probatorio
+# e un font mancante lo mutila. mPDF non ripiega in silenzio: senza il file del font lancia
+# un'eccezione e il referto NON si genera — per questo il collaudo del referto va rifatto
+# dopo ogni cambio a questo elenco. Se un giorno il referto usera' un'altra famiglia (p.es.
+# monospace per l'impronta), va aggiunta QUI. Se un ente non riesce a caricare lo zip, il
+# problema e' il limite di PHP sul suo server (upload_max_filesize/post_max_size): c'e'
+# scritto nella guida. Non si mutila il prodotto per compensare un server mal configurato.
 TTFONTS="$SORGENTE/administrator/components/com_alboonline/vendor/mpdf/mpdf/ttfonts"
+FONT_REFERTO=(
+	DejaVuSerifCondensed.ttf
+	DejaVuSerifCondensed-Bold.ttf
+	DejaVuSerifCondensed-Italic.ttf
+	DejaVuSerifCondensed-BoldItalic.ttf
+)
 if [ -d "$TTFONTS" ]; then
-	find "$TTFONTS" -type f ! -name 'DejaVu*' -delete
-	echo "▸ Font: tengo i $(find "$TTFONTS" -type f | wc -l) DejaVu, tolti gli alfabeti inutilizzati"
+	for f in "${FONT_REFERTO[@]}"; do
+		[ -f "$TTFONTS/$f" ] || { echo "ERRORE: mPDF non porta piu' il font del referto: $f" >&2; exit 1; }
+	done
+	# Resta anche DejaVuinfo.txt: e' l'avviso di copyright dei DejaVu (licenza Bitstream Vera)
+	# e DEVE accompagnare ogni copia dei font.
+	find "$TTFONTS" -type f ! -name 'DejaVuSerifCondensed*.ttf' ! -name 'DejaVuinfo.txt' -delete
+	echo "▸ Font: tengo i $(find "$TTFONTS" -type f -name '*.ttf' | wc -l) DejaVu Serif Condensed del referto, tolti gli altri"
 fi
+
+# LE LICENZE CHE MANCANO. Due pacchetti di mPDF (psr-http-message-shim e psr-log-aware-trait)
+# dichiarano la licenza MIT nel composer.json ma non distribuiscono il file di licenza: non
+# ce l'hanno nemmeno nel repository. La JED pretende che ogni libreria spedita porti la sua
+# licenza, e ha ragione: chi riceve il pacchetto deve poter leggere a quali condizioni.
+# Il testo sta in bin/licenze-vendor/<pacchetto>/LICENSE.md e si copia nel dist di Composer,
+# accanto al composer.json che la dichiara. Se un giorno upstream aggiungera' il suo file,
+# questa copia va tolta: vale il loro, non il nostro.
+VENDOR="$SORGENTE/administrator/components/com_alboonline/vendor"
+for pacchetto in mpdf/psr-http-message-shim mpdf/psr-log-aware-trait; do
+	[ -d "$VENDOR/$pacchetto" ] || { echo "ERRORE: manca la dipendenza $pacchetto" >&2; exit 1; }
+	cp "$RADICE/bin/licenze-vendor/${pacchetto//\//-}/LICENSE.md" "$VENDOR/$pacchetto/LICENSE.md"
+done
 
 # ---------------------------------------------------------------------------
 # 2. COMPOSIZIONE DEL PACCHETTO
@@ -169,6 +203,15 @@ INDISPENSABILI=(
 	# ogni copia: se sparisce, la ridistribuzione dei font non e' piu' conforme.
 	"$ADMIN/vendor/mpdf/mpdf/ttfonts/DejaVuinfo.txt"
 	"$ADMIN/vendor/mpdf/mpdf/LICENSE.txt"
+	# I quattro file della famiglia con cui il referto e' impaginato (vedi la potatura dei
+	# font piu' sopra): senza uno di questi mPDF lancia un'eccezione e il referto non esce.
+	"$ADMIN/vendor/mpdf/mpdf/ttfonts/DejaVuSerifCondensed.ttf"
+	"$ADMIN/vendor/mpdf/mpdf/ttfonts/DejaVuSerifCondensed-Bold.ttf"
+	"$ADMIN/vendor/mpdf/mpdf/ttfonts/DejaVuSerifCondensed-Italic.ttf"
+	"$ADMIN/vendor/mpdf/mpdf/ttfonts/DejaVuSerifCondensed-BoldItalic.ttf"
+	# Le licenze che aggiungiamo noi ai due pacchetti che non la distribuiscono.
+	"$ADMIN/vendor/mpdf/psr-http-message-shim/LICENSE.md"
+	"$ADMIN/vendor/mpdf/psr-log-aware-trait/LICENSE.md"
 	# Il pulsante «Guida» punta qui: se il file non c'e', il pulsante porta a un 404.
 	"media/com_alboonline/guida/index.html"
 	# La guida linka questo PDF: enumerare i pezzi della guida lo aveva gia' lasciato fuori.
@@ -200,4 +243,15 @@ PACCHETTO="$USCITA/com_alboonline-$VERSIONE.zip"
 rm -f "$PACCHETTO"
 (cd "$LAVORO" && zip -qr "$PACCHETTO" .)
 
-echo "▸ Fatto: $PACCHETTO ($(du -h "$PACCHETTO" | cut -f1))"
+# LA JED ACCETTA ZIP FINO A 7 MB. La 1.2.1 pesava 9,1 MB e non si poteva nemmeno caricare:
+# meglio scoprirlo qui che dal modulo di invio. Il limite e' della vetrina, non di Joomla:
+# un pacchetto piu' grande si installa lo stesso, ma non entra nella JED. Se scatta, le
+# cause sono quasi sempre due: le immagini della guida (si ottimizzano) o un font in piu'.
+LIMITE_JED=7000000
+DIMENSIONE="$(wc -c < "$PACCHETTO" | tr -d '[:space:]')"
+if [ "$DIMENSIONE" -gt "$LIMITE_JED" ]; then
+	echo "ERRORE: il pacchetto pesa $DIMENSIONE byte, oltre i 7 MB accettati dalla JED." >&2
+	exit 1
+fi
+
+echo "▸ Fatto: $PACCHETTO ($(du -h "$PACCHETTO" | cut -f1), $DIMENSIONE byte)"

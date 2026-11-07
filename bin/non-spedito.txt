@@ -20,3 +20,17 @@
 node_modules     # dipendenze del tooling (lo scanner di accessibilita'), non del prodotto
 .git*            # .github/ e .gitignore DELLE DIPENDENZE (mPDF): sono il loro sviluppo,
                  # non il nostro prodotto. Un comune non ci fa niente con i workflow di mPDF.
+
+# Residui di sviluppo delle dipendenze, spediti da Composer dentro il dist dei pacchetti.
+# Non servono a runtime (il codice sta in src/ e lib/ di ciascun pacchetto), la vetrina
+# delle estensioni Joomla (JED) li segnala e un ente non ci fa niente. Ogni voce esiste
+# davvero nel vendor di oggi: se un aggiornamento di mPDF la fa sparire, va tolta da qui.
+*.sh             # paragonie/random_compat/build-phar.sh: per la JED "shell script detected"
+psalm.xml        # paragonie/random_compat: configurazione dell'analisi statica
+psalm-autoload.php  # paragonie/random_compat: autoload per psalm, non per il prodotto
+phpstan*.neon    # mpdf/mpdf: configurazione e baseline dell'analisi statica
+phpunit.xml      # mpdf/mpdf: configurazione dei test (i test non sono nel dist)
+ruleset.xml      # mpdf/mpdf: regole di stile (phpcs)
+docs             # psr/http-message/docs: documentazione di sviluppo
+dist             # paragonie/random_compat/dist: chiave pubblica del phar, serve a chi scarica il phar
+other            # paragonie/random_compat/other/build_phar.php: costruisce il phar, non serve a runtime
