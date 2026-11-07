@@ -7,6 +7,12 @@ Il formato si ispira a [Keep a Changelog](https://keepachangelog.com/it/1.1.0/) 
 
 ## [Non rilasciato]
 
+### Corretto
+- `script.php`: le versioni minime controllate all'installazione erano PHP 8.1.0 e
+  Joomla 5.0.0, mentre i requisiti dichiarati (README, manifest, update server) sono
+  PHP 8.3 e Joomla 5.1: ora coincidono. Emerso installando la 1.2.1 su Joomla 6.2 /
+  PHP 8.4 il 7/11/2026 (installazione e pagine pubbliche senza errori).
+
 ### Progetto
 - Aggiunto `publiccode.yml` in radice, validato con `publiccode-parser-go` 5.4.3,
   per l'inserimento nel catalogo del software open source per la PA di Developers

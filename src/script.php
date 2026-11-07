@@ -18,8 +18,8 @@ use Joomla\Filesystem\Folder;
 
 class Com_AlboonlineInstallerScript
 {
-	protected $minimumPhp = '8.1.0';
-	protected $minimumJoomla = '5.0.0';
+	protected $minimumPhp = '8.3.0';
+	protected $minimumJoomla = '5.1.0';
 
 	public function preflight($type, InstallerAdapter $parent)
 	{
