@@ -3,12 +3,14 @@
     <name>com_alboonline</name>
     <creationDate>2025-02-06</creationDate>
     <copyright>2025 Eddy Prosperi</copyright>
-    <license>GNU General Public License versione 2 o successiva; vedi LICENSE.txt</license>
+    <license>GNU General Public License version 2 or later (GPL-2.0-or-later); see LICENSE.txt</license>
     <author>Eddy Prosperi</author>
     <authorEmail>eddy.prosperi@protocollicreativi.it</authorEmail>
     <authorUrl>https://github.com/pcrt/albo-pretorio-joomla</authorUrl>
     <version>1.2.1</version>
-    <php_minimum>8.3</php_minimum>
+    <!-- Il PHP minimo NON si dichiara qui: <php_minimum> appartiene all'update server
+         (updateserver/extension.xml), non al manifest di installazione, dove lo schema di
+         Joomla non lo prevede. All'installazione lo controlla script.php (preflight). -->
     <description>COM_ALBOONLINE_XML_DESCRIPTION</description>
     <namespace path="src">Pcrt\Component\Alboonline</namespace>
 
@@ -66,8 +68,12 @@
     <administration>
         <menu>COM_ALBOONLINE</menu>
         <submenu>
-            <menu link="option=com_alboonline&amp;view=atti" view="atti" alt="Albo Online/Atti">COM_ALBOONLINE_TITLE_ATTI</menu>
-            <menu link="option=com_categories&amp;extension=com_alboonline" view="categories" alt="Albo Online/Categorie">COM_ALBOONLINE_TITLE_CATEGORIE</menu>
+            <!-- Per ogni voce O `view` (Joomla compone index.php?option=com_alboonline&view=…)
+                 O `link` (per le voci che puntano a un altro componente); mai entrambi, perche'
+                 `link` vince e `view` resta lettera morta. Nessun attributo `alt`: lo schema del
+                 manifest non lo conosce e Joomla non lo legge. -->
+            <menu view="atti">COM_ALBOONLINE_TITLE_ATTI</menu>
+            <menu link="option=com_categories&amp;extension=com_alboonline">COM_ALBOONLINE_TITLE_CATEGORIE</menu>
         </submenu>
         <files folder="administrator/components/com_alboonline">
             <filename>access.xml</filename>
@@ -102,18 +108,17 @@
         </files>
     </administration>
 
-    <plugins folder="plugins">
-        <plugin plugin="alboonline" group="task">plugins/task/alboonline</plugin>
-        <plugin plugin="alboonline" group="content">plugins/content/alboonline</plugin>
-    </plugins>
+    <!-- I DUE PLUGIN (plugins/task/alboonline e plugins/content/alboonline) viaggiano nel
+         pacchetto e li installa, aggiorna e disinstalla script.php (installPlugins /
+         uninstallPlugins), che ne conosce l'elenco. Qui NON si dichiarano: un componente
+         non puo' elencare altre estensioni nel proprio manifest — quella e' la forma di un
+         pacchetto (type="package") — e l'elemento <plugins> che stava qui fino alla 1.2.1
+         lo leggeva solo il nostro script, mentre JED Checker lo segnalava come sconosciuto.
 
-    <config>
-        <fields name="params">
-            <fieldset name="component">
-                <field name="save_history" default="1" />
-            </fieldset>
-        </fields>
-    </config>
+         Niente <config>, per la stessa ragione: per i componenti i parametri stanno in
+         administrator/components/com_alboonline/config.xml (lo schema del manifest prevede
+         <config> per moduli, plugin e template). Il valore iniziale di save_history, che
+         fino alla 1.2.1 veniva seminato da qui, lo mette script.php alla prima installazione. -->
 
     <updateservers>
         <server type="extension" priority="1" name="Albo Online Update Server">https://raw.githubusercontent.com/pcrt/albo-pretorio-joomla/main/updateserver/extension.xml</server>

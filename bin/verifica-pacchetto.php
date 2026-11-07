@@ -327,7 +327,7 @@ foreach (['task', 'content'] as $gruppo) {
 // In cima al pacchetto stanno cose che nessuna sezione dichiara ma che Joomla usa lo stesso.
 $basi[''][] = 'alboonline.xml';                                   // il manifest
 $basi[''][] = (string) ($manifest->scriptfile ?? 'script.php');   // <scriptfile>
-$basi[''][] = 'plugins';                                          // <plugins folder="plugins">
+$basi[''][] = 'plugins';                                          // i plugin: li installa script.php da plugins/<gruppo>/<nome>
 
 controllaIgnorati($lavoro, $basi, $percorsiBase, [], $errori);
 

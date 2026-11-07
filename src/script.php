@@ -21,6 +21,20 @@ class Com_AlboonlineInstallerScript
 	protected $minimumPhp = '8.3.0';
 	protected $minimumJoomla = '5.1.0';
 
+	/**
+	 * I plugin spediti col componente, installati e disinstallati da QUESTO script.
+	 *
+	 * Fino alla 1.2.1 l'elenco stava nel manifest, in un elemento <plugins> che Joomla
+	 * ignora (lo leggeva solo questo script) e che lo schema dei manifest non prevede: un
+	 * componente non elenca altre estensioni, quella e' la forma di un pacchetto. Il manifest
+	 * ora dichiara solo cio' che Joomla sa leggere; i plugin li conosce chi li installa.
+	 * Le cartelle restano in plugins/<gruppo>/<nome> dentro il pacchetto.
+	 */
+	private const PLUGINS = [
+		['group' => 'task',    'plugin' => 'alboonline'],
+		['group' => 'content', 'plugin' => 'alboonline'],
+	];
+
 	public function preflight($type, InstallerAdapter $parent)
 	{
 		if (version_compare(PHP_VERSION, $this->minimumPhp, '<'))
@@ -40,8 +54,66 @@ class Com_AlboonlineInstallerScript
 		$this->createAllegatiDirectory();
 		$this->createRefertiDirectory();
 		$this->createImagesDirectory();
+		$this->impostaParametriIniziali();
 		$this->installPlugins($parent);
 		return true;
+	}
+
+	/**
+	 * Parametri iniziali del componente su un'installazione NUOVA.
+	 *
+	 * Fino alla 1.2.1 li seminava l'elemento <config> del manifest, che Joomla legge
+	 * (Installer::getParams()) ma che lo schema dei manifest riserva a moduli, plugin e
+	 * template: per i componenti i parametri stanno in config.xml. Senza quel seme, pero',
+	 * `save_history` resterebbe non impostato finche' l'amministratore non salva le Opzioni,
+	 * e il plugin di versionamento di Joomla lo legge con predefinito 0: la cronologia delle
+	 * modifiche agli atti partirebbe spenta. Quindi il seme lo mette questo script, SOLO se
+	 * il parametro manca: un valore scelto dall'ente non si tocca. Gira dopo che Joomla ha
+	 * scritto la riga in #__extensions (InstallerAdapter: storeExtension precede install).
+	 */
+	private function impostaParametriIniziali(): void
+	{
+		try
+		{
+			$db = Factory::getContainer()->get(\Joomla\Database\DatabaseInterface::class);
+
+			$query = $db->getQuery(true)
+				->select($db->quoteName(['extension_id', 'params']))
+				->from($db->quoteName('#__extensions'))
+				->where($db->quoteName('type') . ' = ' . $db->quote('component'))
+				->where($db->quoteName('element') . ' = ' . $db->quote('com_alboonline'));
+			$riga = $db->setQuery($query)->loadObject();
+
+			if (!$riga)
+			{
+				return;
+			}
+
+			$params = json_decode((string) $riga->params, true);
+			$params = \is_array($params) ? $params : [];
+
+			if (\array_key_exists('save_history', $params))
+			{
+				return;
+			}
+
+			$params['save_history'] = '1';
+
+			$query = $db->getQuery(true)
+				->update($db->quoteName('#__extensions'))
+				->set($db->quoteName('params') . ' = ' . $db->quote(json_encode($params)))
+				->where($db->quoteName('extension_id') . ' = ' . (int) $riga->extension_id);
+			$db->setQuery($query)->execute();
+		}
+		catch (\Throwable $e)
+		{
+			// Non si fa fallire l'installazione per un'opzione: l'amministratore la trova
+			// nelle Opzioni (config.xml la propone gia' a Si'). Ma lo si dice.
+			Factory::getApplication()->enqueueMessage(
+				'Albo Pretorio Online: could not set the initial option save_history=1; check it in Options.',
+				'warning'
+			);
+		}
 	}
 
 	public function update(InstallerAdapter $parent)
@@ -387,27 +459,13 @@ class Com_AlboonlineInstallerScript
 		$installationFolder = $parent->getParent()->getPath('source');
 		$app = Factory::getApplication();
 
-		if (method_exists($parent, 'getManifest'))
-		{
-			$plugins = $parent->getManifest()->plugins;
-		}
-		else
-		{
-			$plugins = $parent->get('manifest')->plugins;
-		}
-
-		if (!$plugins || !count($plugins->children()))
-		{
-			return;
-		}
-
 		$db = Factory::getContainer()->get(\Joomla\Database\DatabaseInterface::class);
 		$query = $db->getQuery(true);
 
-		foreach ($plugins->children() as $plugin)
+		foreach (self::PLUGINS as $plugin)
 		{
-			$pluginName  = (string) $plugin['plugin'];
-			$pluginGroup = (string) $plugin['group'];
+			$pluginName  = $plugin['plugin'];
+			$pluginGroup = $plugin['group'];
 			$path        = $installationFolder . '/plugins/' . $pluginGroup . '/' . $pluginName;
 			$installer   = new Installer;
 			// Joomla 6: l'Installer richiede il database impostato esplicitamente
@@ -449,27 +507,13 @@ class Com_AlboonlineInstallerScript
 	{
 		$app = Factory::getApplication();
 
-		if (method_exists($parent, 'getManifest'))
-		{
-			$plugins = $parent->getManifest()->plugins;
-		}
-		else
-		{
-			$plugins = $parent->get('manifest')->plugins;
-		}
-
-		if (!$plugins || !count($plugins->children()))
-		{
-			return;
-		}
-
 		$db = Factory::getContainer()->get(\Joomla\Database\DatabaseInterface::class);
 		$query = $db->getQuery(true);
 
-		foreach ($plugins->children() as $plugin)
+		foreach (self::PLUGINS as $plugin)
 		{
-			$pluginName  = (string) $plugin['plugin'];
-			$pluginGroup = (string) $plugin['group'];
+			$pluginName  = $plugin['plugin'];
+			$pluginGroup = $plugin['group'];
 
 			$query->clear()
 				->select('extension_id')
