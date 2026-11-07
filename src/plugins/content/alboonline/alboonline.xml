@@ -4,10 +4,10 @@
 	<author>Eddy Prosperi</author>
 	<authorEmail>eddy.prosperi@protocollicreativi.it</authorEmail>
 	<authorUrl>https://www.protocollicreativi.it</authorUrl>
-	<creationDate>2026-04</creationDate>
+	<creationDate>2026-11</creationDate>
 	<copyright>2026 Eddy Prosperi</copyright>
 	<license>GNU General Public License version 2 or later (GPL-2.0-or-later); see LICENSE.txt</license>
-	<version>1.1.0</version>
+	<version>1.1.1</version>
 	<description>PLG_CONTENT_ALBOONLINE_XML_DESCRIPTION</description>
 	<namespace path="src">Pcrt\Plugin\Content\Alboonline</namespace>
 	<scriptfile>script.php</scriptfile>

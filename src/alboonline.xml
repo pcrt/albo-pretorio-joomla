@@ -7,7 +7,7 @@
     <author>Eddy Prosperi</author>
     <authorEmail>eddy.prosperi@protocollicreativi.it</authorEmail>
     <authorUrl>https://github.com/pcrt/albo-pretorio-joomla</authorUrl>
-    <version>1.2.1</version>
+    <version>1.2.2</version>
     <!-- Il PHP minimo NON si dichiara qui: <php_minimum> appartiene all'update server
          (updateserver/extension.xml), non al manifest di installazione, dove lo schema di
          Joomla non lo prevede. All'installazione lo controlla script.php (preflight). -->

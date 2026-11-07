@@ -5,7 +5,11 @@ Tutte le modifiche rilevanti a questo progetto sono annotate qui.
 Il formato si ispira a [Keep a Changelog](https://keepachangelog.com/it/1.1.0/) e il progetto adotta il
 [Versionamento Semantico](https://semver.org/lang/it/).
 
-## [Non rilasciato]
+## [1.2.2] — 2026-11-07
+
+Release di manutenzione per la pubblicazione nella Joomla Extensions Directory (JED):
+corregge quanto segnalato da JED Checker 2.4.4 e porta il pacchetto sotto i 7 MB accettati
+dalla vetrina. Nessun cambiamento funzionale per l'uso normale.
 
 ### Corretto
 - Elenco atti (vista `Atti`): il meta `robots` non veniva impostato, quindi l'elenco
@@ -17,6 +21,33 @@ Il formato si ispira a [Keep a Changelog](https://keepachangelog.com/it/1.1.0/) 
   Joomla 5.0.0, mentre i requisiti dichiarati (README, manifest, update server) sono
   PHP 8.3 e Joomla 5.1: ora coincidono. Emerso installando la 1.2.1 su Joomla 6.2 /
   PHP 8.4 il 7/11/2026 (installazione e pagine pubbliche senza errori).
+- Manifest (segnalazioni di JED Checker): `<license>` con la dicitura GPL nei tre manifest;
+  tolto `<php_minimum>` dai manifest di installazione (resta nell'update server, dove
+  appartiene); voci di sottomenu con il solo attributo `view` o `link`, senza `alt`;
+  `<authorUrl>` nei due plugin. Tolti dal manifest del componente `<plugins>` e `<config>`,
+  che lo schema di Joomla non prevede per un componente: l'elenco dei plugin da installare
+  sta ora in `script.php` (che li installa, aggiorna e disinstalla come prima) e il valore
+  iniziale `save_history=1` lo semina `script.php` alla prima installazione, solo se manca.
+- Lingue: `JGLOBAL_ITEM_NOT_FOUND` (chiave inesistente nel core di Joomla) sostituita da
+  `COM_ALBOONLINE_ERROR_ITEM_NOT_FOUND`; `AlboonlineHtml::toggle()` usa
+  `COM_ALBOONLINE_TOGGLE` invece della stringa grezza «Toggle». Entrambe definite in it-IT
+  e en-GB.
+- `FirmaVerifier`: commentata byte per byte la codifica DER dell'OID
+  id-aa-signatureTimeStampToken, che lo scanner anti-malware di JED Checker segnala come
+  «valore esadecimale»: nessuna modifica alla logica.
+
+### Pacchetto
+- Font: si spedisce la sola famiglia DejaVu Serif Condensed (4 file), quella con cui mPDF
+  impagina il referto (`font-family: serif`); fino alla 1.2.1 si spedivano tutti e 20 i
+  DejaVu. Lo zip passa da 9,1 a 4,7 MB (la JED accetta zip fino a 7 MB) e il build ora
+  fallisce se supera il limite. Il referto è stato collaudato con i font rimasti.
+- Dipendenze: `mpdf/psr-http-message-shim` e `mpdf/psr-log-aware-trait` dichiarano la
+  licenza MIT ma non distribuiscono il file: il build aggiunge un `LICENSE.md` (testo in
+  `bin/licenze-vendor/`). Tolti dal pacchetto i residui di sviluppo delle dipendenze
+  (`build-phar.sh`, `psalm.xml`, `phpstan*.neon`, `phpunit.xml`, `ruleset.xml`, `docs/`,
+  `dist/`, `other/`): l'elenco con i motivi è in `bin/non-spedito.txt`.
+- Plugin: `plg_content_alboonline` 1.1.1 e `plg_task_alboonline` 1.4.1 (cambia solo il
+  manifest: licenza, `authorUrl`, niente `php_minimum`).
 
 ### Progetto
 - Aggiunto `publiccode.yml` in radice, validato con `publiccode-parser-go` 5.4.3,
