@@ -8,8 +8,8 @@ publiccodeYmlVersion: "0"
 name: Albo Pretorio Online
 url: "https://github.com/pcrt/albo-pretorio-joomla"
 landingURL: "https://www.protocollicreativi.it/albo-pretorio-online-componente-open-source-joomla"
-softwareVersion: "1.2.2"
-releaseDate: "2026-11-07"
+softwareVersion: "1.2.3"
+releaseDate: "2026-11-10"
 
 platforms:
   - web

@@ -5,6 +5,22 @@ Tutte le modifiche rilevanti a questo progetto sono annotate qui.
 Il formato si ispira a [Keep a Changelog](https://keepachangelog.com/it/1.1.0/) e il progetto adotta il
 [Versionamento Semantico](https://semver.org/lang/it/).
 
+## [1.2.3] — 2026-11-10
+
+Release di manutenzione per la Joomla Extensions Directory (JED), che il 10/11/2026 ha
+respinto la 1.2.2 per l'avviso di licenza GPL mancante nelle intestazioni dei file PHP.
+Nessun cambiamento funzionale.
+
+### Pacchetto
+- Avviso di licenza in ogni file PHP: i file del componente lo avevano già; 495 file
+  delle dipendenze (mPDF, psr/log, psr/http-message, myclabs/deep-copy, mpdf/psr-*, file
+  generati da Composer) dichiaravano la licenza solo nel composer.json e nel LICENSE del
+  pacchetto. Il build (`bin/avviso-licenze-vendor.php`) aggiunge in testa a quei file un
+  commento con la licenza dichiarata dal pacchetto (GPL-2.0-only per mPDF, MIT per gli
+  altri; LGPL per i due file di mPDF che la dichiarano solo come sigla) e il percorso del
+  suo file di licenza. Il codice delle librerie non cambia. Verificato con la regola GPL
+  di JED Checker 2.4.4: nessun file senza avviso.
+
 ## [1.2.2] — 2026-11-07
 
 Release di manutenzione per la pubblicazione nella Joomla Extensions Directory (JED):
