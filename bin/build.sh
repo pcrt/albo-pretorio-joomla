@@ -146,6 +146,15 @@ for pacchetto in mpdf/psr-http-message-shim mpdf/psr-log-aware-trait; do
 	cp "$RADICE/bin/licenze-vendor/${pacchetto//\//-}/LICENSE.md" "$VENDOR/$pacchetto/LICENSE.md"
 done
 
+# L'AVVISO DI LICENZA IN OGNI FILE PHP. La JED vuole l'avviso in testa a ogni file PHP del
+# pacchetto, dipendenze comprese (regola "GPL" di JED Checker): la 1.2.2 e' stata respinta
+# il 10/11/2026 perche' 495 file delle dipendenze non ce l'avevano. Le librerie la licenza la
+# dichiarano nel composer.json e nel LICENSE: lo script la ripete in un commento in testa ai
+# file che non la nominano, senza toccare il codice. Gira sul vendor di src/ (che non sta nel
+# repository), cosi' il guardiano ritrova nel pacchetto gli stessi file del sorgente.
+echo "▸ Avviso di licenza nei file PHP delle dipendenze…"
+php "$RADICE/bin/avviso-licenze-vendor.php" "$VENDOR" || { echo "ERRORE: avviso di licenza non applicato." >&2; exit 1; }
+
 # ---------------------------------------------------------------------------
 # 2. COMPOSIZIONE DEL PACCHETTO
 # ---------------------------------------------------------------------------
